@@ -21,7 +21,7 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
 }
 
 export const register: RequestHandler = async (req, res) => {
-  const { firstName, lastName, email, password, roles } = req.body;
+  const { name, email, password, roles } = req.body;
   const userExists = await User.exists({ email });
   if (userExists) throw new Error('Email already exists', { cause: { status: 400 } });
 
@@ -32,8 +32,7 @@ export const register: RequestHandler = async (req, res) => {
   const newUser = await User.create({
     email,
     password: hashedPassword,
-    firstName,
-    lastName,
+    name,
     roles
   });
 
