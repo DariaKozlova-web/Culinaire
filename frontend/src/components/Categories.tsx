@@ -6,7 +6,7 @@ const Categories = () => {
   return (
     <section className="py-16">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <h2 className="mb-10 text-3xl font-bold text-center text-[var(--text-title)]">
+        <h2 className="mb-10 text-3xl font-bold text-center text-(--text-title)">
           Categories
         </h2>
 
@@ -24,11 +24,11 @@ const Categories = () => {
     className="
       inline-flex h-12 items-center justify-center
       rounded-xl
-      bg-[var(--accent-olive)]
+      bg-(--accent-olive)
       px-7
       text-sm font-semibold text-white
       transition-colors
-      hover:bg-[var(--accent-wine)]
+      hover:bg-(--accent-wine)
     "
   >
     View all recipes
