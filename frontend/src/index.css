@@ -1,1 +1,95 @@
 @import "tailwindcss";
+
+/* ======================
+   Google Fonts
+====================== */
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Lato:wght@400;500;600;700&display=swap');
+
+/* ======================
+   Light theme (default)
+====================== */
+:root {
+  /* backgrounds */
+  --bg-main: #FAF7F2;
+  --bg-footer: #E8E2D8;
+
+  /* text */
+  --text-title: #2B2A27;
+  --text-body: #4A4A4A;
+  --text-muted: rgba(74, 74, 74, 0.7);
+
+  /* accents */
+  --accent-olive: #6B7A4F;
+  --accent-wine: #6E2F3C;
+
+  /* overlays */
+  --bg-overlay: rgba(210, 175, 150, 0.5);
+  --bg-overlay-card: rgba(210, 175, 150, 0.3);
+
+  /* gradients */
+  --gradient-cta: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(232, 226, 216, 0.7) 100%
+  );
+
+  --gradient-logo: linear-gradient(
+    309deg,
+    #6a3f22 0%,
+    #a86a3d 22%,
+    #f2c9a0 50%,
+    #a86a3d 78%,
+    #6a3f22 100%
+  );
+}
+
+/* ======================
+   Dark theme
+====================== */
+.dark {
+  --bg-main: #1E1712;
+  --bg-footer: #261E18;
+
+  --text-title: #F3EDE6;
+  --text-body: #CFC6BB;
+  --text-muted: #9B9186;
+
+  --accent-olive: #8E9445;
+  --accent-wine: #6E2B2B;
+
+  --bg-overlay: rgba(67, 40, 20, 0.4);
+  --bg-overlay-card: rgba(0, 0, 0, 0.3);
+
+  --gradient-cta: linear-gradient(
+    180deg,
+    #1e1712 0%,
+    #2a211b 100%
+  );
+
+  --gradient-logo: linear-gradient(
+    309deg,
+    #6e4a1e 0%,
+    #c9a24d 25%,
+    #fff3b0 50.5%,
+    #c9a24d 75%,
+    #6e4a1e 100%
+  );
+}
+
+/* ======================
+   Base styles
+====================== */
+html,
+body {
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  font-family: 'Lato', system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Philosopher', serif;
+}
