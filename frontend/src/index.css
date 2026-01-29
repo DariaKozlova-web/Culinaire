@@ -24,7 +24,7 @@
 
   /* overlays */
   --bg-overlay: rgba(210, 175, 150, 0.5);
-  --bg-overlay-card: rgba(210, 175, 150, 0.3);
+  --bg-overlay-card: rgba(210, 175, 150, 0.4);
 
   /* gradients */
   --gradient-cta: linear-gradient(
