@@ -28,7 +28,7 @@ const CategoryCard = ({ category }: Props) => {
       <div
         className="
           absolute inset-0
-          bg-[var(--bg-overlay-card)]
+          bg-(--bg-overlay-card)
           transition-opacity
           group-hover:opacity-70
         "
@@ -36,7 +36,7 @@ const CategoryCard = ({ category }: Props) => {
 
       {/* Title */}
       <div className="absolute inset-0 flex items-center justify-center p-6">
-        <h3 className="text-xl font-semibold text-[var(--text-title)]">
+        <h3 className="text-xl font-semibold text-(--text-title)">
           {category.title}
         </h3>
       </div>

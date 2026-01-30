@@ -1,16 +1,20 @@
 import { NavLink } from "react-router";
-
+import logoDark from "../assets/images/logo-dark.svg";
 import logoLight from "../assets/images/logo-light.svg";
+import { useTheme } from "../contexts/themeContext";
+
 
 const Footer = () => {
+  const { theme } = useTheme();
   return (
-    <footer className="mt-24 bg-[var(--bg-footer)]">
+    <footer className="mt-24 bg-(--bg-footer)">
       <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 md:px-8">
         <div className="grid items-center gap-12 md:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="mb-4 flex flex-col items-start font-[Philosopher]">
-              <img src={logoLight} alt="Culinaire" className="h-16" />
+              {/* <Logo className="h-16"/> */}
+              <img src={theme === 'light'? logoLight:logoDark} className="h-16" alt="Culinaire"  />
               <span
                 className="mt-2 inline-block bg-clip-text font-bold text-transparent uppercase"
                 style={{
@@ -22,7 +26,7 @@ const Footer = () => {
               </span>
               <span className="text-sm">Elevated home cooking</span>
             </div>
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-(--text-muted)">
               Fine-dining recipes by professional chefs, designed for home
               kitchens.
             </p>
@@ -33,13 +37,13 @@ const Footer = () => {
             <h4 className="mb-4 font-medium">Explore</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <NavLink to="/recipes" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Recipes</NavLink>
+                <NavLink to="/recipes" className='text-(--accent-olive) hover:text-(--accent-wine)'>Recipes</NavLink>
               </li>
               <li>
-                <NavLink to="/chefs" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Chefs</NavLink>
+                <NavLink to="/chefs" className='text-(--accent-olive) hover:text-(--accent-wine)'>Chefs</NavLink>
               </li>
               <li>
-                <NavLink to="/about" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>About Us</NavLink>
+                <NavLink to="/about" className='text-(--accent-olive) hover:text-(--accent-wine)'>About Us</NavLink>
               </li>
             </ul>
           </div>
@@ -49,13 +53,13 @@ const Footer = () => {
             <h4 className="mb-4 font-medium">Account</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <NavLink to="/login" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Login</NavLink>
+                <NavLink to="/login" className='text-(--accent-olive) hover:text-(--accent-wine)'>Login</NavLink>
               </li>
               <li>
-                <NavLink to="/register" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Register</NavLink>
+                <NavLink to="/register" className='text-(--accent-olive) hover:text-(--accent-wine)'>Register</NavLink>
               </li>
               <li>
-                <NavLink to="/favourites" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Favourites</NavLink>
+                <NavLink to="/favourites" className='text-(--accent-olive) hover:text-(--accent-wine)'>Favourites</NavLink>
               </li>
             </ul>
           </div>
@@ -65,25 +69,27 @@ const Footer = () => {
             <h4 className="mb-4 font-medium">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <NavLink to="/privacy" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Privacy Policy</NavLink>
+                <NavLink to="/privacy" className='text-(--accent-olive) hover:text-(--accent-wine)'>Privacy Policy</NavLink>
               </li>
               <li>
-                <NavLink to="/terms" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Terms of Use</NavLink>
+                <NavLink to="/terms" className='text-(--accent-olive) hover:text-(--accent-wine)'>Terms of Use</NavLink>
               </li>
               <li>
-                <NavLink to="/contact" className='text-[var(--accent-olive)] hover:text-[var(--accent-wine)]'>Contact</NavLink>
+                <NavLink to="/contact" className='text-(--accent-olive) hover:text-(--accent-wine)'>Contact</NavLink>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 border-t border-black/10 pt-6 text-center text-sm text-[var(--text-muted)]">
+        <div className="mt-16 border-t border-black/10 pt-6 text-center text-sm text-(--text-muted)">
           © 2026 Culinaire. All rights reserved.
         </div>
       </div>
     </footer>
+
   );
+
 };
 
 export default Footer;
