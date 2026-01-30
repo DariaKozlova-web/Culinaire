@@ -2,7 +2,7 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRouter } from '#routes';
+import { authRouter, categoryRouter } from '#routes';
 import { errorHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
 
@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: CLIENT_BASE_URL, // for use with credentials, origin(s) need to be specified
     credentials: true, // sends and receives secure cookies
-    exposedHeaders: ['WWW-Authenticate'] // needed to send the 'refresh trigger''
+    exposedHeaders: ['WWW-Authenticate'] // needed to send the refresh trigger
   })
 );
 
@@ -25,11 +25,13 @@ app.get('/error', (req, res) => {
 
 app.use('/auth', authRouter);
 
+app.use('/categories', categoryRouter);
+
 app.use('*splat', (req, res) => {
-  res.status(404).json({ message: 'not found' });
+  res.status(404).json({ message: 'Not found' });
 });
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Auth Server listening on port ${port}`);
+  console.log(`Auth server listening on port ${port}`);
 });
