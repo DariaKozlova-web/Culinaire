@@ -22,9 +22,9 @@ function App() {
             <Route path="category/:slug" element={<Category />} />
             <Route path="recipe/:slug" element={<Recipe />} />
             <Route path="chef/:slug" element={<Chef />} />
-            <Route path="add-category" element={<CreateCategory />} />
-            <Route path="add-chef" element={<CreateChef />} />
-            <Route path="add-recipe" element={<CreateRecipe />} />
+            <Route path="categories" element={<CreateCategory />} />
+            <Route path="chefs" element={<CreateChef />} />
+            <Route path="recipes" element={<CreateRecipe />} />
             <Route path="authentication" element={<Authentication />} />
           </Route>
         </Routes>
