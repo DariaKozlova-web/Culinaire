@@ -2,7 +2,7 @@ import { z } from 'zod/v4';
 import { Types } from 'mongoose';
 
 export const categoryInputSchema = z.object({
-  name: z.string('Title must be a string').min(1, 'Title is required'),
+  name: z.string('Name must be a string').min(1, 'Name is required'),
   url: z.string('URL must be a string').min(1, 'URL is required'),
   image: z.string('Image must be a string').min(1, 'Image is required')
 });
