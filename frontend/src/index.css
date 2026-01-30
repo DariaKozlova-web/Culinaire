@@ -1,11 +1,6 @@
 @import "tailwindcss";
 
 /* ======================
-   Google Fonts
-====================== */
-@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Lato:wght@400;500;600;700&display=swap');
-
-/* ======================
    Light theme (default)
 ====================== */
 :root {
@@ -24,14 +19,16 @@
 
   /* overlays */
   --bg-overlay: rgba(210, 175, 150, 0.5);
-  --bg-overlay-card: rgba(210, 175, 150, 0.3);
+  --bg-overlay-card: rgba(210, 175, 150, 0.4);
 
   /* gradients */
+
   --gradient-cta: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    rgba(232, 226, 216, 0.7) 100%
-  );
+  180deg,
+  #ffffff 0%,
+  #f1ede6 60%,
+  #e8e2d8 100%
+);
 
   --gradient-logo: linear-gradient(
     309deg,
@@ -60,11 +57,12 @@
   --bg-overlay: rgba(67, 40, 20, 0.4);
   --bg-overlay-card: rgba(0, 0, 0, 0.3);
 
-  --gradient-cta: linear-gradient(
-    180deg,
-    #1e1712 0%,
-    #2a211b 100%
-  );
+ --gradient-cta: linear-gradient(
+  180deg,
+  #1b1410 0%,
+  #241b16 55%,
+  #2a211b 100%
+);
 
   --gradient-logo: linear-gradient(
     309deg,
