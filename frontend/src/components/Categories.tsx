@@ -1,5 +1,5 @@
 import CategoryCard from "./CategoryCard";
-import { categoriesMock } from "./categories.mock";
+import { categoriesMock } from "../mocks/categories.mock";
 import { NavLink } from "react-router";
 
 const Categories = () => {

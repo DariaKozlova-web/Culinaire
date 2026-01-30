@@ -7,7 +7,7 @@ import { useTheme } from "../contexts/themeContext";
 const Footer = () => {
   const { theme } = useTheme();
   return (
-    <footer className="mt-24 bg-(--bg-footer)">
+    <footer className="bg-(--bg-footer)">
       <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 md:px-8">
         <div className="grid items-center gap-12 md:grid-cols-4">
           {/* Brand */}

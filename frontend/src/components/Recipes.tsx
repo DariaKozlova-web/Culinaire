@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import RecipeCard from "./RecipeCard";
-import { recipesMock } from "./recipes.mock";
+import { recipesMock } from "../mocks/recipes.mock";
 import { getRandomItems } from "../utils/getRandomItems";
 
 const Recipes = () => {

@@ -1,5 +1,5 @@
 import ChefCard from "./ChefCard";
-import { chefsMock } from "./chefs.mock";
+import { chefsMock } from "../mocks/chefs.mock";
 
 const Chefs = () => {
   return (
@@ -7,7 +7,7 @@ const Chefs = () => {
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
-          <h2 className="mb-4 font-[Philosopher] text-4xl font-bold">
+          <h2 className="mb-4 font-[Philosopher] text-4xl text-(--text-title) font-bold">
             Meet Our Chefs
           </h2>
 
