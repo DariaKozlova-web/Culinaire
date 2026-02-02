@@ -1,9 +1,8 @@
-import type { Chef } from "../types/chef";
-import lecler from "../assets/images/Anna-Leclerc.png";
-import moretti from "../assets/images/Luca-Moretti.png";
 import weis from "../assets/images/Klara-Weiss.png";
-import whitmore from "../assets/images/James-Whitmore.png";
-
+import moretti from "../assets/images/Luca-Moretti.png";
+import lecler from "../assets/images/anna-leclerc.png";
+import whitmore from "../assets/images/james-whitmore.png";
+import type { Chef } from "../types/chef";
 
 export const chefsMock: Chef[] = [
   {
@@ -37,7 +36,7 @@ export const chefsMock: Chef[] = [
     id: "4",
     name: "James Whitmore",
     restaurant: {
-      name: "The Iron Crown"
+      name: "The Iron Crown",
     },
     city: "Berlin",
     avatar: whitmore,
