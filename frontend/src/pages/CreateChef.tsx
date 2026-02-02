@@ -11,22 +11,30 @@ const CreateChef = () => {
     name: "",
     url: "",
     image: "",
+    city: "",
+    cuisine: "",
     description: "",
     signature: "",
     restaurant_name: "",
     restaurant_address: "",
+    opening_hours: "",
+    closed: "",
   });
 
-  const [openingHours, setOpeningHours] = useState<string[]>([""]);
+  const [story, setStory] = useState<string[]>([""]);
 
   const {
     name,
     url,
     image,
+    city,
+    cuisine,
     description,
     signature,
     restaurant_name,
     restaurant_address,
+    opening_hours,
+    closed,
   } = form;
 
   const handleChange = (
@@ -35,19 +43,19 @@ const CreateChef = () => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleHourChange = (index: number, value: string) => {
-    const updatedHours = [...openingHours];
-    updatedHours[index] = value;
-    setOpeningHours(updatedHours);
+  const handleStoryChange = (index: number, value: string) => {
+    const updatedStory = [...story];
+    updatedStory[index] = value;
+    setStory(updatedStory);
   };
 
-  const addHourField = () => {
-    setOpeningHours([...openingHours, ""]);
+  const addStoryField = () => {
+    setStory([...story, ""]);
   };
 
-  const removeHourField = (index: number) => {
-    if (openingHours.length > 1) {
-      setOpeningHours(openingHours.filter((_, i) => i !== index));
+  const removeStoryField = (index: number) => {
+    if (story.length > 1) {
+      setStory(story.filter((_, i) => i !== index));
     }
   };
 
@@ -58,9 +66,9 @@ const CreateChef = () => {
         (value) => value.trim() !== "",
       );
 
-      const validHours = openingHours.filter((h) => h.trim() !== "");
+      const validStory = story.filter((h) => h.trim() !== "");
 
-      if (!allFieldsFilled || validHours.length === 0) {
+      if (!allFieldsFilled || validStory.length === 0) {
         throw new Error("All fields are required");
       }
 
@@ -70,12 +78,16 @@ const CreateChef = () => {
         name,
         url,
         image,
+        city,
+        cuisine,
         description,
+        story: story.filter((h) => h.trim() !== ""),
         signature,
         restaurant: {
           name: restaurant_name,
           address: restaurant_address,
-          openingHours: openingHours.filter((h) => h.trim() !== ""),
+          openingHours: opening_hours,
+          closed: closed,
         },
       };
 
@@ -87,13 +99,17 @@ const CreateChef = () => {
         name: "",
         url: "",
         image: "",
+        city: "",
+        cuisine: "",
         description: "",
         signature: "",
         restaurant_name: "",
         restaurant_address: "",
+        opening_hours: "",
+        closed: "",
       });
 
-      setOpeningHours([""]);
+      setStory([""]);
 
       navigate("/chefs");
     } catch (error: unknown) {
@@ -144,6 +160,30 @@ const CreateChef = () => {
         placeholder="Image"
         className="rounded border p-2"
       />
+      <label htmlFor="city" className="sr-only">
+        City
+      </label>
+      <input
+        id="city"
+        name="city"
+        value={city}
+        type="text"
+        onChange={handleChange}
+        placeholder="City"
+        className="rounded border p-2"
+      />
+      <label htmlFor="cuisine" className="sr-only">
+        Cuisine
+      </label>
+      <input
+        id="cuisine"
+        name="cuisine"
+        value={cuisine}
+        type="text"
+        onChange={handleChange}
+        placeholder="Cuisine"
+        className="rounded border p-2"
+      />
       <label htmlFor="description" className="sr-only">
         Description
       </label>
@@ -155,6 +195,36 @@ const CreateChef = () => {
         placeholder="Description"
         className="rounded border p-2"
       />
+      <div className="flex flex-col gap-2">
+        {story.map((s, index) => (
+          <div key={index} className="flex gap-2">
+            <label htmlFor={`hour_${index}`} className="sr-only">
+              Opening Hour {index + 1}
+            </label>
+            <input
+              id={`hour_${index}`}
+              value={s}
+              onChange={(e) => handleStoryChange(index, e.target.value)}
+              placeholder="Story"
+              className="flex-1 rounded border p-2"
+            />
+            <button
+              type="button"
+              onClick={() => removeStoryField(index)}
+              className="rounded bg-red-100 px-3 text-red-600 hover:bg-red-200"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addStoryField}
+          className="flex items-center gap-1 self-start font-bold text-blue-600 hover:underline"
+        >
+          <span>+</span> Add story item
+        </button>
+      </div>
       <label htmlFor="signature" className="sr-only">
         Signature
       </label>
@@ -190,36 +260,30 @@ const CreateChef = () => {
         placeholder="Restaurant address"
         className="rounded border p-2"
       />
-      <div className="flex flex-col gap-2">
-        {openingHours.map((hour, index) => (
-          <div key={index} className="flex gap-2">
-            <label htmlFor={`hour_${index}`} className="sr-only">
-              Opening Hour {index + 1}
-            </label>
-            <input
-              id={`hour_${index}`}
-              value={hour}
-              onChange={(e) => handleHourChange(index, e.target.value)}
-              placeholder="Mon-Fri: 09:00 - 20:00"
-              className="flex-1 rounded border p-2"
-            />
-            <button
-              type="button"
-              onClick={() => removeHourField(index)}
-              className="rounded bg-red-100 px-3 text-red-600 hover:bg-red-200"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addHourField}
-          className="flex items-center gap-1 self-start font-bold text-blue-600 hover:underline"
-        >
-          <span>+</span> Add time slot
-        </button>
-      </div>
+      <label htmlFor="opening_hours" className="sr-only">
+        Opening time
+      </label>
+      <input
+        id="opening_hours"
+        name="opening_hours"
+        value={opening_hours}
+        type="text"
+        onChange={handleChange}
+        placeholder="Opening time"
+        className="rounded border p-2"
+      />
+      <label htmlFor="closed" className="sr-only">
+        Closed time
+      </label>
+      <input
+        id="closed"
+        name="closed"
+        value={closed}
+        type="text"
+        onChange={handleChange}
+        placeholder="Closed time"
+        className="rounded border p-2"
+      />
       <button
         type="submit"
         disabled={loading}

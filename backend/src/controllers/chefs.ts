@@ -12,13 +12,16 @@ export const getAllChefs: RequestHandler<{}, chefDTO[]> = async (req, res) => {
 };
 
 export const createChef: RequestHandler<{}, chefDTO, chefInputDTO> = async (req, res) => {
-  const { name, url, image, description, signature, restaurant } = req.body;
+  const { name, url, image, city, cuisine, description, story, signature, restaurant } = req.body;
 
   const chef = await Chef.create({
     name,
     url,
     image,
+    city,
+    cuisine,
     description,
+    story,
     signature,
     restaurant
   });
@@ -45,7 +48,7 @@ export const updateChefById: RequestHandler<{ id: string }, chefDTO, chefInputDT
     params: { id },
     body
   } = req;
-  const { name, url, image, description, signature, restaurant } = body;
+  const { name, url, image, city, cuisine, description, story, signature, restaurant } = body;
 
   const chef = await Chef.findById(id);
   if (!chef) throw new Error('Chef not found', { cause: 404 });
@@ -53,7 +56,10 @@ export const updateChefById: RequestHandler<{ id: string }, chefDTO, chefInputDT
   chef.name = name;
   chef.url = url;
   chef.image = image;
+  chef.city = city;
+  chef.cuisine = cuisine;
   chef.description = description;
+  chef.story = story;
   chef.signature = signature;
   chef.restaurant = restaurant;
   await chef.save();
