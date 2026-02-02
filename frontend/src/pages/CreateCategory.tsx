@@ -1,10 +1,16 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-import { createCategory } from "../data/categories";
+import {
+  createCategory,
+  getCategoryById,
+  updateCategoryById,
+} from "../data/categories";
 
 const CreateCategory = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const isEditMode = Boolean(id);
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -14,6 +20,25 @@ const CreateCategory = () => {
   });
 
   const { name, url, image } = form;
+
+  useEffect(() => {
+    if (isEditMode && id) {
+      (async () => {
+        try {
+          const category = await getCategoryById(id);
+          setForm({
+            name: category.name || "",
+            url: category.url || "",
+            image: category.image || "",
+          });
+        } catch (error) {
+          console.error("Error fetching category:", error);
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [id, isEditMode]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -30,17 +55,17 @@ const CreateCategory = () => {
 
       setLoading(true);
 
-      const newCategory = await createCategory({ name, url, image });
+      if (isEditMode && id) {
+        const updatedCategory = await updateCategoryById(id, form);
 
-      console.log("Category created:", newCategory);
+        console.log("Category updated:", updatedCategory);
+      } else {
+        const newCategory = await createCategory(form);
 
-      setForm({
-        name: "",
-        url: "",
-        image: "",
-      });
+        console.log("Category created:", newCategory);
+      }
 
-      navigate("/categories");
+      navigate("/dashboard/categories");
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "An error occurred";
@@ -94,7 +119,7 @@ const CreateCategory = () => {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 rounded bg-green-600 p-3 font-bold text-white hover:bg-green-700 disabled:bg-gray-400"
+        className="mt-6 cursor-pointer rounded bg-green-600 p-3 font-bold text-white hover:bg-green-700 disabled:bg-gray-400"
       >
         {loading ? "Creating..." : "Create category"}
       </button>

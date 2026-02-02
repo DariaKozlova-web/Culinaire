@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-import { createChef } from "../data/chefs";
+import { createChef, getChefById, updateChefById } from "../data/chefs";
 
 const CreateChef = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const isEditMode = Boolean(id);
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -36,6 +38,34 @@ const CreateChef = () => {
     opening_hours,
     closed,
   } = form;
+
+  useEffect(() => {
+    if (isEditMode && id) {
+      (async () => {
+        try {
+          const chef = await getChefById(id);
+          setForm({
+            name: chef.name,
+            url: chef.url,
+            image: chef.image,
+            city: chef.city,
+            cuisine: chef.cuisine,
+            description: chef.description,
+            signature: chef.signature,
+            restaurant_name: chef.restaurant.name,
+            restaurant_address: chef.restaurant.address,
+            opening_hours: chef.restaurant.openingHours,
+            closed: chef.restaurant.closed,
+          });
+          setStory(chef.story || [""]);
+        } catch (error) {
+          console.error("Error fetching chef:", error);
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [id, isEditMode]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -91,27 +121,17 @@ const CreateChef = () => {
         },
       };
 
-      const newChef = await createChef(chefData);
+      if (isEditMode && id) {
+        const updatedChef = await updateChefById(id, chefData);
 
-      console.log("Chef created:", newChef);
+        console.log("Chef updated:", updatedChef);
+      } else {
+        const newChef = await createChef(chefData);
 
-      setForm({
-        name: "",
-        url: "",
-        image: "",
-        city: "",
-        cuisine: "",
-        description: "",
-        signature: "",
-        restaurant_name: "",
-        restaurant_address: "",
-        opening_hours: "",
-        closed: "",
-      });
+        console.log("Chef created:", newChef);
+      }
 
-      setStory([""]);
-
-      navigate("/chefs");
+      navigate("/dashboard/chefs");
     } catch (error: unknown) {
       alert(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -287,7 +307,7 @@ const CreateChef = () => {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 rounded bg-green-600 p-3 font-bold text-white hover:bg-green-700 disabled:bg-gray-400"
+        className="mt-6 cursor-pointer rounded bg-green-600 p-3 font-bold text-white hover:bg-green-700 disabled:bg-gray-400"
       >
         {loading ? "Creating..." : "Create chef"}
       </button>
