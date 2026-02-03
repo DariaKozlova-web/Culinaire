@@ -13,6 +13,7 @@ export const chefsMock: Chef[] = [
     },
     city: "Berlin",
     avatar: lecler,
+    url: "anna-leclerc",
   },
   {
     id: "2",
@@ -22,6 +23,7 @@ export const chefsMock: Chef[] = [
     },
     city: "München",
     avatar: moretti,
+    url: "luca-moretti",
   },
   {
     id: "3",
@@ -31,6 +33,7 @@ export const chefsMock: Chef[] = [
     },
     city: "Hamburg",
     avatar: weis,
+    url: "klara-weiss",
   },
   {
     id: "4",
@@ -40,5 +43,6 @@ export const chefsMock: Chef[] = [
     },
     city: "Berlin",
     avatar: whitmore,
+    url: "james-whitmore",
   },
 ];

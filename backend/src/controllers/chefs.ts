@@ -77,3 +77,14 @@ export const deleteChefById: RequestHandler<{ id: string }> = async (req, res) =
 
   res.json({ message: 'Chef deleted' });
 };
+
+export const getChefByURL: RequestHandler<{ url: string }, chefDTO> = async (req, res) => {
+  const {
+    params: { url }
+  } = req;
+
+  const chef = await Chef.findOne({ url: url });
+  if (!chef) throw new Error('Chef not found', { cause: 404 });
+
+  res.json(chef);
+};
