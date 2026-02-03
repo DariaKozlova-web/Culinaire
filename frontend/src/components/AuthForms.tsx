@@ -109,7 +109,7 @@ export const AuthForms = ({
                                   </div>
                                   <div className="relative">
                                     <Field
-                                      type="text"
+                                      type="password"
                                       name="password"
                                       className="form-style"
                                       placeholder="Your Password"
@@ -191,7 +191,7 @@ export const AuthForms = ({
                                     </div>
                                     <div className="relative mb-2">
                                       <Field
-                                        type="text"
+                                        type="password"
                                         name="password"
                                         className="form-style"
                                         placeholder="Your Password"
@@ -204,7 +204,7 @@ export const AuthForms = ({
                                     </div>
                                     <div className="relative">
                                       <Field
-                                        type="text"
+                                        type="password"
                                         name="confirmPassword"
                                         className="form-style"
                                         placeholder="Confirm Password"
