@@ -5,18 +5,21 @@ import { z } from 'zod/v4';
 const validateBodyZod =
   (zodSchema: ZodObject): RequestHandler =>
   (req, _res, next) => {
-    const { data, error, success } = zodSchema.safeParse(req.body);
-    if (!success) {
-      next(
-        new Error(z.prettifyError(error), {
-          cause: {
-            status: 400
-          }
-        })
-      );
-    } else {
+    try {
+      const { data, error, success } = zodSchema.safeParse(req.body);
+
+      if (!success) {
+        return next(
+          new Error(z.prettifyError(error), {
+            cause: { status: 400 }
+          })
+        );
+      }
+
       req.body = data;
-      next();
+      return next();
+    } catch (err) {
+      return next(err);
     }
   };
 

@@ -2,7 +2,7 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRouter, categoryRouter, chefRouter } from '#routes';
+import { authRouter, categoryRouter, chefRouter, recipeRouter } from '#routes';
 import { errorHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
 
@@ -28,6 +28,8 @@ app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 
 app.use('/chefs', chefRouter);
+
+app.use('/recipes', recipeRouter);
 
 app.use('*splat', (req, res) => {
   res.status(404).json({ message: 'Not found' });

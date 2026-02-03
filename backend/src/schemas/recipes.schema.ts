@@ -1,37 +1,66 @@
-import { z } from "zod";
+import { z } from 'zod/v4';
+import { Types } from 'mongoose';
 
-/* -------- Ingredients -------- */
-export const ingredientSchema = z.object({
-  title: z.string().min(1, "Ingredient title is required"),
-  quantity: z.string().min(1, "Quantity is required"),
-  unit: z.string().min(1, "Unit is required"),
+const coerceString = (val: unknown) => (Array.isArray(val) ? val[0] : val);
+
+const parseJSONArray = (val: unknown) => {
+  const v = coerceString(val);
+  if (typeof v !== 'string') return v;
+  try {
+    return JSON.parse(v);
+  } catch {
+    return v;
+  }
+};
+
+const objectIdFromForm = (label: string) =>
+  z.preprocess(
+    (val) => coerceString(val),
+    z
+      .string({ message: `${label} is required` })
+      .min(1, `${label} is required`)
+      .refine((s) => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
+      .transform((s) => new Types.ObjectId(s))
+  );
+
+export const recipeInputSchema = z.object({
+  title: z.preprocess(coerceString, z.string().min(1, 'Title is required')),
+  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  description: z.preprocess(coerceString, z.string().min(1, 'Description is required')),
+
+  categoryId: objectIdFromForm('Category'),
+  chefId: objectIdFromForm('Chef'),
+
+  totalTime: z.preprocess(coerceString, z.string().min(1, 'Total time is required')),
+  level: z.preprocess(coerceString, z.string().min(1, 'Level is required')),
+  cuisine: z.preprocess(coerceString, z.string().min(1, 'Cuisine is required')),
+  service: z.preprocess(coerceString, z.string().min(1, 'Service is required')),
+
+  ingredients: z.preprocess(
+    parseJSONArray,
+    z
+      .array(
+        z.object({
+          title: z.string().min(1),
+          quantity: z.string().min(1),
+          unit: z.string().min(1)
+        })
+      )
+      .min(1, 'At least one ingredient is required')
+  ),
+
+  instructions: z.preprocess(
+    parseJSONArray,
+    z
+      .array(
+        z.object({
+          number: z.string().min(1),
+          title: z.string().min(1),
+          description: z.string().min(1),
+        })
+      )
+      .min(1, 'At least one instruction is required')
+  ),
+
+  image: z.string().url().optional()
 });
-
-/* -------- Cooking Steps -------- */
-export const cookingStepSchema = z.object({
-  number: z.number().int().positive(),
-  title: z.string().min(1, "Step title is required"),
-  description: z.string().min(1, "Step description is required"),
-  image: z.string().optional(),
-});
-
-/* -------- Recipe -------- */
-export const createRecipeSchema = z.object({
-  title: z.string().min(1, "Recipe title is required"),
-  image: z.string().url("Invalid image URL").optional(),
-  description: z.string().min(1, "Description is required"),
-
-  categoryId: z.string().min(1, "Category is required"),
-  chefId: z.string().min(1, "Chef is required"),
-
-  totalTime: z.string().min(1, "Total time is required"),
-  cuisine: z.string().min(1, "Cuisine is required"),
-  difficulty: z.enum(["Easy", "Medium", "Advanced"]),
-  servings: z.number().int().positive(),
-
-  ingredients: z.array(ingredientSchema).min(1, "At least one ingredient"),
-  steps: z.array(cookingStepSchema).min(1, "At least one step"),
-});
-
-/* -------- Types -------- */
-export type CreateRecipeDto = z.infer<typeof createRecipeSchema>;
