@@ -1,16 +1,25 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+
 import logoDark from "../assets/images/logo-dark.svg";
 import logoLight from "../assets/images/logo-light.svg";
 import { useTheme } from "../contexts/themeContext";
+import useAuth from "../contexts/useAuth";
+import { logout } from "../data";
+import { LogoutIcon } from "./icons/LogoutIcon";
 import { MoonIcon } from "./icons/MoonIcon";
 import { SunIcon } from "./icons/SunIcon";
-import { LogoutIcon } from "./icons/LogoutIcon";
 import { UserIcon } from "./icons/UserIcon";
 
-
-
 const Header = () => {
-  const isAuthenticated = true; // временно
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+    navigate("/");
+  };
+
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -65,7 +74,7 @@ const Header = () => {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="cursor-pointer group flex h-9 w-9 items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
+            className="group flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
           >
             {theme === "light" ? (
               <MoonIcon className="h-4 w-4" />
@@ -74,7 +83,26 @@ const Header = () => {
             )}
           </button>
 
-          {!isAuthenticated ? (
+          {user ? (
+            <>
+              {/* User avatar */}
+              <NavLink
+                to="/dashboard"
+                className="group flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
+              >
+                <UserIcon className="h-5 w-5" />
+              </NavLink>
+
+              {/* Log out */}
+              <button
+                onClick={handleLogout}
+                className="flex cursor-pointer items-center gap-2 text-sm text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
+              >
+                <LogoutIcon className="h-5 w-5" />
+                Log out
+              </button>
+            </>
+          ) : (
             <>
               <NavLink
                 to="/login"
@@ -89,22 +117,6 @@ const Header = () => {
               >
                 Get Started
               </NavLink>
-            </>
-          ) : (
-            <>
-              {/* User avatar */}
-              <NavLink
-                to="/dashboard"
-                className="cursor-pointer group flex h-9 w-9 items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
-              >
-                <UserIcon className="h-5 w-5"/>
-              </NavLink>
-
-              {/* Log out */}
-              <button className="flex items-center cursor-pointer gap-2 text-sm text-(--accent-olive) transition-colors hover:text-(--accent-wine)">
-                <LogoutIcon className="h-5 w-5" />
-                Log out
-              </button>
             </>
           )}
         </div>

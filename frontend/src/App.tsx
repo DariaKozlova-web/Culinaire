@@ -11,9 +11,9 @@ import CreateCategory from "./pages/CreateCategory.tsx";
 import CreateChef from "./pages/CreateChef.tsx";
 import CreateRecipe from "./pages/CreateRecipe.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
-import MyProfile from "./pages/MyProfile.tsx";
-import Favourites from "./pages/Favourites.tsx";
+import Favorites from "./pages/Favorites.tsx";
 import Home from "./pages/Home.tsx";
+import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
 
@@ -50,10 +50,20 @@ function App() {
 
               {/* user */}
               <Route path="my-profile" element={<MyProfile />} />
-              <Route path="favourites" element={<Favourites />} />
+              <Route path="favorites" element={<Favorites />} />
             </Route>
-
-            <Route path="authentication" element={<Authentication />} />
+            <Route
+              path="register"
+              element={<Authentication showLoginForm={false} />}
+            />
+            <Route
+              path="login"
+              element={<Authentication showLoginForm={true} />}
+            />
+            <Route
+              path="authentication"
+              element={<Authentication showLoginForm={false} />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
