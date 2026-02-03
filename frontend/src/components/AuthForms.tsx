@@ -13,12 +13,10 @@ export interface IUserAuth {
   password: string;
   confirmPassword: string;
   name: string;
-  // token: string;
-  // liked_courses_ids: string[],
-  // lessonsProgress: userLessonData[],
 }
 
 interface IProps {
+  showLoginForm?: boolean;
   onLoginSubmit: (userAuthData: Pick<IUserAuth, "email" | "password">) => void;
   onRegisterSubmit: (
     userAuthData: Pick<
@@ -32,6 +30,7 @@ interface IProps {
   loginLoading: boolean;
 }
 export const AuthForms = ({
+  showLoginForm = true,
   onLoginSubmit,
   onRegisterSubmit,
   onOkBtnClick,
@@ -72,6 +71,7 @@ export const AuthForms = ({
                 <input
                   className="checkbox"
                   type="checkbox"
+                  defaultChecked={!showLoginForm}
                   id="reg-log"
                   name="reg-log"
                 />

@@ -1,10 +1,21 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+
 import logoDark from "../assets/images/logo-dark.svg";
 import logoLight from "../assets/images/logo-light.svg";
 import { useTheme } from "../contexts/themeContext";
-
+import useAuth from "../contexts/useAuth";
+import { logout } from "../data";
 
 const Footer = () => {
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+    navigate("/");
+  };
+
   const { theme } = useTheme();
   return (
     <footer className="bg-(--bg-footer)">
@@ -14,7 +25,11 @@ const Footer = () => {
           <div>
             <div className="mb-4 flex flex-col items-start font-[Philosopher]">
               {/* <Logo className="h-16"/> */}
-              <img src={theme === 'light'? logoLight:logoDark} className="h-16" alt="Culinaire"  />
+              <img
+                src={theme === "light" ? logoLight : logoDark}
+                className="h-16"
+                alt="Culinaire"
+              />
               <span
                 className="mt-2 inline-block bg-clip-text font-bold text-transparent uppercase"
                 style={{
@@ -37,13 +52,28 @@ const Footer = () => {
             <h4 className="mb-4 font-medium">Explore</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <NavLink to="/recipes" className='text-(--accent-olive) hover:text-(--accent-wine)'>Recipes</NavLink>
+                <NavLink
+                  to="/recipes"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  Recipes
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/chefs" className='text-(--accent-olive) hover:text-(--accent-wine)'>Chefs</NavLink>
+                <NavLink
+                  to="/chefs"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  Chefs
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/about" className='text-(--accent-olive) hover:text-(--accent-wine)'>About Us</NavLink>
+                <NavLink
+                  to="/about"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  About Us
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -52,15 +82,56 @@ const Footer = () => {
           <div>
             <h4 className="mb-4 font-medium">Account</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <NavLink to="/login" className='text-(--accent-olive) hover:text-(--accent-wine)'>Login</NavLink>
-              </li>
-              <li>
-                <NavLink to="/register" className='text-(--accent-olive) hover:text-(--accent-wine)'>Register</NavLink>
-              </li>
-              <li>
-                <NavLink to="/favourites" className='text-(--accent-olive) hover:text-(--accent-wine)'>Favourites</NavLink>
-              </li>
+              {user && (
+                <li>
+                  <NavLink
+                    to="/favourites"
+                    className="text-(--accent-olive) hover:text-(--accent-wine)"
+                  >
+                    Favourites
+                  </NavLink>
+                </li>
+              )}
+              {user && (
+                <li>
+                  <NavLink
+                    to="/profile"
+                    className="text-(--accent-olive) hover:text-(--accent-wine)"
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+              )}
+              {user && (
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="text-(--accent-olive) hover:text-(--accent-wine)"
+                  >
+                    Log out
+                  </button>
+                </li>
+              )}
+              {!user && (
+                <li>
+                  <NavLink
+                    to="/login"
+                    className="text-(--accent-olive) hover:text-(--accent-wine)"
+                  >
+                    Log in
+                  </NavLink>
+                </li>
+              )}
+              {!user && (
+                <li>
+                  <NavLink
+                    to="/register"
+                    className="text-(--accent-olive) hover:text-(--accent-wine)"
+                  >
+                    Register
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -69,13 +140,28 @@ const Footer = () => {
             <h4 className="mb-4 font-medium">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <NavLink to="/privacy" className='text-(--accent-olive) hover:text-(--accent-wine)'>Privacy Policy</NavLink>
+                <NavLink
+                  to="/privacy"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  Privacy Policy
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/terms" className='text-(--accent-olive) hover:text-(--accent-wine)'>Terms of Use</NavLink>
+                <NavLink
+                  to="/terms"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  Terms of Use
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/contact" className='text-(--accent-olive) hover:text-(--accent-wine)'>Contact</NavLink>
+                <NavLink
+                  to="/contact"
+                  className="text-(--accent-olive) hover:text-(--accent-wine)"
+                >
+                  Contact
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -87,9 +173,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-
   );
-
 };
 
 export default Footer;
