@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+
 import type { Chef } from "../types/chef";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 const ChefCard = ({ chef }: Props) => {
   return (
     <NavLink
-      to={`/chefs/${chef.id}`}
+      to={`/chef/${chef.url}`}
       className="group rounded-2xl bg-(--bg-card) p-6 text-center shadow-[0_0_40px_rgba(0,0,0,0.4)] transition hover:shadow-[0_0_55px_rgba(0,0,0,0.6)]"
     >
       {/* Avatar */}
@@ -20,9 +21,7 @@ const ChefCard = ({ chef }: Props) => {
         />
       </div>
 
-      <h3 className="mb-1 font-[Philosopher] text-lg font-bold">
-        {chef.name}
-      </h3>
+      <h3 className="mb-1 font-[Philosopher] text-lg font-bold">{chef.name}</h3>
 
       <p className="mb-4 text-sm text-(--text-muted)">
         Head Chef at {chef.restaurant?.name}
