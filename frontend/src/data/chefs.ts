@@ -89,3 +89,16 @@ export const deleteChefById = async (id: string): Promise<void> => {
     );
   }
 };
+
+export const getChefByURL = async (url: string): Promise<Chef> => {
+  const res = await fetch(`${baseURL}/url/${url}`);
+  if (!res.ok) {
+    const errorData = await res.json();
+    if (!errorData.error) {
+      throw new Error("An error occurred while fetching the category");
+    }
+    throw new Error(errorData.error);
+  }
+  const data: Chef = await res.json();
+  return data;
+};
