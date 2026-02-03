@@ -1,108 +1,75 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
-
-type Category = {
-  _id: string;
-  name: string;
-  url: string;
-  image: string;
-};
-
-type Chef = {
-  _id: string;
-  name: string; // если у тебя другое поле (firstName/lastName) — скажи, подстрою
-  url: string;
-  image: string;
-};
-
-type Ingredient = {
-  title: string;
-  quantity: string;
-  unit: string;
-};
-
-type Step = {
-  number: string;
-  title: string;
-  description: string;
-  imageFile: File | null; // файл шага
-};
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
-
-function slugify(input: string) {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/['"]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { getAllCategories } from "../data/categories";
+import { getAllChefs } from "../data/chefs";
+import { createRecipe } from "../data/recipes";
+import type { Category } from "../types/category";
+import type { Chef } from "../types/chef";
+import type { RecipeCreateForm } from "../types/recipeForm";
 
 const inputBase =
-  "w-full rounded-xl border border-black/15 dark:border-white/15 bg-white/70 dark:bg-white/5 px-4 py-3 text-sm outline-none " +
-  "placeholder:text-black/40 dark:placeholder:text-white/40 " +
-  "focus:border-(--accent-olive) focus:ring-2 focus:ring-(--accent-olive)/20";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
 
-const sectionTitle = "text-center text-xl md:text-2xl font-[Philosopher] font-bold";
+
+function makeSlug(v: string) {
+  return v
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+const initialForm: RecipeCreateForm = {
+  title: "",
+  url: "", // slug
+  categoryId: "",
+  chefId: "",
+  description: "",
+  totalTime: "",
+  level: "",
+  cuisine: "",
+  service: "",
+  imageFile: null,
+  ingredients: [{ title: "", quantity: "", unit: "" }],
+  instructions: [{ number: "1", title: "", description: "", imageFile: null }],
+};
 
 export default function CreateRecipe() {
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const topRef = useRef<HTMLDivElement | null>(null);
+
+  const successTimerRef = useRef<number | null>(null);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [chefs, setChefs] = useState<Chef[]>([]);
+  const [loadingLists, setLoadingLists] = useState(true);
 
-  // main form fields
-  const [title, setTitle] = useState("");
-  const url = useMemo(() => slugify(title), [title]);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
 
-  const [description, setDescription] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [chefId, setChefId] = useState("");
+  // so that the title doesn't overwrite the slug if the admin changes it manually
+  const [slugTouched, setSlugTouched] = useState(false);
 
-  const [totalTime, setTotalTime] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [level, setLevel] = useState("");
-  const [service, setService] = useState("");
+  const [form, setForm] = useState<RecipeCreateForm>(initialForm);
 
-  // images
-  const [mainImage, setMainImage] = useState<File | null>(null);
+  const scrollToTop = () => {
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  // ingredients
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { title: "", quantity: "", unit: "" }
-  ]);
-
-  // steps
-  const [steps, setSteps] = useState<Step[]>([
-    { number: "1", title: "", description: "", imageFile: null }
-  ]);
-
-  // fetch categories/chefs
   useEffect(() => {
     let ignore = false;
 
     (async () => {
       try {
-        const [catRes, chefRes] = await Promise.all([
-          fetch(`${API_BASE}/categories`, { credentials: "include" }),
-          fetch(`${API_BASE}/chefs`, { credentials: "include" })
-        ]);
-
-        if (!catRes.ok) throw new Error("Failed to load categories");
-        if (!chefRes.ok) throw new Error("Failed to load chefs");
-
-        const cats = (await catRes.json()) as Category[];
-        const chs = (await chefRes.json()) as Chef[];
-
+        setLoadingLists(true);
+        const [cats, ch] = await Promise.all([getAllCategories(), getAllChefs()]);
         if (!ignore) {
           setCategories(cats);
-          setChefs(chs);
+          setChefs(ch);
         }
       } catch (e) {
-        if (!ignore) {
-          setServerError(e instanceof Error ? e.message : "Something went wrong");
-        }
+        if (!ignore) setError(e instanceof Error ? e.message : "Failed to fetch");
+      } finally {
+        if (!ignore) setLoadingLists(false);
       }
     })();
 
@@ -111,618 +78,495 @@ export default function CreateRecipe() {
     };
   }, []);
 
-  // --- ingredients handlers ---
-  function updateIngredient(index: number, key: keyof Ingredient, value: string) {
-    setIngredients((prev) => prev.map((ing, i) => (i === index ? { ...ing, [key]: value } : ing)));
-  }
+  // Autogenerate slug from title ONLY if the admin did not enter the slug manually
+  useEffect(() => {
+    if (!form.title.trim()) return;
+    if (slugTouched) return;
 
-  function addIngredient() {
-    setIngredients((prev) => [...prev, { title: "", quantity: "", unit: "" }]);
-  }
+    const slug = makeSlug(form.title);
+    setForm((p) => ({ ...p, url: slug }));
+  }, [form.title, slugTouched]);
 
-  function removeIngredient(index: number) {
-    setIngredients((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== index)));
-  }
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) {
+        window.clearTimeout(successTimerRef.current);
+      }
+    };
+  }, []);
 
-  // --- steps handlers ---
-  function updateStep(index: number, key: keyof Omit<Step, "imageFile">, value: string) {
-    setSteps((prev) =>
-      prev.map((st, i) => (i === index ? { ...st, [key]: value } : st))
+  const canSubmit = useMemo(() => {
+    if (!form.title.trim()) return false;
+    if (!form.url.trim()) return false;
+    if (!form.categoryId) return false;
+    if (!form.chefId) return false;
+    if (!form.description.trim()) return false;
+    if (!form.totalTime.trim()) return false;
+    if (!form.level.trim()) return false;
+    if (!form.cuisine.trim()) return false;
+    if (!form.service.trim()) return false;
+    if (!form.imageFile) return false;
+
+    const badIngredient = form.ingredients.some(
+      (i) => !i.title.trim() || !i.quantity.trim() || !i.unit.trim()
     );
-  }
+    if (badIngredient) return false;
 
-  function setStepFile(index: number, file: File | null) {
-    setSteps((prev) => prev.map((st, i) => (i === index ? { ...st, imageFile: file } : st)));
-  }
+    const badStep = form.instructions.some(
+      (s) => !s.number.trim() || !s.title.trim() || !s.description.trim()
+    );
+    if (badStep) return false;
 
-  function addStep() {
-    setSteps((prev) => {
-      const nextNumber = String(prev.length + 1);
-      return [...prev, { number: nextNumber, title: "", description: "", imageFile: null }];
+    return true;
+  }, [form]);
+
+  const setField = <K extends keyof RecipeCreateForm>(
+    key: K,
+    value: RecipeCreateForm[K]
+  ) => setForm((p) => ({ ...p, [key]: value }));
+
+  const onText =
+    (key: keyof RecipeCreateForm) =>
+    (
+      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+      setField(key, e.target.value as RecipeCreateForm[typeof key]);
+    };
+
+  // slug input handler (Note that the admin changed the slug manually)
+  const onSlugChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSlugTouched(true);
+    setField("url", e.target.value);
+  };
+
+  // INGREDIENTS
+  const addIngredient = () => {
+    setForm((p) => ({
+      ...p,
+      ingredients: [...p.ingredients, { title: "", quantity: "", unit: "" }],
+    }));
+  };
+
+  const updateIngredient = (
+    idx: number,
+    key: "title" | "quantity" | "unit",
+    value: string
+  ) => {
+    setForm((p) => {
+      const next = [...p.ingredients];
+      next[idx] = { ...next[idx], [key]: value };
+      return { ...p, ingredients: next };
     });
-  }
+  };
 
-  function removeStep(index: number) {
-    setSteps((prev) => {
-      if (prev.length === 1) return prev;
-
-      const next = prev.filter((_, i) => i !== index);
-      // перенумеруем красиво 1..n
-      return next.map((s, i) => ({ ...s, number: String(i + 1) }));
+  const removeIngredient = (idx: number) => {
+    setForm((p) => {
+      const next = p.ingredients.filter((_, i) => i !== idx);
+      return {
+        ...p,
+        ingredients: next.length ? next : [{ title: "", quantity: "", unit: "" }],
+      };
     });
-  }
+  };
 
-  function onMainImageChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-    setMainImage(file);
-  }
+  // STEPS
+  const addStep = () => {
+    setForm((p) => {
+      const nextNumber = String(p.instructions.length + 1);
+      return {
+        ...p,
+        instructions: [
+          ...p.instructions,
+          { number: nextNumber, title: "", description: "", imageFile: null },
+        ],
+      };
+    });
+  };
 
-  async function onSubmit(e: FormEvent) {
+  const updateStep = (
+    idx: number,
+    key: "number" | "title" | "description",
+    value: string
+  ) => {
+    setForm((p) => {
+      const next = [...p.instructions];
+      next[idx] = { ...next[idx], [key]: value };
+      return { ...p, instructions: next };
+    });
+  };
+
+  const updateStepImage = (idx: number, file: File | null) => {
+    setForm((p) => {
+      const next = [...p.instructions];
+      next[idx] = { ...next[idx], imageFile: file };
+      return { ...p, instructions: next };
+    });
+  };
+
+  const removeStep = (idx: number) => {
+    setForm((p) => {
+      const next = p.instructions.filter((_, i) => i !== idx);
+      const normalized = (next.length
+        ? next
+        : [{ number: "1", title: "", description: "", imageFile: null }]
+      ).map((s, i) => ({ ...s, number: String(i + 1) }));
+      return { ...p, instructions: normalized };
+    });
+  };
+
+  // MAIN IMAGE
+  const onMainImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] ?? null;
+    setField("imageFile", f);
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setServerError(null);
+    setError("");
+    setSuccess("");
 
-    // минимальная фронт-валидация, чтобы не ловить лишние 400
-    if (!title.trim()) return setServerError("Title is required");
-    if (!categoryId) return setServerError("Category is required");
-    if (!chefId) return setServerError("Chef is required");
-    if (!mainImage) return setServerError("Main image is required");
-
-    setLoading(true);
     try {
+      setSubmitting(true);
+
       const fd = new FormData();
 
-      // strings
-      fd.append("title", title);
-      fd.append("url", url);
-      fd.append("description", description);
+      // text
+      fd.append("title", form.title);
+      fd.append("url", form.url);
+      fd.append("categoryId", form.categoryId);
+      fd.append("chefId", form.chefId);
+      fd.append("description", form.description);
+      fd.append("totalTime", form.totalTime);
+      fd.append("level", form.level);
+      fd.append("cuisine", form.cuisine);
+      fd.append("service", form.service);
 
-      fd.append("categoryId", categoryId);
-      fd.append("chefId", chefId);
-
-      fd.append("totalTime", totalTime);
-      fd.append("level", level);
-      fd.append("cuisine", cuisine);
-      fd.append("service", service);
-
-      // arrays as JSON string
-      fd.append("ingredients", JSON.stringify(ingredients));
+      // json
+      fd.append("ingredients", JSON.stringify(form.ingredients));
       fd.append(
         "instructions",
         JSON.stringify(
-          steps.map((s) => ({
+          form.instructions.map((s) => ({
             number: s.number,
             title: s.title,
-            description: s.description
+            description: s.description,
           }))
         )
       );
 
       // files
-      fd.append("image", mainImage);
-      steps.forEach((s) => {
+      if (form.imageFile) fd.append("image", form.imageFile);
+      form.instructions.forEach((s) => {
         if (s.imageFile) fd.append("instructionImages", s.imageFile);
       });
 
-      const res = await fetch(`${API_BASE}/recipes`, {
-        method: "POST",
-        body: fd,
-        credentials: "include"
-      });
+      await createRecipe(fd);
 
-      if (!res.ok) {
-        const payload = await res.json().catch(() => null);
-        const msg =
-          payload?.message ??
-          "Failed to create recipe. Check backend logs and request payload.";
-        throw new Error(msg);
+      setSuccess("Recipe created successfully!");
+      scrollToTop();
+
+      if (successTimerRef.current) {
+        window.clearTimeout(successTimerRef.current);
       }
+      successTimerRef.current = window.setTimeout(() => {
+        setSuccess("");
+      }, 3000);
 
-      // success reset
-      setTitle("");
-      setDescription("");
-      setCategoryId("");
-      setChefId("");
-      setTotalTime("");
-      setLevel("");
-      setCuisine("");
-      setService("");
-      setMainImage(null);
-      setIngredients([{ title: "", quantity: "", unit: "" }]);
-      setSteps([{ number: "1", title: "", description: "", imageFile: null }]);
-
-      // если хочешь — можно редиректнуть на список рецептов в dashboard
-      // navigate("/dashboard/all-recipes");
-    } catch (err) {
-      setServerError(err instanceof Error ? err.message : "Something went wrong");
+      setForm(initialForm);
+      setSlugTouched(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to create recipe");
+      scrollToTop();
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
-    <div className="mx-auto w-full max-w-3xl pb-24">
-      {/* Page header */}
-      <div className="text-center">
-        <h1 className="font-[Philosopher] text-3xl font-bold md:text-4xl">
+    <div className="w-full" ref={topRef}>
+      <div className="mx-auto max-w-3xl py-10">
+        <h1 className="text-center text-3xl font-semibold">
           Create new recipe
         </h1>
-        <p className="mt-2 text-sm text-(--text-muted)">
+        <p className="mt-2 text-center text-sm text-(--text-muted)">
           Add a new recipe to the Culinaire collection
         </p>
-      </div>
 
-      {/* Form card */}
-      <form
-        onSubmit={onSubmit}
-        className="mt-10 rounded-3xl border border-black/10 bg-white/60 p-10 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5"
-      >
-        {serverError && (
-          <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
-            {serverError}
+        {error && (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
           </div>
         )}
 
-        {/* MAIN INFORMATION */}
-        <h2 className={sectionTitle}>Main information</h2>
+        {success && (
+          <div className="mt-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {success}
+          </div>
+        )}
 
-        <div className="mt-8 space-y-4">
-          <input
-            className={inputBase}
-            placeholder="Recipe title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+        <form
+          onSubmit={onSubmit}
+          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
+        >
+          <h3 className="mb-6 text-center text-2xl font-semibold">Main information</h3>
 
-          {/* image */}
-          <label className="block">
-            <div className={`${inputBase} flex items-center justify-between gap-3`}>
-              <span className="text-black/50 dark:text-white/50">Recipe image</span>
+          <div className="space-y-4">
+            <input
+              className={inputBase}
+              placeholder="Recipe title"
+              value={form.title}
+              onChange={onText("title")}
+              required
+            />
+
+            {/* ✅ SLUG / URL */}
+            <input
+              className={inputBase}
+              placeholder="Recipe slug (url)"
+              value={form.url}
+              onChange={onSlugChange}
+              required
+            />
+            <p className="text-xs text-(--text-muted) -mt-2 ml-2">
+              Tip: slug should be unique and stable (changing it later may create a new Cloudinary folder).
+            </p>
+
+            {/* File upload (English) */}
+            <div className="flex items-center gap-3">
               <input
-                type="file"
-                accept="image/*"
-                onChange={onMainImageChange}
-                className="text-xs file:mr-3 file:rounded-lg file:border file:border-black/15 file:bg-white file:px-3 file:py-2 file:text-xs file:font-medium file:text-black/70
-                           dark:file:border-white/15 dark:file:bg-white/10 dark:file:text-white/80"
+                className={inputBase}
+                placeholder="Recipe image"
+                value={form.imageFile?.name ?? ""}
+                readOnly
               />
+              <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) text-(--accent-olive) px-4 py-3 text-sm transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                Upload
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onMainImage}
+                />
+              </label>
             </div>
-          </label>
 
-          {/* chef */}
-          <div className="relative">
             <select
-              className={`${inputBase} appearance-none pr-10`}
-              value={chefId}
-              onChange={(e) => setChefId(e.target.value)}
+              className={inputBase}
+              value={form.chefId}
+              onChange={onText("chefId")}
+              disabled={loadingLists}
+              required
             >
-              <option value="">Recipe creator</option>
+              <option value="">
+                {loadingLists ? "Loading chefs..." : "Recipe creator"}
+              </option>
               {chefs.map((c) => (
                 <option key={c._id} value={c._id}>
                   {c.name}
                 </option>
               ))}
             </select>
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40">
-              ▾
-            </span>
-          </div>
 
-          {/* category */}
-          <div className="relative">
             <select
-              className={`${inputBase} appearance-none pr-10`}
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              className={inputBase}
+              value={form.categoryId}
+              onChange={onText("categoryId")}
+              disabled={loadingLists}
+              required
             >
-              <option value="">Recipe category</option>
-              {categories.map((c) => (
-                <option key={c._id} value={c._id}>
-                  {c.name}
+              <option value="">
+                {loadingLists ? "Loading categories..." : "Recipe category"}
+              </option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
                 </option>
               ))}
             </select>
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40">
-              ▾
-            </span>
+
+            <textarea
+              className={`${inputBase} min-h-24 resize-none`}
+              placeholder="Recipe description"
+              value={form.description}
+              onChange={onText("description")}
+              required
+            />
           </div>
 
-          <input
-            className={inputBase}
-            placeholder="Recipe description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
+          <div className="mt-12">
+            <h3 className="mb-6 text-center text-2xl font-semibold">Recipe details</h3>
 
-        {/* RECIPE DETAILS */}
-        <h2 className={`${sectionTitle} mt-14`}>Recipe details</h2>
-
-        <div className="mt-8 space-y-4">
-          <input
-            className={inputBase}
-            placeholder="Total time"
-            value={totalTime}
-            onChange={(e) => setTotalTime(e.target.value)}
-          />
-          <input
-            className={inputBase}
-            placeholder="Cuisine"
-            value={cuisine}
-            onChange={(e) => setCuisine(e.target.value)}
-          />
-          <input
-            className={inputBase}
-            placeholder="Difficulty"
-            value={level}
-            onChange={(e) => setLevel(e.target.value)}
-          />
-          <input
-            className={inputBase}
-            placeholder="Servings"
-            value={service}
-            onChange={(e) => setService(e.target.value)}
-          />
-        </div>
-
-        {/* INGREDIENTS */}
-        <h2 className={`${sectionTitle} mt-16`}>Ingredients</h2>
-
-        <div className="mt-8 space-y-4">
-          {ingredients.map((ing, idx) => (
-            <div key={idx} className="flex flex-wrap items-center gap-3">
+            <div className="space-y-4">
               <input
-                className={`${inputBase} flex-1 min-w-[240px]`}
-                placeholder="Ingredient title"
-                value={ing.title}
-                onChange={(e) => updateIngredient(idx, "title", e.target.value)}
+                className={inputBase}
+                placeholder="Total time"
+                value={form.totalTime}
+                onChange={onText("totalTime")}
+                required
               />
-
               <input
-                className={`${inputBase} w-28`}
-                placeholder="Quantity"
-                value={ing.quantity}
-                onChange={(e) => updateIngredient(idx, "quantity", e.target.value)}
+                className={inputBase}
+                placeholder="Cuisine"
+                value={form.cuisine}
+                onChange={onText("cuisine")}
+                required
               />
+              <input
+                className={inputBase}
+                placeholder="Difficulty"
+                value={form.level}
+                onChange={onText("level")}
+                required
+              />
+              <input
+                className={inputBase}
+                placeholder="Servings"
+                value={form.service}
+                onChange={onText("service")}
+                required
+              />
+            </div>
+          </div>
 
-              <div className="relative w-28">
-                <input
-                  className={`${inputBase} pr-8`}
-                  placeholder="Unit"
-                  value={ing.unit}
-                  onChange={(e) => updateIngredient(idx, "unit", e.target.value)}
-                />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black/35 dark:text-white/35">
-                  ▾
-                </span>
-              </div>
+          <div className="mt-12">
+            <h3 className='mb-6 text-center text-2xl font-semibold'>Ingredients</h3>
 
-              <button
-                type="button"
-                onClick={() => removeIngredient(idx)}
-                className="rounded-xl px-3 py-2 text-black/40 transition hover:text-(--accent-wine) dark:text-white/40"
-                aria-label="Remove ingredient"
-                title="Remove"
-              >
-                ✕
-              </button>
-
-              {/* add button inline, как у тебя на макете справа */}
-              {idx === 0 && (
-                <div className="ml-auto">
+            <div className="space-y-3">
+              {form.ingredients.map((ing, idx) => (
+                <div key={idx} className="grid grid-cols-12 gap-3">
+                  <input
+                    className={`${inputBase} col-span-6`}
+                    placeholder="Ingredient title"
+                    value={ing.title}
+                    onChange={(e) => updateIngredient(idx, "title", e.target.value)}
+                    required
+                  />
+                  <input
+                    className={`${inputBase} col-span-3`}
+                    placeholder="Quantity"
+                    value={ing.quantity}
+                    onChange={(e) => updateIngredient(idx, "quantity", e.target.value)}
+                    required
+                  />
+                  <input
+                    className={`${inputBase} col-span-2`}
+                    placeholder="Unit"
+                    value={ing.unit}
+                    onChange={(e) => updateIngredient(idx, "unit", e.target.value)}
+                    required
+                  />
                   <button
                     type="button"
-                    onClick={addIngredient}
-                    className="inline-flex items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+                    onClick={() => removeIngredient(idx)}
+                    className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) dark:border-white/10"
+                    aria-label="Remove ingredient"
+                    title="Remove ingredient"
                   >
-                    + Add ingredient
+                    ×
                   </button>
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* COOKING STEPS */}
-        <h2 className={`${sectionTitle} mt-16`}>Cooking Steps</h2>
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={addIngredient}
+                className="rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              >
+                + Add ingredient
+              </button>
+            </div>
+          </div>
 
-        <div className="mt-8 space-y-6">
-          {steps.map((s, idx) => (
-            <div
-              key={idx}
-              className="rounded-2xl border border-black/10 bg-white/60 p-6 dark:border-white/10 dark:bg-white/5"
-            >
-              <div className="flex items-center gap-3">
-                <input
-                  className={`${inputBase} w-28`}
-                  placeholder="Step number"
-                  value={s.number}
-                  onChange={(e) => updateStep(idx, "number", e.target.value)}
-                />
-                <input
-                  className={`${inputBase} flex-1`}
-                  placeholder="Step title"
-                  value={s.title}
-                  onChange={(e) => updateStep(idx, "title", e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => removeStep(idx)}
-                  className="rounded-xl px-3 py-2 text-black/40 transition hover:text-(--accent-wine) dark:text-white/40"
-                  aria-label="Remove step"
-                  title="Remove"
+          <div className="mt-12">
+            <h3 className="mb-6 text-center text-2xl font-semibold">Cooking Steps</h3>
+
+            <div className="space-y-5">
+              {form.instructions.map((s, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-black/10 p-5 dark:border-white/10"
                 >
-                  ✕
-                </button>
-              </div>
-
-              <div className="mt-4">
-                <label className="block">
-                  <div className={`${inputBase} flex items-center justify-between gap-3`}>
-                    <span className="text-black/50 dark:text-white/50">Step image</span>
+                  <div className="grid grid-cols-12 gap-3">
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setStepFile(idx, e.target.files?.[0] ?? null)}
-                      className="text-xs file:mr-3 file:rounded-lg file:border file:border-black/15 file:bg-white file:px-3 file:py-2 file:text-xs file:font-medium file:text-black/70
-                                 dark:file:border-white/15 dark:file:bg-white/10 dark:file:text-white/80"
+                      className={`${inputBase} col-span-2`}
+                      placeholder="Step #"
+                      value={s.number}
+                      onChange={(e) => updateStep(idx, "number", e.target.value)}
+                      required
+                    />
+                    <input
+                      className={`${inputBase} col-span-9`}
+                      placeholder="Step title"
+                      value={s.title}
+                      onChange={(e) => updateStep(idx, "title", e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeStep(idx)}
+                      className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) dark:border-white/10"
+                      aria-label="Remove step"
+                      title="Remove step"
+                    >
+                      ×
+                    </button>
+
+                    <div className="col-span-12 flex items-center gap-3">
+                      <input
+                        className={inputBase}
+                        placeholder="Step image"
+                        value={s.imageFile?.name ?? ""}
+                        readOnly
+                      />
+                      <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) text-(--accent-olive) px-4 py-3 text-sm transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                        Upload
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) =>
+                            updateStepImage(idx, e.target.files?.[0] ?? null)
+                          }
+                        />
+                      </label>
+                    </div>
+
+                    <textarea
+                      className={`${inputBase} col-span-12 min-h-30 resize-none`}
+                      placeholder="Step description"
+                      value={s.description}
+                      onChange={(e) => updateStep(idx, "description", e.target.value)}
+                      required
                     />
                   </div>
-                </label>
-              </div>
-
-              <textarea
-                className={`${inputBase} mt-4 min-h-[120px] resize-none`}
-                placeholder="Step description"
-                value={s.description}
-                onChange={(e) => updateStep(idx, "description", e.target.value)}
-              />
+                </div>
+              ))}
             </div>
-          ))}
 
-          <div className="flex justify-end">
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={addStep}
+                className="rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              >
+                + Add step
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-10 flex justify-center">
             <button
-              type="button"
-              onClick={addStep}
-              className="inline-flex items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              type="submit"
+              disabled={!canSubmit || submitting}
+              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              + Add step
+              {submitting ? "Saving..." : "Save recipe"}
             </button>
           </div>
-        </div>
-
-        {/* SUBMIT */}
-        <div className="mt-12 flex justify-center">
-          <button
-            type="submit"
-            disabled={loading}
-            className="h-12 w-[260px] rounded-xl bg-(--accent-olive) text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:opacity-60"
-          >
-            {loading ? "Saving..." : "Save recipe"}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
-
-
-
-
-// import { categoriesMock } from "../mocks/categories.mock";
-// import { chefsMock } from "../mocks/chefs.mock";
-
-// import { useState } from "react";
-
-
-// /* =======================
-//    UI CLASSES
-// ======================= */
-
-// const inputBase =
-//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-(--accent-olive)";
-
-// const textareaBase =
-//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-(--accent-olive)";
-
-// const selectBase =
-//   "w-full appearance-none rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-(--accent-olive)";
-
-// /* =======================
-//    PAGE
-// ======================= */
-
-// const CreateRecipe = () => {
-//   const [ingredients, setIngredients] = useState([
-//     { title: "", quantity: "", unit: "" },
-//   ]);
-
-//   const [steps, setSteps] = useState([
-//     { number: "", title: "", image: "", description: "" },
-//   ]);
-
-//   return (
-//     <div className="mx-auto max-w-3xl">
-//       {/* Page title */}
-//       <div className="mb-10 text-center">
-//         <h1 className="text-2xl font-semibold">Create new recipe</h1>
-//         <p className="mt-2 text-sm text-(--text-muted)">
-//           Add a new recipe to the Culinaire collection
-//         </p>
-//       </div>
-
-//       {/* Form card */}
-//       <div className="rounded-3xl border border-black/10 bg-white px-8 py-10">
-//         {/* MAIN INFORMATION */}
-//         <Section title="Main information">
-//           <input className={inputBase} placeholder="Recipe title" />
-//           <input className={inputBase} placeholder="Recipe image" />
-
-//           <select className={selectBase}>
-//             <option value="">Recipe creator</option>
-//             {chefsMock.map((chef) => (
-//               <option key={chef.id} value={chef.id}>
-//                 {chef.name}
-//               </option>
-//             ))}
-//           </select>
-
-//           <select className={selectBase}>
-//             <option value="">Recipe category</option>
-//             {categoriesMock.map((cat) => (
-//               <option key={cat.id} value={cat.id}>
-//                 {cat.title}
-//               </option>
-//             ))}
-//           </select>
-
-//           <textarea
-//             rows={3}
-//             className={textareaBase}
-//             placeholder="Recipe description"
-//           />
-//         </Section>
-
-//         {/* RECIPE DETAILS */}
-//         <Section title="Recipe details">
-//           <input className={inputBase} placeholder="Total time" />
-//           <input className={inputBase} placeholder="Cuisine" />
-//           <input className={inputBase} placeholder="Difficulty" />
-//           <input className={inputBase} placeholder="Servings" />
-//         </Section>
-
-//         {/* INGREDIENTS */}
-//         <Section title="Ingredients">
-//           {ingredients.map((_, index) => (
-//             <div key={index} className="flex gap-4">
-//               <input
-//                 className={inputBase}
-//                 placeholder="Ingredient title"
-//               />
-//               <input className={inputBase} placeholder="Quantity" />
-//               <select className={selectBase}>
-//                 <option>Unit</option>
-//                 <option>g</option>
-//                 <option>ml</option>
-//                 <option>pcs</option>
-//               </select>
-
-//               {ingredients.length > 1 && (
-//                 <button
-//                   type="button"
-//                   className="text-black/40"
-//                   onClick={() =>
-//                     setIngredients((prev) =>
-//                       prev.filter((_, i) => i !== index)
-//                     )
-//                   }
-//                 >
-//                   ✕
-//                 </button>
-//               )}
-//             </div>
-//           ))}
-
-//           <button
-//             type="button"
-//             className="ml-auto mt-4 rounded-xl border border-(--accent-olive) px-4 py-2 text-sm text-(--accent-olive)"
-//             onClick={() =>
-//               setIngredients((prev) => [
-//                 ...prev,
-//                 { title: "", quantity: "", unit: "" },
-//               ])
-//             }
-//           >
-//             + Add ingredient
-//           </button>
-//         </Section>
-
-//         {/* COOKING STEPS */}
-//         <Section title="Cooking steps">
-//           {steps.map((_, index) => (
-//             <div
-//               key={index}
-//               className="rounded-2xl border border-black/10 p-6"
-//             >
-//               <div className="mb-4 flex gap-4">
-//                 <input
-//                   className={inputBase}
-//                   placeholder="Step number"
-//                 />
-//                 <input
-//                   className={inputBase}
-//                   placeholder="Step title"
-//                 />
-
-//                 {steps.length > 1 && (
-//                   <button
-//                     type="button"
-//                     className="text-black/40"
-//                     onClick={() =>
-//                       setSteps((prev) =>
-//                         prev.filter((_, i) => i !== index)
-//                       )
-//                     }
-//                   >
-//                     ✕
-//                   </button>
-//                 )}
-//               </div>
-
-//               <input
-//                 className={inputBase}
-//                 placeholder="Step image"
-//               />
-
-//               <textarea
-//                 rows={3}
-//                 className={`${textareaBase} mt-4`}
-//                 placeholder="Step description"
-//               />
-//             </div>
-//           ))}
-
-//           <button
-//             type="button"
-//             className="ml-auto mt-4 rounded-xl border border-(--accent-olive) px-4 py-2 text-sm text-(--accent-olive)"
-//             onClick={() =>
-//               setSteps((prev) => [
-//                 ...prev,
-//                 { number: "", title: "", image: "", description: "" },
-//               ])
-//             }
-//           >
-//             + Add step
-//           </button>
-//         </Section>
-
-//         {/* SUBMIT */}
-//         <button
-//           type="button"
-//           className="mx-auto mt-10 block w-64 rounded-xl bg-(--accent-olive) py-3 text-sm font-semibold text-white transition hover:bg-(--accent-wine)"
-//         >
-//           Save recipe
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CreateRecipe;
-
-// /* =======================
-//    HELPERS
-// ======================= */
-
-// const Section = ({
-//   title,
-//   children,
-// }: {
-//   title: string;
-//   children: React.ReactNode;
-// }) => (
-//   <div className="mb-12">
-//     <h3 className="mb-6 text-center text-lg font-medium">
-//       {title}
-//     </h3>
-//     <div className="space-y-4">{children}</div>
-//   </div>
-// );

@@ -1,3 +1,5 @@
+import type { Category } from "../types/category";
+
 const API_URL: string | undefined = import.meta.env.VITE_APP_SERVER_URL as
   | string
   | undefined;

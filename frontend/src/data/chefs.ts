@@ -1,3 +1,5 @@
+import type { Chef } from "../types/chef";
+
 const API_URL: string | undefined = import.meta.env.VITE_APP_SERVER_URL as
   | string
   | undefined;

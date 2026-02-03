@@ -1,5 +1,5 @@
 export interface Chef {
-  id: string;
+  _id: string;
   name: string;
   url?: string;
   description?: string;
