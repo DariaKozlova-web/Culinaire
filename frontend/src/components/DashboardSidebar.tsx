@@ -1,5 +1,7 @@
 import { NavLink } from "react-router";
 
+import useAuth from "../contexts/useAuth";
+
 const adminMenu = [
   { label: "All categories", to: "categories" },
   { label: "All chefs", to: "chefs" },
@@ -11,19 +13,20 @@ const adminMenu = [
 
 const userMenu = [
   { label: "My profile", to: "my-profile" },
-  { label: "Favourites", to: "favourites" },
+  { label: "Favorites", to: "favorites" },
 ];
 
 const DashboardSidebar = () => {
-  const isAdmin = true;
-  const isUser = true;
+  const { user } = useAuth();
+  const isAdmin = user?.roles?.some((role) => role === "admin");
+  const isUser = user?.roles?.some((role) => role === "user");
 
   return (
     <aside className="w-64 shrink-0">
       <nav className="space-y-6">
         {isAdmin && (
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-(--text-muted)">
+            <p className="mb-3 text-xs font-semibold tracking-wide text-(--text-muted) uppercase">
               Admin
             </p>
 
@@ -50,7 +53,7 @@ const DashboardSidebar = () => {
 
         {isUser && (
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-(--text-muted)">
+            <p className="mb-3 text-xs font-semibold tracking-wide text-(--text-muted) uppercase">
               Account
             </p>
 

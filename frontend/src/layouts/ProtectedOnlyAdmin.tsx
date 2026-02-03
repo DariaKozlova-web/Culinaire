@@ -3,22 +3,20 @@ import { Outlet, useNavigate } from "react-router";
 
 import useAuth from "../contexts/useAuth";
 
-const ProtectedOnlyGuests = () => {
+const ProtectedOnlyAdmin = () => {
   const navigate = useNavigate();
   const { user, authLoading } = useAuth();
 
   useEffect(() => {
-    console.log("ProtectedOnlyGuests - user:", user);
-    console.log("ProtectedOnlyGuests - authLoading:", authLoading);
     if (authLoading) return;
     if (!user) navigate("/login");
   }, [user, navigate, authLoading]);
 
   if (authLoading) return <p>Loading...</p>;
   if (!user) return null;
-  if (!user.roles?.some((role) => role === "user"))
-    return <p>"Access denied. Only users allowed."</p>;
+  if (!user.roles?.some((role) => role === "admin"))
+    return <p>"Access denied. Only admins allowed."</p>;
   return <Outlet />;
 };
 
-export default ProtectedOnlyGuests;
+export default ProtectedOnlyAdmin;

@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import MainLayout from "./layouts/MainLayout.tsx";
+import ProtectedOnlyAdmin from "./layouts/ProtectedOnlyAdmin.tsx";
+import ProtectedOnlyGuests from "./layouts/ProtectedOnlyGuest.tsx";
 import AllCategories from "./pages/AllCategories.tsx";
 import AllChefs from "./pages/AllChefs.tsx";
 import AllRecipes from "./pages/AllRecipes.tsx";
@@ -33,24 +35,31 @@ function App() {
             <Route path="recipes" element={<CreateRecipe />} /> */}
 
             <Route path="dashboard" element={<Dashboard />}>
-              {/* create */}
-              <Route path="create-recipe" element={<CreateRecipe />} />
-              <Route path="create-chef" element={<CreateChef />} />
-              <Route path="create-category" element={<CreateCategory />} />
+              {/* admin */}
+              <Route element={<ProtectedOnlyAdmin />}>
+                {/* create */}
+                <Route path="create-recipe" element={<CreateRecipe />} />
+                <Route path="create-chef" element={<CreateChef />} />
+                <Route path="create-category" element={<CreateCategory />} />
 
-              {/* admin lists */}
-              <Route path="recipes" element={<AllRecipes />} />
-              <Route path="chefs" element={<AllChefs />} />
-              <Route path="categories" element={<AllCategories />} />
+                {/* admin lists */}
+                <Route path="recipes" element={<AllRecipes />} />
+                <Route path="chefs" element={<AllChefs />} />
+                <Route path="categories" element={<AllCategories />} />
 
-              {/* edit */}
-              <Route path="recipes/:id/edit" element={<CreateRecipe />} />
-              <Route path="chefs/:id/edit" element={<CreateChef />} />
-              <Route path="categories/:id/edit" element={<CreateCategory />} />
-
+                {/* edit */}
+                <Route path="recipes/:id/edit" element={<CreateRecipe />} />
+                <Route path="chefs/:id/edit" element={<CreateChef />} />
+                <Route
+                  path="categories/:id/edit"
+                  element={<CreateCategory />}
+                />
+              </Route>
               {/* user */}
-              <Route path="my-profile" element={<MyProfile />} />
-              <Route path="favorites" element={<Favorites />} />
+              <Route element={<ProtectedOnlyGuests />}>
+                <Route path="my-profile" element={<MyProfile />} />
+                <Route path="favorites" element={<Favorites />} />
+              </Route>
             </Route>
             <Route
               path="register"

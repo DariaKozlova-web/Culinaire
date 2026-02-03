@@ -82,23 +82,23 @@ const Footer = () => {
           <div>
             <h4 className="mb-4 font-medium">Account</h4>
             <ul className="space-y-2 text-sm">
-              {user && (
+              {user?.roles?.some((role) => role === "user") && (
                 <li>
                   <NavLink
-                    to="/favorites"
+                    to="/dashboard/favorites"
                     className="text-(--accent-olive) hover:text-(--accent-wine)"
                   >
                     Favorites
                   </NavLink>
                 </li>
               )}
-              {user && (
+              {user?.roles?.some((role) => role === "user") && (
                 <li>
                   <NavLink
-                    to="/profile"
+                    to="/dashboard/my-profile"
                     className="text-(--accent-olive) hover:text-(--accent-wine)"
                   >
-                    Profile
+                    My profile
                   </NavLink>
                 </li>
               )}
