@@ -85,10 +85,10 @@ const Footer = () => {
               {user && (
                 <li>
                   <NavLink
-                    to="/favourites"
+                    to="/favorites"
                     className="text-(--accent-olive) hover:text-(--accent-wine)"
                   >
-                    Favourites
+                    Favorites
                   </NavLink>
                 </li>
               )}
