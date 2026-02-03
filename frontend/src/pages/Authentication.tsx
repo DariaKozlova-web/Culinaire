@@ -6,7 +6,7 @@ import { AuthForms, type IUserAuth } from "../components/AuthForms";
 import useAuth from "../contexts/useAuth";
 import { getMe, login, register } from "../data";
 
-function Authentication() {
+function Authentication({ showLoginForm }: { showLoginForm: boolean }) {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [registerSuccess, setRegisterSuccess] = useState(false);
@@ -68,6 +68,7 @@ function Authentication() {
   return (
     <>
       <AuthForms
+        showLoginForm={showLoginForm}
         onLoginSubmit={handleLoginSubmit}
         onRegisterSubmit={handleRegisterSubmit}
         registerSuccess={registerSuccess}

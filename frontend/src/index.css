@@ -5,17 +5,17 @@
 ====================== */
 :root {
   /* backgrounds */
-  --bg-main: #FAF7F2;
-  --bg-footer: #E8E2D8;
+  --bg-main: #faf7f2;
+  --bg-footer: #e8e2d8;
 
   /* text */
-  --text-title: #2B2A27;
-  --text-body: #4A4A4A;
+  --text-title: #2b2a27;
+  --text-body: #4a4a4a;
   --text-muted: rgba(74, 74, 74, 0.7);
 
   /* accents */
-  --accent-olive: #6B7A4F;
-  --accent-wine: #6E2F3C;
+  --accent-olive: #6b7a4f;
+  --accent-wine: #6e2f3c;
 
   /* overlays */
   --bg-overlay: rgba(210, 175, 150, 0.5);
@@ -24,11 +24,11 @@
   /* gradients */
 
   --gradient-cta: linear-gradient(
-  180deg,
-  #ffffff 0%,
-  #f1ede6 60%,
-  #e8e2d8 100%
-);
+    180deg,
+    #ffffff 0%,
+    #f1ede6 60%,
+    #e8e2d8 100%
+  );
 
   --gradient-logo: linear-gradient(
     309deg,
@@ -44,25 +44,25 @@
    Dark theme
 ====================== */
 .dark {
-  --bg-main: #1E1712;
-  --bg-footer: #261E18;
+  --bg-main: #1e1712;
+  --bg-footer: #261e18;
 
-  --text-title: #F3EDE6;
-  --text-body: #CFC6BB;
-  --text-muted: #9B9186;
+  --text-title: #f3ede6;
+  --text-body: #cfc6bb;
+  --text-muted: #9b9186;
 
-  --accent-olive: #8E9445;
-  --accent-wine: #6E2B2B;
+  --accent-olive: #8e9445;
+  --accent-wine: #6e2b2b;
 
   --bg-overlay: rgba(67, 40, 20, 0.4);
   --bg-overlay-card: rgba(0, 0, 0, 0.3);
 
- --gradient-cta: linear-gradient(
-  180deg,
-  #1b1410 0%,
-  #241b16 55%,
-  #2a211b 100%
-);
+  --gradient-cta: linear-gradient(
+    180deg,
+    #1b1410 0%,
+    #241b16 55%,
+    #2a211b 100%
+  );
 
   --gradient-logo: linear-gradient(
     309deg,
@@ -81,7 +81,7 @@ html,
 body {
   background-color: var(--bg-main);
   color: var(--text-body);
-  font-family: 'Lato', system-ui, sans-serif;
+  font-family: "Lato", system-ui, sans-serif;
 }
 
 h1,
@@ -89,5 +89,5 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Philosopher', serif;
+  font-family: "Philosopher", serif;
 }
