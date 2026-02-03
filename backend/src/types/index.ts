@@ -1,1 +1,14 @@
-/* For custom types used in more than one module */
+import type { File } from 'formidable';
+
+declare global {
+  namespace Express {
+    interface Request {
+      images?: {
+        main?: File;
+        steps?: File[];
+      }
+    }
+  }
+}
+
+export {};
