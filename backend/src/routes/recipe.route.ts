@@ -4,7 +4,8 @@ import {
   deleteRecipeById,
   getAllRecipes,
   getRecipeById,
-  updateRecipeById
+  updateRecipeById,
+  getRandomRecipes
 } from '#controllers';
 import {
   recipeFormMiddleware,
@@ -14,6 +15,8 @@ import {
 import { recipeInputSchema } from '#schemas';
 
 const recipeRouter = Router();
+
+recipeRouter.get('/random', getRandomRecipes);
 
 recipeRouter
   .route('/')

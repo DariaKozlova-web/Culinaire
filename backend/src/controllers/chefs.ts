@@ -88,3 +88,9 @@ export const getChefByURL: RequestHandler<{ url: string }, chefDTO> = async (req
 
   res.json(chef);
 };
+
+export const getRandomChefs: RequestHandler = async (req, res) => {
+  const limit = Math.max(1, Math.min(Number(req.query.limit) || 4, 24));
+  const chefs = await Chef.aggregate([{ $sample: { size: limit } }]);
+  res.json(chefs);
+};

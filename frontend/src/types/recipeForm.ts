@@ -10,7 +10,7 @@ export type InstructionForm = {
   number: string;        // "1", "2", ...
   title: string;         // REQUIRED
   description: string;   // REQUIRED
-  imageFile?: File | null; // фронт, НЕ уходит в JSON
+  imageFile?: File | null; 
 };
 
 export type RecipeCreateForm = {

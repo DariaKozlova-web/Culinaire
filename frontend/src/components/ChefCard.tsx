@@ -15,7 +15,7 @@ const ChefCard = ({ chef }: Props) => {
       {/* Avatar */}
       <div className="mx-auto mb-4 h-28 w-28 overflow-hidden rounded-full">
         <img
-          src={chef.avatar}
+          src={chef.image}
           alt={chef.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
@@ -24,7 +24,7 @@ const ChefCard = ({ chef }: Props) => {
       <h3 className="mb-1 font-[Philosopher] text-lg font-bold">{chef.name}</h3>
 
       <p className="mb-4 text-sm text-(--text-muted)">
-        Head Chef at {chef.restaurant?.name}
+        Head Chef at {chef.restaurant.name}
         <br />
         {chef.city}
       </p>

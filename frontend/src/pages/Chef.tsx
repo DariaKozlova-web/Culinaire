@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
+import type { Chef as ChefType } from "../types/chef";
 import { ClockIcon } from "../components/icons/ClockIcon";
 import { LocationIcon } from "../components/icons/LocationIcon";
 import { getChefByURL } from "../data/chefs";
@@ -8,7 +8,7 @@ import { getChefByURL } from "../data/chefs";
 function Chef() {
   const { slug } = useParams<{ slug: string }>();
   const [loading, setLoading] = useState(true);
-  const [chefData, setChefData] = useState<Chef | null>(null);
+  const [chefData, setChefData] = useState<ChefType | null>(null);
 
   useEffect(() => {
     const fetchChefData = async () => {
@@ -55,7 +55,7 @@ function Chef() {
                 <strong className="mb-4 block font-[Philosopher] text-2xl font-medium text-(--accent-olive)">
                   {chefData.cuisine}
                 </strong>
-                <p className="mx-auto max-w-[448px] font-semibold text-(--text-title) md:mx-0">
+                <p className="mx-auto max-w-md font-semibold text-(--text-title) md:mx-0">
                   {chefData.description}
                 </p>
               </div>
@@ -69,7 +69,7 @@ function Chef() {
             <h2 className="mb-4 text-4xl font-bold text-(--text-title)">
               About the Chef
             </h2>
-            {chefData.story.map((item, index) => (
+            {chefData.story.map((item: string, index: number) => (
               <p
                 key={index}
                 className="mx-auto mb-6 max-w-[75%] text-(--text-title)"

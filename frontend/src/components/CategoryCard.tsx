@@ -8,7 +8,7 @@ interface Props {
 const CategoryCard = ({ category }: Props) => {
   return (
     <NavLink
-      to={`/recipes?category=${category.id}`}
+      to={`/recipes?category=${category._id}`}
       className="
         group relative block h-80 w-65 overflow-hidden rounded-xl
       "
@@ -16,7 +16,7 @@ const CategoryCard = ({ category }: Props) => {
       {/* Image */}
       <img
         src={category.image}
-        alt={category.title}
+        alt={category.name}
         className="
           h-full w-full object-cover
           transition-transform duration-500
@@ -37,7 +37,7 @@ const CategoryCard = ({ category }: Props) => {
       {/* Title */}
       <div className="absolute inset-0 flex items-center justify-center p-6">
         <h3 className="text-xl font-semibold text-(--text-title)">
-          {category.title}
+          {category.name}
         </h3>
       </div>
     </NavLink>
