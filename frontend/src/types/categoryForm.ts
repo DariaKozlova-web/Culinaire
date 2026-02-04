@@ -1,5 +1,4 @@
-export type Category = {
-  _id: string;
+export type CategoryCreateForm = {
   name: string;
   url: string;
   image?: File | string | null;

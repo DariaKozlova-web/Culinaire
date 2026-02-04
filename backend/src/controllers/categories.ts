@@ -16,7 +16,6 @@ export const createCategory: RequestHandler<{}, categoryDTO, categoryInputDTO> =
   res
 ) => {
   const { name, url, image } = req.body;
-
   const category = await Category.create({
     name: name,
     url: url,

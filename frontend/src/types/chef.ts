@@ -7,7 +7,7 @@ export interface Chef {
   restaurant?: {
     name: string;
     addresse?: string;
-    openingHours?: string[]
+    openingHours?: string[];
   };
   city: string;
   avatar: string;

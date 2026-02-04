@@ -7,8 +7,6 @@ if (!API_URL)
   throw new Error("API URL is required, are you missing a .env file?");
 const baseURL: string = `${API_URL}/categories`;
 
-type FormData = Omit<Category, "_id">;
-
 export const getAllCategories = async (): Promise<Category[]> => {
   const res = await fetch(baseURL);
   if (!res.ok) {
@@ -25,10 +23,8 @@ export const getAllCategories = async (): Promise<Category[]> => {
 export const createCategory = async (formData: FormData): Promise<Category> => {
   const res = await fetch(baseURL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
+    credentials: "include",
+    body: formData,
   });
   if (!res.ok) {
     const errorData = await res.json();
@@ -60,10 +56,8 @@ export const updateCategoryById = async (
 ): Promise<Category> => {
   const res = await fetch(`${baseURL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
+    credentials: "include",
+    body: formData,
   });
 
   if (!res.ok) {
@@ -80,6 +74,7 @@ export const updateCategoryById = async (
 export const deleteCategoryById = async (id: string): Promise<void> => {
   const res = await fetch(`${baseURL}/${id}`, {
     method: "DELETE",
+    credentials: "include",
   });
 
   if (!res.ok) {
