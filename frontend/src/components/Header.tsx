@@ -90,7 +90,15 @@ const Header = () => {
                 to="/dashboard/my-profile"
                 className="group flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
               >
-                <UserIcon className="h-5 w-5" />
+                {user?.image ? (
+                  <img
+                    src={user.image}
+                    alt="User Avatar"
+                    className="object-fit-cover h-5 w-5 rounded-full"
+                  />
+                ) : (
+                  <UserIcon className="h-5 w-5" />
+                )}
               </NavLink>
 
               {/* Log out */}

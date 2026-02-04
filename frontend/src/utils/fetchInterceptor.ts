@@ -1,8 +1,9 @@
 const originalFetch = fetch;
-const authServiceURL = import.meta.env.VITE_APP_SERVER_URL + "/auth";
-if (!authServiceURL) {
-  console.error("No Auth service set");
+const serverURL = import.meta.env.VITE_APP_SERVER_URL;
+if (!serverURL) {
+  console.error("No server URL set");
 }
+const authServiceURL = serverURL + "/auth";
 
 window.fetch = async (url, options, ...rest) => {
   let res = await originalFetch(
@@ -27,4 +28,4 @@ window.fetch = async (url, options, ...rest) => {
   return res;
 };
 
-export { authServiceURL };
+export { serverURL, authServiceURL };

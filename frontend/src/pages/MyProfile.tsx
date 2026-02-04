@@ -1,6 +1,146 @@
-function MyProfile (){
+import { UserIcon } from "@/components/icons/UserIcon";
+import useAuth from "@/contexts/useAuth";
+import { updateProfile } from "@/data/profile";
+import type { ProfileForm } from "@/types/profileForm";
+import { inputBase } from "@/utils";
+import { useEffect, useState } from "react";
+
+function MyProfile() {
+  const { user, setUser } = useAuth();
+  const initialForm = {
+    name: "",
+    imageFile: null,
+  };
+  const [imagePreview, setImagePreview] = useState("");
+  const [form, setForm] = useState<ProfileForm>(initialForm);
+
+  useEffect(() => {
+    setForm({ name: user?.name || "", imageFile: null });
+    setImagePreview(user?.image || "");
+  }, [user]);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+
+  const onText = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const onMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setForm((prev) => ({ ...prev, imageFile: file }));
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(user?.image || "");
+    }
+  };
+
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      setSubmitting(true);
+
+      form.name = form.name.trim();
+      if (!form.name) {
+        setError("Name cannot be empty");
+        return;
+      }
+
+      const updatedUser = await updateProfile(form);
+      setSuccess("Profile updated successfully!");
+      setUser(updatedUser);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to create recipe");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div>MyProfile</div>
-  )
+    <div className="w-full">
+      <div className="mx-auto max-w-3xl py-10">
+        <h1 className="text-center text-3xl font-semibold">My Profile</h1>
+        <p className="mt-2 text-center text-sm text-(--text-muted)">
+          Update your personal information
+        </p>
+
+        <div className="mt-8 flex justify-center">
+          {imagePreview ? (
+            <img
+              src={imagePreview}
+              alt="Profile Preview"
+              className="object-fit-cover aspect-square max-h-40 w-auto items-center rounded-full"
+            />
+          ) : (
+            <UserIcon className="max-h-40 w-auto rounded-xl object-cover" />
+          )}
+        </div>
+
+        {error && (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mt-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {success}
+          </div>
+        )}
+
+        <form
+          onSubmit={onSubmit}
+          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
+        >
+          <div className="space-y-4">
+            <input
+              className={inputBase}
+              placeholder="Name"
+              value={form.name}
+              onChange={onText}
+              required
+            />
+
+            {/* File upload (English) */}
+            <div className="flex items-center gap-3">
+              <input
+                className={inputBase}
+                placeholder="Profile image"
+                value={form.imageFile?.name ?? ""}
+                readOnly
+              />
+              <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                Upload
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onMainImage}
+                />
+              </label>
+            </div>
+          </div>
+          <div className="mt-10 flex justify-center">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 export default MyProfile;
