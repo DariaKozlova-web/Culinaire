@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateBodyZod } from '#middlewares';
+import { validateBodyZod, categoryFormMiddleware, cloudUploaderCategory } from '#middlewares';
 import {
   createCategory,
   deleteCategoryById,
@@ -14,12 +14,22 @@ const categoryRouter = Router();
 categoryRouter
   .route('/')
   .get(getAllCategories)
-  .post(validateBodyZod(categoryInputSchema), createCategory);
+  .post(
+    categoryFormMiddleware,
+    cloudUploaderCategory,
+    validateBodyZod(categoryInputSchema),
+    createCategory
+  );
 
 categoryRouter
   .route('/:id')
   .get(getCategoryById)
-  .put(validateBodyZod(categoryInputSchema), updateCategoryById)
+  .put(
+    categoryFormMiddleware,
+    cloudUploaderCategory,
+    validateBodyZod(categoryInputSchema),
+    updateCategoryById
+  )
   .delete(deleteCategoryById);
 
 export default categoryRouter;

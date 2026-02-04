@@ -1,4 +1,5 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+
 import { getAllCategories } from "../data/categories";
 import { getAllChefs } from "../data/chefs";
 import { createRecipe } from "../data/recipes";
@@ -8,7 +9,6 @@ import type { RecipeCreateForm } from "../types/recipeForm";
 
 const inputBase =
   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
-
 
 function makeSlug(v: string) {
   return v
@@ -61,13 +61,17 @@ export default function CreateRecipe() {
     (async () => {
       try {
         setLoadingLists(true);
-        const [cats, ch] = await Promise.all([getAllCategories(), getAllChefs()]);
+        const [cats, ch] = await Promise.all([
+          getAllCategories(),
+          getAllChefs(),
+        ]);
         if (!ignore) {
           setCategories(cats);
           setChefs(ch);
         }
       } catch (e) {
-        if (!ignore) setError(e instanceof Error ? e.message : "Failed to fetch");
+        if (!ignore)
+          setError(e instanceof Error ? e.message : "Failed to fetch");
       } finally {
         if (!ignore) setLoadingLists(false);
       }
@@ -108,12 +112,12 @@ export default function CreateRecipe() {
     if (!form.imageFile) return false;
 
     const badIngredient = form.ingredients.some(
-      (i) => !i.title.trim() || !i.quantity.trim() || !i.unit.trim()
+      (i) => !i.title.trim() || !i.quantity.trim() || !i.unit.trim(),
     );
     if (badIngredient) return false;
 
     const badStep = form.instructions.some(
-      (s) => !s.number.trim() || !s.title.trim() || !s.description.trim()
+      (s) => !s.number.trim() || !s.title.trim() || !s.description.trim(),
     );
     if (badStep) return false;
 
@@ -122,13 +126,15 @@ export default function CreateRecipe() {
 
   const setField = <K extends keyof RecipeCreateForm>(
     key: K,
-    value: RecipeCreateForm[K]
+    value: RecipeCreateForm[K],
   ) => setForm((p) => ({ ...p, [key]: value }));
 
   const onText =
     (key: keyof RecipeCreateForm) =>
     (
-      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+      e: ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
     ) => {
       setField(key, e.target.value as RecipeCreateForm[typeof key]);
     };
@@ -150,7 +156,7 @@ export default function CreateRecipe() {
   const updateIngredient = (
     idx: number,
     key: "title" | "quantity" | "unit",
-    value: string
+    value: string,
   ) => {
     setForm((p) => {
       const next = [...p.ingredients];
@@ -164,7 +170,9 @@ export default function CreateRecipe() {
       const next = p.ingredients.filter((_, i) => i !== idx);
       return {
         ...p,
-        ingredients: next.length ? next : [{ title: "", quantity: "", unit: "" }],
+        ingredients: next.length
+          ? next
+          : [{ title: "", quantity: "", unit: "" }],
       };
     });
   };
@@ -186,7 +194,7 @@ export default function CreateRecipe() {
   const updateStep = (
     idx: number,
     key: "number" | "title" | "description",
-    value: string
+    value: string,
   ) => {
     setForm((p) => {
       const next = [...p.instructions];
@@ -206,9 +214,10 @@ export default function CreateRecipe() {
   const removeStep = (idx: number) => {
     setForm((p) => {
       const next = p.instructions.filter((_, i) => i !== idx);
-      const normalized = (next.length
-        ? next
-        : [{ number: "1", title: "", description: "", imageFile: null }]
+      const normalized = (
+        next.length
+          ? next
+          : [{ number: "1", title: "", description: "", imageFile: null }]
       ).map((s, i) => ({ ...s, number: String(i + 1) }));
       return { ...p, instructions: normalized };
     });
@@ -250,8 +259,8 @@ export default function CreateRecipe() {
             number: s.number,
             title: s.title,
             description: s.description,
-          }))
-        )
+          })),
+        ),
       );
 
       // files
@@ -308,7 +317,9 @@ export default function CreateRecipe() {
           onSubmit={onSubmit}
           className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
         >
-          <h3 className="mb-6 text-center text-2xl font-semibold">Main information</h3>
+          <h3 className="mb-6 text-center text-2xl font-semibold">
+            Main information
+          </h3>
 
           <div className="space-y-4">
             <input
@@ -327,8 +338,9 @@ export default function CreateRecipe() {
               onChange={onSlugChange}
               required
             />
-            <p className="text-xs text-(--text-muted) -mt-2 ml-2">
-              Tip: slug should be unique and stable (changing it later may create a new Cloudinary folder).
+            <p className="-mt-2 ml-2 text-xs text-(--text-muted)">
+              Tip: slug should be unique and stable (changing it later may
+              create a new Cloudinary folder).
             </p>
 
             {/* File upload (English) */}
@@ -339,7 +351,7 @@ export default function CreateRecipe() {
                 value={form.imageFile?.name ?? ""}
                 readOnly
               />
-              <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) text-(--accent-olive) px-4 py-3 text-sm transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+              <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
                 Upload
                 <input
                   type="file"
@@ -394,7 +406,9 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">Recipe details</h3>
+            <h3 className="mb-6 text-center text-2xl font-semibold">
+              Recipe details
+            </h3>
 
             <div className="space-y-4">
               <input
@@ -429,7 +443,9 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className='mb-6 text-center text-2xl font-semibold'>Ingredients</h3>
+            <h3 className="mb-6 text-center text-2xl font-semibold">
+              Ingredients
+            </h3>
 
             <div className="space-y-3">
               {form.ingredients.map((ing, idx) => (
@@ -438,21 +454,27 @@ export default function CreateRecipe() {
                     className={`${inputBase} col-span-6`}
                     placeholder="Ingredient title"
                     value={ing.title}
-                    onChange={(e) => updateIngredient(idx, "title", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "title", e.target.value)
+                    }
                     required
                   />
                   <input
                     className={`${inputBase} col-span-3`}
                     placeholder="Quantity"
                     value={ing.quantity}
-                    onChange={(e) => updateIngredient(idx, "quantity", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "quantity", e.target.value)
+                    }
                     required
                   />
                   <input
                     className={`${inputBase} col-span-2`}
                     placeholder="Unit"
                     value={ing.unit}
-                    onChange={(e) => updateIngredient(idx, "unit", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "unit", e.target.value)
+                    }
                     required
                   />
                   <button
@@ -480,7 +502,9 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">Cooking Steps</h3>
+            <h3 className="mb-6 text-center text-2xl font-semibold">
+              Cooking Steps
+            </h3>
 
             <div className="space-y-5">
               {form.instructions.map((s, idx) => (
@@ -493,7 +517,9 @@ export default function CreateRecipe() {
                       className={`${inputBase} col-span-2`}
                       placeholder="Step #"
                       value={s.number}
-                      onChange={(e) => updateStep(idx, "number", e.target.value)}
+                      onChange={(e) =>
+                        updateStep(idx, "number", e.target.value)
+                      }
                       required
                     />
                     <input
@@ -520,7 +546,7 @@ export default function CreateRecipe() {
                         value={s.imageFile?.name ?? ""}
                         readOnly
                       />
-                      <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) text-(--accent-olive) px-4 py-3 text-sm transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                      <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
                         Upload
                         <input
                           type="file"
@@ -537,7 +563,9 @@ export default function CreateRecipe() {
                       className={`${inputBase} col-span-12 min-h-30 resize-none`}
                       placeholder="Step description"
                       value={s.description}
-                      onChange={(e) => updateStep(idx, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateStep(idx, "description", e.target.value)
+                      }
                       required
                     />
                   </div>
