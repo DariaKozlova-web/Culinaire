@@ -57,10 +57,16 @@ export const recipeInputSchema = z.object({
           number: z.string().min(1),
           title: z.string().min(1),
           description: z.string().min(1),
+          image: z.string().url().optional()
         })
       )
       .min(1, 'At least one instruction is required')
   ),
 
   image: z.string().url().optional()
+});
+
+// ✅ update: url optional
+export const recipeUpdateSchema = recipeInputSchema.extend({
+  url: z.preprocess(coerceString, z.string().min(1, "URL is required")).optional()
 });

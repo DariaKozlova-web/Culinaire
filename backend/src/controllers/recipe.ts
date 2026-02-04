@@ -1,10 +1,7 @@
 import { Recipe } from '#models';
-import { recipeInputSchema } from '#schemas';
 import { deleteRecipeFolder } from '#utils';
 import { type RequestHandler } from 'express';
-import { z } from 'zod/v4';
 
-type RecipeInputDTO = z.infer<typeof recipeInputSchema>;
 
 export const getAllRecipes: RequestHandler = async (_req, res) => {
   const recipes = await Recipe.find()
@@ -36,16 +33,20 @@ export const updateRecipeById: RequestHandler<{ id: string }> = async (req, res)
 
   const body = req.body as any;
 
+// IMPORTANT: We prohibit changing the URL
+// We extract the URL and ignore it, update the rest
+  const { url: _ignoredUrl, ...safeBody } = body;
+
   // If the instructions arrived without images, leave the old links.
-  const mergedInstructions = Array.isArray(body.instructions)
-    ? body.instructions.map((step: any, i: number) => ({
+  const mergedInstructions = Array.isArray(safeBody.instructions)
+    ? safeBody.instructions.map((step: any, i: number) => ({
         ...step,
         image: step.image ?? recipe.instructions?.[i]?.image ?? ''
       }))
     : recipe.instructions;
 
   recipe.set({
-    ...body,
+    ...safeBody,
     instructions: mergedInstructions
   });
 

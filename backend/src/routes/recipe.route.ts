@@ -12,7 +12,7 @@ import {
   cloudUploaderRecipe,
   validateBodyZod
 } from '#middlewares';
-import { recipeInputSchema } from '#schemas';
+import { recipeInputSchema, recipeUpdateSchema } from '#schemas';
 
 const recipeRouter = Router();
 
@@ -31,7 +31,7 @@ recipeRouter
 recipeRouter
   .route('/:id')
   .get(getRecipeById)
-  .put(recipeFormMiddleware, validateBodyZod(recipeInputSchema), cloudUploaderRecipe,  updateRecipeById)
+  .put(recipeFormMiddleware, validateBodyZod(recipeUpdateSchema), cloudUploaderRecipe,  updateRecipeById)
   .delete(deleteRecipeById);
 
 export default recipeRouter;
