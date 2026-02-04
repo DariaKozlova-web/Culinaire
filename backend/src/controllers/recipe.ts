@@ -54,16 +54,6 @@ export const updateRecipeById: RequestHandler<{ id: string }> = async (req, res)
 };
 
 
-// export const deleteRecipeById: RequestHandler<{ id: string }> = async (req, res) => {
-//   const recipe = await Recipe.findByIdAndDelete(req.params.id);
-
-//   if (!recipe) {
-//     throw new Error('Recipe not found', { cause: { status: 404 } });
-//   }
-
-//   res.json({ message: 'Recipe deleted' });
-// };
-
 export const deleteRecipeById: RequestHandler<{ id: string }> = async (req, res) => {
   const recipe = await Recipe.findById(req.params.id);
 
@@ -84,4 +74,24 @@ export const deleteRecipeById: RequestHandler<{ id: string }> = async (req, res)
   }
 
   res.json({ message: 'Recipe deleted' });
+};
+
+export const getRandomRecipes: RequestHandler = async (req, res) => {
+  const limit = Math.max(1, Math.min(Number(req.query.limit) || 3, 24));
+
+  // 1) take random IDs
+  const randomIds = await Recipe.aggregate([{ $sample: { size: limit } }, { $project: { _id: 1 } }]);
+
+  const ids = randomIds.map((x: any) => x._id);
+
+  // 2) get documents + populate
+  const recipes = await Recipe.find({ _id: { $in: ids } })
+    .populate('categoryId')
+    .populate('chefId');
+
+  // (optional) keep "random" order as in ids
+  const map = new Map(recipes.map(r => [String(r._id), r]));
+  const ordered = ids.map((id: any) => map.get(String(id))).filter(Boolean);
+
+  res.json(ordered);
 };

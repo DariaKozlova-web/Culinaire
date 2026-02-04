@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+// import type { Chef } from "../types/chef";
+import type { ChefPayload } from "../data/chefs";
 
 import { createChef, getChefById, updateChefById } from "../data/chefs";
 
@@ -104,7 +106,7 @@ const CreateChef = () => {
 
       setLoading(true);
 
-      const chefData: Omit<Chef, "_id"> = {
+      const chefData: ChefPayload = {
         name,
         url,
         image,

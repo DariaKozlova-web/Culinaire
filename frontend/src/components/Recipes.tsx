@@ -1,15 +1,37 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import RecipeCard from "./RecipeCard";
-import { recipesMock } from "../mocks/recipes.mock";
-import { getRandomItems } from "../utils/getRandomItems";
+import type { Recipe } from "../types/recipe";
+import { getRandomRecipes } from "../data/recipes";
 
 const Recipes = () => {
-  const featured = getRandomItems(recipesMock, 3);
+  const [featured, setFeatured] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        setLoading(true);
+        const data = await getRandomRecipes(3);
+        if (alive) setFeatured(data);
+      } catch (e) {
+        if (alive) setError(e instanceof Error ? e.message : "Failed to load recipes");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        {/* Header */}
         <div className="mb-16 text-center">
           <h2 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
             Featured Recipes
@@ -21,17 +43,20 @@ const Recipes = () => {
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid gap-10 md:grid-cols-3">
-          {featured.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              recipe={recipe}
-            />
-          ))}
-        </div>
+        {loading && <p className="text-center text-(--text-muted)">Loading...</p>}
+        {error && <p className="text-center text-red-400">{error}</p>}
 
-        {/* CTA */}
+        {!loading && !error && (
+          <div className="grid gap-10 md:grid-cols-3">
+            {featured.map((recipe) => (
+              <RecipeCard
+                key={recipe._id}
+                recipe={recipe}
+              />
+            ))}
+          </div>
+        )}
+
         <div className="mt-14 flex justify-center">
           <NavLink
             to="/recipes"
