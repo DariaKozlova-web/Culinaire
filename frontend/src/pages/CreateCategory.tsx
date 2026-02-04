@@ -1,4 +1,4 @@
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 import {
@@ -51,8 +51,6 @@ const CreateCategory = () => {
           });
         } catch (error) {
           console.error("Error fetching category:", error);
-        } finally {
-          setSubmitting(false);
         }
       })();
     }
@@ -65,6 +63,14 @@ const CreateCategory = () => {
     const slug = makeSlug(form.name);
     setForm((p) => ({ ...p, url: slug }));
   }, [form.name, slugTouched]);
+
+  const canSubmit = useMemo(() => {
+    if (!form.name.trim()) return false;
+    if (!form.url.trim()) return false;
+    if (!form.image) return false;
+
+    return true;
+  }, [form]);
 
   const setField = <K extends keyof CategoryCreateForm>(
     key: K,
@@ -209,7 +215,7 @@ const CreateCategory = () => {
           <div className="mt-10 flex justify-center">
             <button
               type="submit"
-              disabled={submitting}
+              disabled={!canSubmit || submitting}
               className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Saving..." : "Save category"}
