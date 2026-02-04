@@ -6,13 +6,16 @@ import {
   getAllChefs,
   getChefById,
   updateChefById,
-  getChefByURL
+  getChefByURL,
+  getRandomChefs
 } from '#controllers';
 import { chefInputSchema } from '#schemas';
 
 const chefRouter = Router();
 
 chefRouter.route('/').get(getAllChefs).post(validateBodyZod(chefInputSchema), createChef);
+
+chefRouter.get('/random', getRandomChefs);
 
 chefRouter.route('/url/:url').get(getChefByURL);
 

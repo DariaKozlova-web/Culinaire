@@ -1,4 +1,5 @@
-import { authServiceURL } from "../utils";
+import type { User } from "@/types/user";
+import { authServiceURL } from "@/utils";
 
 export async function register(
   body: User & { password: string; confirmPassword: string },

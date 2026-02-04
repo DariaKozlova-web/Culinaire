@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Category } from "../types/category";
 import { Link } from "react-router";
 
 import { deleteCategoryById, getAllCategories } from "../data/categories";

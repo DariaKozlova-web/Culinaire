@@ -3,13 +3,11 @@ import { Outlet, useNavigate } from "react-router";
 
 import useAuth from "../contexts/useAuth";
 
-const ProtectedOnlyGuests = () => {
+const ProtectedOnlyGuest = () => {
   const navigate = useNavigate();
   const { user, authLoading } = useAuth();
 
   useEffect(() => {
-    console.log("ProtectedOnlyGuests - user:", user);
-    console.log("ProtectedOnlyGuests - authLoading:", authLoading);
     if (authLoading) return;
     if (!user) navigate("/login");
   }, [user, navigate, authLoading]);
@@ -21,4 +19,4 @@ const ProtectedOnlyGuests = () => {
   return <Outlet />;
 };
 
-export default ProtectedOnlyGuests;
+export default ProtectedOnlyGuest;

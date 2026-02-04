@@ -7,7 +7,8 @@ if (!API_URL)
   throw new Error("API URL is required, are you missing a .env file?");
 const baseURL: string = `${API_URL}/chefs`;
 
-type FormData = Omit<Chef, "_id">;
+// type FormData = Omit<Chef, "_id">;
+export type ChefPayload = Omit<Chef, "_id">;
 
 export const getAllChefs = async (): Promise<Chef[]> => {
   const res = await fetch(baseURL);
@@ -22,7 +23,7 @@ export const getAllChefs = async (): Promise<Chef[]> => {
   return data;
 };
 
-export const createChef = async (formData: FormData): Promise<Chef> => {
+export const createChef = async (formData: ChefPayload): Promise<Chef> => {
   const res = await fetch(baseURL, {
     method: "POST",
     headers: {
@@ -54,10 +55,7 @@ export const getChefById = async (id: string): Promise<Chef> => {
   return data;
 };
 
-export const updateChefById = async (
-  id: string,
-  formData: FormData,
-): Promise<Chef> => {
+export const updateChefById = async (id: string, formData: ChefPayload): Promise<Chef> => {
   const res = await fetch(`${baseURL}/${id}`, {
     method: "PUT",
     headers: {
@@ -101,4 +99,10 @@ export const getChefByURL = async (url: string): Promise<Chef> => {
   }
   const data: Chef = await res.json();
   return data;
+};
+
+export const getRandomChefs = async (limit = 4) => {
+  const res = await fetch(`${API_URL}/chefs/random?limit=${limit}`);
+  if (!res.ok) throw new Error('Failed to fetch random chefs');
+  return res.json();
 };

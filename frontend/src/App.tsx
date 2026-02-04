@@ -1,8 +1,6 @@
+import { MainLayout, ProtectedOnlyAdmin, ProtectedOnlyGuest } from "@/layouts";
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import MainLayout from "./layouts/MainLayout.tsx";
-import ProtectedOnlyAdmin from "./layouts/ProtectedOnlyAdmin.tsx";
-import ProtectedOnlyGuests from "./layouts/ProtectedOnlyGuest.tsx";
 import AllCategories from "./pages/AllCategories.tsx";
 import AllChefs from "./pages/AllChefs.tsx";
 import AllRecipes from "./pages/AllRecipes.tsx";
@@ -56,7 +54,7 @@ function App() {
                 />
               </Route>
               {/* user */}
-              <Route element={<ProtectedOnlyGuests />}>
+              <Route element={<ProtectedOnlyGuest />}>
                 <Route path="my-profile" element={<MyProfile />} />
                 <Route path="favorites" element={<Favorites />} />
               </Route>

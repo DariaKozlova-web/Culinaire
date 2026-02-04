@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Chef } from "../types/chef";
 import { Link } from "react-router";
 
 import { deleteChefById, getAllChefs } from "../data/chefs";
