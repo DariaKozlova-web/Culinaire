@@ -6,3 +6,4 @@ export { default as cloudUploaderRecipe } from './recipeCloudUploader.ts';
 export { default as cloudUploaderCategory } from './categoryCloudUploader.ts';
 export { default as authenticate } from './authenticate.ts';
 export { default as profileFormMiddleware } from './profileFormMiddleware.ts';
+export { default as profileCloudUploader } from './profileCloudUploader.ts';

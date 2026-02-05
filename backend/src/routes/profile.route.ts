@@ -1,8 +1,8 @@
 import { updateProfile } from '#controllers';
 import {
   authenticate,
-  cloudUploaderCategory,
   profileFormMiddleware,
+  profileCloudUploader,
   validateBodyZod
 } from '#middlewares';
 import { profileInputSchema } from '#schemas';
@@ -15,7 +15,7 @@ profileRouter
   .put(
     authenticate,
     profileFormMiddleware,
-    cloudUploaderCategory,
+    profileCloudUploader,
     validateBodyZod(profileInputSchema),
     updateProfile
   );

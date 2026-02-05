@@ -1,21 +1,26 @@
 import { UserIcon } from "@/components/icons/UserIcon";
 import useAuth from "@/contexts/useAuth";
 import { updateProfile } from "@/data/profile";
-import type { ProfileForm } from "@/types/profileForm";
+import type { User } from "@/types/user";
 import { inputBase } from "@/utils";
 import { useEffect, useState } from "react";
+
+export type ProfileForm = Pick<User, "name"> & {
+  // Add any additional fields needed for the form
+  image: string;
+};
 
 function MyProfile() {
   const { user, setUser } = useAuth();
   const initialForm = {
     name: "",
-    image: null,
+    image: "",
   };
   const [imagePreview, setImagePreview] = useState("");
   const [form, setForm] = useState<ProfileForm>(initialForm);
 
   useEffect(() => {
-    setForm({ name: user?.name || "", image: null });
+    setForm({ name: user?.name || "", image: "" });
     setImagePreview(user?.image || "");
   }, [user]);
 
@@ -29,7 +34,7 @@ function MyProfile() {
 
   const onMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setForm((prev) => ({ ...prev, image: file?.name || null }));
+    setForm((prev) => ({ ...prev, image: file?.name || "" }));
     if (file) {
       setImagePreview(URL.createObjectURL(file));
     } else {
@@ -51,6 +56,7 @@ function MyProfile() {
       formData.forEach((value, key) => {
         console.log(`${key}: ${value}`);
       });
+
       const updatedUser = await updateProfile(formData);
       setSuccess("Profile updated successfully!");
       setUser(updatedUser);
@@ -112,7 +118,7 @@ function MyProfile() {
               <input
                 className={inputBase}
                 placeholder="Profile image"
-                value={form.image ?? ""}
+                value={form.image}
                 readOnly
               />
               <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
@@ -121,7 +127,7 @@ function MyProfile() {
                   type="file"
                   name="image"
                   accept="image/*"
-                  className="file-input input-bordered w-full"
+                  className="hidden"
                   onChange={onMainImage}
                 />
               </label>
