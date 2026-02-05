@@ -1,7 +1,6 @@
 import { z } from 'zod/v4';
 import { Types } from 'mongoose';
-
-const coerceString = (val: unknown) => (Array.isArray(val) ? val[0] : val);
+import { coerceString } from '#utils';
 
 const parseJSONArray = (val: unknown) => {
   const v = coerceString(val);
@@ -15,12 +14,12 @@ const parseJSONArray = (val: unknown) => {
 
 const objectIdFromForm = (label: string) =>
   z.preprocess(
-    (val) => coerceString(val),
+    val => coerceString(val),
     z
       .string({ message: `${label} is required` })
       .min(1, `${label} is required`)
-      .refine((s) => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
-      .transform((s) => new Types.ObjectId(s))
+      .refine(s => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
+      .transform(s => new Types.ObjectId(s))
   );
 
 export const recipeInputSchema = z.object({
@@ -68,5 +67,5 @@ export const recipeInputSchema = z.object({
 
 // ✅ update: url optional
 export const recipeUpdateSchema = recipeInputSchema.extend({
-  url: z.preprocess(coerceString, z.string().min(1, "URL is required")).optional()
+  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')).optional()
 });

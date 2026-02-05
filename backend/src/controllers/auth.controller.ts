@@ -4,6 +4,8 @@ import { createAccessToken, createRefreshToken, hashPassword } from '#utils';
 import { ACCESS_JWT_SECRET, REFRESH_TOKEN_TTL } from '#config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import type { z } from 'zod/v4';
+import type { loginSchema, meSchema, registerSchema } from '#schemas';
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
   res.cookie('refreshToken', refreshToken, {
@@ -20,7 +22,11 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
   });
 }
 
-export const register: RequestHandler = async (req, res) => {
+type RegisterDTO = z.infer<typeof registerSchema>;
+type LoginDTO = z.infer<typeof loginSchema>;
+type MeDTO = { message: string; user: z.infer<typeof meSchema> };
+
+export const register: RequestHandler<{}, {}, RegisterDTO> = async (req, res) => {
   const { name, email, password, roles } = req.body;
   const userExists = await User.exists({ email });
   if (userExists) throw new Error('Email already exists', { cause: { status: 400 } });
@@ -44,7 +50,7 @@ export const register: RequestHandler = async (req, res) => {
   res.status(201).json({ message: 'Registered' });
 };
 
-export const login: RequestHandler = async (req, res) => {
+export const login: RequestHandler<{}, {}, LoginDTO> = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email }).select('+password');
@@ -102,7 +108,7 @@ export const logout: RequestHandler = async (req, res) => {
   res.status(200).json({ message: 'Successfully logged out' });
 };
 
-export const me: RequestHandler = async (req, res, next) => {
+export const me: RequestHandler<{}, MeDTO, {}> = async (req, res, next) => {
   const { accessToken } = req.cookies;
 
   if (!accessToken)

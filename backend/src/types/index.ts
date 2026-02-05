@@ -6,7 +6,11 @@ declare global {
       images?: {
         main?: File;
         steps?: File[];
-      }
+      };
+      user?: {
+        id: string;
+        roles: string[];
+      };
     }
   }
 }
