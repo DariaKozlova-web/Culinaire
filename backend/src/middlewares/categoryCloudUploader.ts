@@ -5,15 +5,28 @@ cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
-  secure_url: true
+  secure: true
 });
 
-const cloudUploaderCategory: RequestHandler = async (req, res, next) => {
+const cloudUploaderCategory: RequestHandler = async (req, _res, next) => {
   try {
-    const filePath = req.image!.filepath;
-    const cloudinaryData = await cloudinary.uploader.upload(filePath, { resource_type: 'auto' });
+    if (!req.image) return next();
 
-    req.body.image = cloudinaryData.secure_url;
+    const hasMain = !!req.image;
+
+    if (!hasMain) return next();
+
+    const slug = req.body.url || 'temp';
+
+    // main image
+    if (req.image) {
+      const uploaded = await cloudinary.uploader.upload(req.image.filepath, {
+        folder: `culinaire/categories/${slug}`,
+        public_id: `${slug}`
+      });
+      req.body.image = uploaded.secure_url;
+    }
+
     next();
   } catch (error) {
     next(error);

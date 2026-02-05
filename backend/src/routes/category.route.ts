@@ -5,11 +5,14 @@ import {
   deleteCategoryById,
   getAllCategories,
   getCategoryById,
-  updateCategoryById
+  updateCategoryById,
+  getRandomCategories
 } from '#controllers';
-import { categoryInputSchema } from '#schemas';
+import { categoryInputSchema, categoryUpdateSchema } from '#schemas';
 
 const categoryRouter = Router();
+
+categoryRouter.get('/random', getRandomCategories);
 
 categoryRouter
   .route('/')
@@ -27,7 +30,7 @@ categoryRouter
   .put(
     categoryFormMiddleware,
     cloudUploaderCategory,
-    validateBodyZod(categoryInputSchema),
+    validateBodyZod(categoryUpdateSchema),
     updateCategoryById
   )
   .delete(deleteCategoryById);

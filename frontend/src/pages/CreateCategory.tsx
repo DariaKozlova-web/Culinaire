@@ -1,11 +1,12 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import {
   createCategory,
   getCategoryById,
   updateCategoryById,
 } from "../data/categories";
+import type { Category } from "../types/category";
 import type { CategoryCreateForm } from "../types/categoryForm";
 
 const inputBase =
@@ -22,40 +23,72 @@ function makeSlug(v: string) {
 const initialForm: CategoryCreateForm = {
   name: "",
   url: "", // slug
-  image: null,
+  imageFile: null,
 };
 
 const CreateCategory = () => {
+  const { id } = useParams<{ id: string }>();
+  const isEdit = Boolean(id);
+
+  const navigate = useNavigate();
+
   const topRef = useRef<HTMLDivElement | null>(null);
-  const { id } = useParams();
-  const isEditMode = Boolean(id);
+
+  const [loadingCategory, setLoadingCategory] = useState(false);
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+
   const [slugTouched, setSlugTouched] = useState(false);
+
   const [form, setForm] = useState<CategoryCreateForm>(initialForm);
+
+  // for previewing current images when editing
+  const [existingMainImage, setExistingMainImage] = useState<string>("");
 
   const scrollToTop = () => {
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   useEffect(() => {
-    if (isEditMode && id) {
-      (async () => {
-        try {
-          const category = await getCategoryById(id);
-          setForm({
-            name: category.name || "",
-            url: category.url || "",
-            image: category.image || "",
-          });
-        } catch (error) {
-          console.error("Error fetching category:", error);
-        }
-      })();
-    }
-  }, [id, isEditMode]);
+    if (!isEdit || !id) return;
 
+    let ignore = false;
+
+    (async () => {
+      try {
+        setLoadingCategory(true);
+        setError("");
+
+        const category: Category = await getCategoryById(id);
+
+        if (ignore) return;
+
+        setForm({
+          name: category.name || "",
+          url: category.url || "",
+          imageFile: null, // In Edit, by default, we don't select a new file.
+        });
+
+        setExistingMainImage(category.image ?? "");
+
+        // so that the title does not overwrite the slug after loading
+        setSlugTouched(true);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to fetch category");
+        scrollToTop();
+      } finally {
+        setLoadingCategory(false);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [isEdit, id]);
+
+  // Autogenerate slug from title ONLY if admin did not enter slug manually
   useEffect(() => {
     if (!form.name.trim()) return;
     if (slugTouched) return;
@@ -67,10 +100,15 @@ const CreateCategory = () => {
   const canSubmit = useMemo(() => {
     if (!form.name.trim()) return false;
     if (!form.url.trim()) return false;
-    if (!form.image) return false;
+
+    // IMPORTANT:
+    // create -> main image required
+    // edit -> main image can stay the same (existingMainImage)
+    if (!isEdit && !form.imageFile) return false;
+    if (isEdit && !form.imageFile && !existingMainImage) return false;
 
     return true;
-  }, [form]);
+  }, [form, isEdit, existingMainImage]);
 
   const setField = <K extends keyof CategoryCreateForm>(
     key: K,
@@ -94,7 +132,7 @@ const CreateCategory = () => {
 
   const onMainImage = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
-    setField("image", f);
+    setField("imageFile", f);
   };
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -106,25 +144,32 @@ const CreateCategory = () => {
 
       const fd = new FormData();
 
+      // text
       fd.append("name", form.name);
       fd.append("url", form.url);
-      if (form.image) fd.append("image", form.image);
 
-      if (isEditMode && id) {
-        const updatedCategory = await updateCategoryById(id, fd);
+      // files
+      if (form.imageFile) fd.append("image", form.imageFile);
 
-        console.log("Category updated:", updatedCategory);
-
+      if (isEdit && id) {
+        await updateCategoryById(id, fd);
         setSuccess("Category updated successfully!");
       } else {
-        const newCategory = await createCategory(fd);
-
-        console.log("Category created:", newCategory);
-
+        await createCategory(fd);
         setSuccess("Category created successfully!");
       }
 
       scrollToTop();
+
+      // after create - clean the form
+      if (!isEdit) {
+        setForm(initialForm);
+        setSlugTouched(false);
+        setExistingMainImage("");
+      } else {
+        // return to category list
+        navigate("/dashboard/categories");
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create category");
       scrollToTop();
@@ -137,10 +182,12 @@ const CreateCategory = () => {
     <div className="w-full">
       <div className="mx-auto max-w-3xl py-10">
         <h1 className="text-center text-3xl font-semibold">
-          Create new category
+          {isEdit ? "Edit category" : "Create new category"}
         </h1>
         <p className="mt-2 text-center text-sm text-(--text-muted)">
-          Add a new category to the Culinaire collection
+          {isEdit
+            ? "Update category details and image"
+            : "Add a new category to the Culinaire collection"}
         </p>
 
         {error && (
@@ -166,11 +213,13 @@ const CreateCategory = () => {
             <input
               id="name"
               name="name"
-              value={form.name}
               type="text"
-              onChange={onText("name")}
-              placeholder="Category title"
               className={inputBase}
+              placeholder="Category name"
+              value={form.name}
+              onChange={onText("name")}
+              required
+              disabled={loadingCategory}
             />
             <label htmlFor="url" className="sr-only">
               Category slug (url)
@@ -178,32 +227,39 @@ const CreateCategory = () => {
             <input
               id="url"
               name="url"
-              value={form.url}
               type="text"
-              onChange={onSlugChange}
-              placeholder="Category slug (url)"
               className={inputBase}
+              placeholder="Category slug (url)"
+              value={form.url}
+              onChange={onSlugChange}
+              required
+              disabled={isEdit}
+              readOnly={isEdit}
             />
             <p className="-mt-2 ml-2 text-xs text-(--text-muted)">
               Tip: slug should be unique and stable (changing it later may
               create a new Cloudinary folder).
             </p>
             <div className="flex items-center gap-3">
+              <label htmlFor="preview" className="sr-only">
+                Preview
+              </label>
               <input
+                id="preview"
+                name="preview"
                 className={inputBase}
                 placeholder="Category image"
-                value={
-                  form.image instanceof File
-                    ? form.image.name
-                    : typeof form.image === "string"
-                      ? form.image
-                      : ""
-                }
+                value={form.imageFile?.name ?? ""}
                 readOnly
               />
-              <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+              <label
+                htmlFor="image"
+                className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              >
                 Upload
                 <input
+                  id="image"
+                  name="image"
                   type="file"
                   accept="image/*"
                   className="hidden"
@@ -211,6 +267,25 @@ const CreateCategory = () => {
                 />
               </label>
             </div>
+
+            {(form.imageFile || existingMainImage) && (
+              <div className="overflow-hidden rounded-2xl border border-black/10 dark:border-white/10">
+                <img
+                  src={
+                    form.imageFile
+                      ? URL.createObjectURL(form.imageFile)
+                      : existingMainImage
+                  }
+                  alt="Category preview"
+                  className="h-48 w-full object-cover"
+                />
+              </div>
+            )}
+            {isEdit && !form.imageFile && existingMainImage && (
+              <p className="-mt-1 ml-2 text-xs text-(--text-muted)">
+                Current main image will stay unless you upload a new one.
+              </p>
+            )}
           </div>
           <div className="mt-10 flex justify-center">
             <button
@@ -221,6 +296,18 @@ const CreateCategory = () => {
               {submitting ? "Saving..." : "Save category"}
             </button>
           </div>
+
+          {isEdit && (
+            <div className="mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => navigate("/dashboard/categories")}
+                className="text-sm text-(--accent-olive) hover:text-(--accent-wine)"
+              >
+                ← Back to categories
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
