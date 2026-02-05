@@ -27,6 +27,20 @@ export async function getAllRecipes(): Promise<Recipe[]> {
   return res.json();
 }
 
+// временно: ищем по slug из общего списка
+// export async function getRecipeBySlug(slug: string): Promise<Recipe> {
+//   const all = await getAllRecipes();
+//   const found = all.find((r) => r.url === slug);
+//   if (!found) throw new Error("Recipe not found");
+//   return found;
+// }
+
+export async function getRecipeBySlug(slug: string) {
+  const res = await fetch(`${API_URL}/recipes/slug/${slug}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to fetch recipe");
+  return res.json();
+}
+
 export async function getRandomRecipes(limit = 3) {
   const res = await fetch(`${API_URL}/recipes/random?limit=${limit}`);
   if (!res.ok) throw new Error('Failed to fetch random recipes');

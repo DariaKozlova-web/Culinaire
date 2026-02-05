@@ -18,7 +18,7 @@ const RecipeCard = ({ recipe }: Props) => {
 
   return (
     <NavLink
-      to={`/recipes/${recipe._id}`}
+      to={`/recipe/${recipe.url}`}
       className="group relative overflow-hidden rounded-2xl bg-(--bg-card) p-4 shadow-[0_0_40px_rgba(0,0,0,0.4)] transition hover:shadow-[0_0_55px_rgba(0,0,0,0.6)]"
     >
       {/* Image */}

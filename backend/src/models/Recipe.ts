@@ -31,7 +31,7 @@ export interface RecipeDocument {
 const recipeSchema = new Schema<RecipeDocument>(
   {
     title: { type: String, required: true },
-    url: { type: String, required: true, unique: true },
+    url: { type: String, required: true, unique: true, trim: true, lowervcase: true },
     image: { type: String, required: true },
 
     categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },

@@ -24,7 +24,17 @@ const objectIdFromForm = (label: string) =>
 
 export const recipeInputSchema = z.object({
   title: z.preprocess(coerceString, z.string().min(1, 'Title is required')),
-  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  // url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  url: z.preprocess(
+    v => {
+      const s = coerceString(v);
+      return typeof s === 'string' ? s.trim().toLowerCase() : s;
+    },
+    z
+      .string()
+      .min(1, 'URL is required')
+      .refine(s => !/\s/.test(s), { message: 'Slug must not contain space' })
+  ),
   description: z.preprocess(coerceString, z.string().min(1, 'Description is required')),
 
   categoryId: objectIdFromForm('Category'),
