@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { type RequestHandler } from 'express';
+import {Recipe} from '#models';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -8,16 +9,35 @@ cloudinary.config({
   secure: true
 });
 
+function pickFirstString(val: unknown):string {
+  if(Array.isArray(val)) return typeof val[0]==="string"?val[0]:"";
+  return typeof val === "string"?val:"";
+}
+
+function normalizeSlug(val: unknown):string{
+  return pickFirstString(val).trim().toLocaleLowerCase();
+}
+
 const cloudUploaderRecipe: RequestHandler = async (req, _res, next) => {
   try {
     if (!req.images) return next();
+
+     let slug = normalizeSlug(req.body?.url);
+
+     //If this is an UPDATE and the slug hasn't arrived, we take it from the database.
+     if (!slug && req.method === "PUT" && req.params?.id) {
+      const existing = await Recipe.findById(req.params.id).select("url");
+      if (existing?.url) slug = existing.url.trim().toLowerCase();
+    }
+
+    if (!slug) slug = 'temp';
 
     const hasMain = !!req.images.main;
     const hasSteps = Array.isArray(req.images.steps) && req.images.steps?.length > 0;
 
     if(!hasMain&&!hasSteps) return next();
 
-    const slug = req.body.url || 'temp';
+
 
     // main image
     if (req.images.main) {

@@ -15,17 +15,27 @@ const parseJSONArray = (val: unknown) => {
 
 const objectIdFromForm = (label: string) =>
   z.preprocess(
-    (val) => coerceString(val),
+    val => coerceString(val),
     z
       .string({ message: `${label} is required` })
       .min(1, `${label} is required`)
-      .refine((s) => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
-      .transform((s) => new Types.ObjectId(s))
+      .refine(s => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
+      .transform(s => new Types.ObjectId(s))
   );
 
 export const recipeInputSchema = z.object({
   title: z.preprocess(coerceString, z.string().min(1, 'Title is required')),
-  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  // url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  url: z.preprocess(
+    v => {
+      const s = coerceString(v);
+      return typeof s === 'string' ? s.trim().toLowerCase() : s;
+    },
+    z
+      .string()
+      .min(1, 'URL is required')
+      .refine(s => !/\s/.test(s), { message: 'Slug must not contain space' })
+  ),
   description: z.preprocess(coerceString, z.string().min(1, 'Description is required')),
 
   categoryId: objectIdFromForm('Category'),
@@ -68,5 +78,5 @@ export const recipeInputSchema = z.object({
 
 // ✅ update: url optional
 export const recipeUpdateSchema = recipeInputSchema.extend({
-  url: z.preprocess(coerceString, z.string().min(1, "URL is required")).optional()
+  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')).optional()
 });
