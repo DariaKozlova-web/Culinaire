@@ -13,7 +13,19 @@ export interface Instruction {
 
 export type PopulatedChef =
   | string
-  | { _id: string; name?: string; url?: string; image?: string };
+  | {
+      _id: string;
+      name?: string;
+      url?: string;
+      image?: string;
+      city?: string;
+      restaurant?: {
+        name?: string;
+        address?: string;
+        openingHours?: string;
+        closed?: string;
+      };
+    };
 
 export type PopulatedCategory =
   | string
@@ -24,7 +36,7 @@ export interface Recipe {
   title: string;
   url: string;
 
-  image?: string;              // URL Cloudinary
+  image?: string; // URL Cloudinary
 
   categoryId: PopulatedCategory;
   chefId: PopulatedChef;
@@ -39,7 +51,7 @@ export interface Recipe {
   cuisine: string;
   service?: string;
 
-  tag?: string;            
+  tag?: string;
 }
 
 // export interface Recipe {
@@ -66,8 +78,6 @@ export interface Recipe {
 //   level?: "Easy" | "Medium" | "Advanced";
 //   cuisine: string;
 //   service?: string;
-
-
 
 // }
 
