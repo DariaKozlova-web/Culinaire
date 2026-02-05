@@ -12,6 +12,11 @@ const cloudUploaderRecipe: RequestHandler = async (req, _res, next) => {
   try {
     if (!req.images) return next();
 
+    const hasMain = !!req.images.main;
+    const hasSteps = Array.isArray(req.images.steps) && req.images.steps?.length > 0;
+
+    if(!hasMain&&!hasSteps) return next();
+
     const slug = req.body.url || 'temp';
 
     // main image
