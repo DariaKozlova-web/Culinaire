@@ -2,7 +2,7 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRouter, categoryRouter, chefRouter, recipeRouter } from '#routes';
+import { authRouter, categoryRouter, chefRouter, recipeRouter, profileRouter } from '#routes';
 import { errorHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
 
@@ -24,6 +24,8 @@ app.get('/error', (req, res) => {
 });
 
 app.use('/auth', authRouter);
+
+app.use('/profile', profileRouter);
 
 app.use('/categories', categoryRouter);
 

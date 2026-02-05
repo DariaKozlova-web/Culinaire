@@ -24,10 +24,14 @@ const userSchema = new Schema(
       type: [String],
       default: ['user'],
       required: true
+    },
+    image: {
+      type: String,
+      default: null
     }
   },
   {
-    timestamps: { createdAt: true, updatedAt: false }
+    timestamps: { createdAt: true, updatedAt: true }
   }
 );
 

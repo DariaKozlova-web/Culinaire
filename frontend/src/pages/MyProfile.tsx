@@ -9,13 +9,13 @@ function MyProfile() {
   const { user, setUser } = useAuth();
   const initialForm = {
     name: "",
-    imageFile: null,
+    image: null,
   };
   const [imagePreview, setImagePreview] = useState("");
   const [form, setForm] = useState<ProfileForm>(initialForm);
 
   useEffect(() => {
-    setForm({ name: user?.name || "", imageFile: null });
+    setForm({ name: user?.name || "", image: null });
     setImagePreview(user?.image || "");
   }, [user]);
 
@@ -29,13 +29,9 @@ function MyProfile() {
 
   const onMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setForm((prev) => ({ ...prev, imageFile: file }));
+    setForm((prev) => ({ ...prev, image: file?.name || null }));
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setImagePreview(user?.image || "");
     }
@@ -49,13 +45,13 @@ function MyProfile() {
     try {
       setSubmitting(true);
 
-      form.name = form.name.trim();
-      if (!form.name) {
-        setError("Name cannot be empty");
-        return;
-      }
+      const formData = new FormData(e.target as HTMLFormElement);
 
-      const updatedUser = await updateProfile(form);
+      console.log("Submitting profile form with data:");
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+      const updatedUser = await updateProfile(formData);
       setSuccess("Profile updated successfully!");
       setUser(updatedUser);
     } catch (e) {
@@ -105,6 +101,7 @@ function MyProfile() {
             <input
               className={inputBase}
               placeholder="Name"
+              name="name"
               value={form.name}
               onChange={onText}
               required
@@ -115,15 +112,16 @@ function MyProfile() {
               <input
                 className={inputBase}
                 placeholder="Profile image"
-                value={form.imageFile?.name ?? ""}
+                value={form.image ?? ""}
                 readOnly
               />
               <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
                 Upload
                 <input
                   type="file"
+                  name="image"
                   accept="image/*"
-                  className="hidden"
+                  className="file-input input-bordered w-full"
                   onChange={onMainImage}
                 />
               </label>
