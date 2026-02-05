@@ -1,7 +1,6 @@
 import { z } from 'zod/v4';
 import { Types } from 'mongoose';
-
-const coerceString = (val: unknown) => (Array.isArray(val) ? val[0] : val);
+import { coerceString } from '#utils';
 
 const parseJSONArray = (val: unknown) => {
   const v = coerceString(val);

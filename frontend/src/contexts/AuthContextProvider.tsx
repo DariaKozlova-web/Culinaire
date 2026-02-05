@@ -1,8 +1,9 @@
-import { AuthContext } from "@/contexts/AuthContext";
 import { getMe, refresh } from "@/data";
 import type { User } from "@/types/user";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+
+import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<null | User>(null);
