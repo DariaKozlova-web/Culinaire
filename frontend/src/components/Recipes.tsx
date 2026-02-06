@@ -38,7 +38,7 @@ const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
-            Featured Recipes
+            {favoritesOnly ? "My favorite Recipes" : "Featured Recipes"}
           </h2>
 
           <p className="mx-auto max-w-xl text-sm text-(--text-muted)">
