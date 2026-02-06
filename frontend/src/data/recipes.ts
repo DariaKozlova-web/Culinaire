@@ -8,14 +8,14 @@ if (!API_URL) {
 
 export async function createRecipe(formData: FormData): Promise<Recipe> {
   const res = await fetch(`${API_URL}/recipes`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData
+    method: "POST",
+    credentials: "include",
+    body: formData,
   });
 
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Failed to create recipe');
+    throw new Error(error.message || "Failed to create recipe");
   }
 
   return res.json();
@@ -23,7 +23,7 @@ export async function createRecipe(formData: FormData): Promise<Recipe> {
 
 export async function getAllRecipes(): Promise<Recipe[]> {
   const res = await fetch(`${API_URL}/recipes`);
-  if (!res.ok) throw new Error('Failed to fetch recipes');
+  if (!res.ok) throw new Error("Failed to fetch recipes");
   return res.json();
 }
 
@@ -36,14 +36,24 @@ export async function getAllRecipes(): Promise<Recipe[]> {
 // }
 
 export async function getRecipeBySlug(slug: string) {
-  const res = await fetch(`${API_URL}/recipes/slug/${slug}`, { credentials: "include" });
+  const res = await fetch(`${API_URL}/recipes/slug/${slug}`, {
+    credentials: "include",
+  });
   if (!res.ok) throw new Error("Failed to fetch recipe");
   return res.json();
 }
 
 export async function getRandomRecipes(limit = 3) {
   const res = await fetch(`${API_URL}/recipes/random?limit=${limit}`);
-  if (!res.ok) throw new Error('Failed to fetch random recipes');
+  if (!res.ok) throw new Error("Failed to fetch random recipes");
+  return res.json();
+}
+
+export async function getFavoriteRecipes() {
+  const res = await fetch(`${API_URL}/recipes/favorites`, {
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to fetch favorite recipes");
   return res.json();
 }
 
@@ -56,7 +66,10 @@ export async function getRecipeById(id: string): Promise<Recipe> {
   return res.json();
 }
 
-export async function updateRecipeById(id: string, formData: FormData): Promise<Recipe> {
+export async function updateRecipeById(
+  id: string,
+  formData: FormData,
+): Promise<Recipe> {
   const res = await fetch(`${API_URL}/recipes/${id}`, {
     method: "PUT",
     credentials: "include",

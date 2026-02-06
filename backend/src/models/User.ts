@@ -4,7 +4,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, 'full name is required'],
+      required: [true, 'Full name is required'],
       trim: true
     },
     email: {
@@ -28,6 +28,10 @@ const userSchema = new Schema(
     image: {
       type: String,
       default: null
+    },
+    favorites: {
+      type: [Schema.Types.ObjectId],
+      default: []
     }
   },
   {

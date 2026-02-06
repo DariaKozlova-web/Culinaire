@@ -6,12 +6,14 @@ import {
   getRecipeById,
   updateRecipeById,
   getRandomRecipes,
-  getRecipeBySlug
+  getRecipeBySlug,
+  getFavoriteRecipes
 } from '#controllers';
 import {
   recipeFormMiddleware,
   cloudUploaderRecipe,
-  validateBodyZod
+  validateBodyZod,
+  authenticate
 } from '#middlewares';
 import { recipeInputSchema, recipeUpdateSchema } from '#schemas';
 
@@ -19,22 +21,29 @@ const recipeRouter = Router();
 
 recipeRouter.get('/random', getRandomRecipes);
 
+recipeRouter.get('/favorites', authenticate, getFavoriteRecipes);
+
 recipeRouter
   .route('/')
   .get(getAllRecipes)
   .post(
-  recipeFormMiddleware,
-  validateBodyZod(recipeInputSchema),
-  cloudUploaderRecipe,
-  createRecipe
-);
+    recipeFormMiddleware,
+    validateBodyZod(recipeInputSchema),
+    cloudUploaderRecipe,
+    createRecipe
+  );
 
 recipeRouter.route('/slug/:slug').get(getRecipeBySlug);
 
 recipeRouter
   .route('/:id')
   .get(getRecipeById)
-  .put(recipeFormMiddleware, validateBodyZod(recipeUpdateSchema), cloudUploaderRecipe,  updateRecipeById)
+  .put(
+    recipeFormMiddleware,
+    validateBodyZod(recipeUpdateSchema),
+    cloudUploaderRecipe,
+    updateRecipeById
+  )
   .delete(deleteRecipeById);
 
 export default recipeRouter;

@@ -1,7 +1,10 @@
-import { Recipe } from '#models';
+import { Recipe, User } from '#models';
+import type { recipeInputSchema } from '#schemas/recipes.schema';
 import { deleteRecipeFolder } from '#utils';
 import { type RequestHandler } from 'express';
+import { z } from 'zod/v4';
 
+type RecipeDTO = z.infer<typeof recipeInputSchema>;
 
 export const getAllRecipes: RequestHandler = async (_req, res) => {
   const recipes = await Recipe.find()
@@ -33,8 +36,8 @@ export const updateRecipeById: RequestHandler<{ id: string }> = async (req, res)
 
   const body = req.body as any;
 
-// IMPORTANT: We prohibit changing the URL
-// We extract the URL and ignore it, update the rest
+  // IMPORTANT: We prohibit changing the URL
+  // We extract the URL and ignore it, update the rest
   const { url: _ignoredUrl, ...safeBody } = body;
 
   // If the instructions arrived without images, leave the old links.
@@ -53,7 +56,6 @@ export const updateRecipeById: RequestHandler<{ id: string }> = async (req, res)
   await recipe.save();
   res.json(recipe);
 };
-
 
 export const deleteRecipeById: RequestHandler<{ id: string }> = async (req, res) => {
   const recipe = await Recipe.findById(req.params.id);
@@ -81,7 +83,10 @@ export const getRandomRecipes: RequestHandler = async (req, res) => {
   const limit = Math.max(1, Math.min(Number(req.query.limit) || 3, 24));
 
   // 1) take random IDs
-  const randomIds = await Recipe.aggregate([{ $sample: { size: limit } }, { $project: { _id: 1 } }]);
+  const randomIds = await Recipe.aggregate([
+    { $sample: { size: limit } },
+    { $project: { _id: 1 } }
+  ]);
 
   const ids = randomIds.map((x: any) => x._id);
 
@@ -97,17 +102,35 @@ export const getRandomRecipes: RequestHandler = async (req, res) => {
   res.json(ordered);
 };
 
+export const getFavoriteRecipes: RequestHandler<{}, RecipeDTO[]> = async (req, res) => {
+  const user = req.user;
+  if (!user) {
+    throw new Error('Unauthorized', { cause: { status: 401 } });
+  }
+
+  const userInDb = await User.findById(user.id).lean();
+  if (!userInDb) {
+    throw new Error('User not found', { cause: { status: 404 } });
+  }
+
+  if (!userInDb.favorites || userInDb.favorites.length === 0) {
+    res.json([]);
+  }
+
+  const recipes = await Recipe.find({ _id: { $in: userInDb.favorites } })
+    .populate('categoryId')
+    .populate('chefId');
+  res.json(recipes);
+};
+
 export const getRecipeBySlug: RequestHandler<{ slug: string }> = async (req, res) => {
   const {
     params: { slug }
   } = req;
 
-  const recipe = await Recipe.findOne({ url: slug })
-    .populate('categoryId')
-    .populate('chefId');
+  const recipe = await Recipe.findOne({ url: slug }).populate('categoryId').populate('chefId');
 
   if (!recipe) throw new Error('Recipe not found', { cause: { status: 404 } });
 
   res.json(recipe);
 };
-

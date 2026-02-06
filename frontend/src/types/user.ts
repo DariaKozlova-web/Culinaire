@@ -3,5 +3,5 @@ export type User = {
   email: string;
   roles?: string[];
   image?: string;
-  favoriteRecipes?: string[];
+  favorites?: string[];
 };

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
-import RecipeCard from "./RecipeCard";
-import type { Recipe } from "../types/recipe";
-import { getRandomRecipes } from "../data/recipes";
 
-const Recipes = () => {
+import { getFavoriteRecipes, getRandomRecipes } from "../data/recipes";
+import type { Recipe } from "../types/recipe";
+import RecipeCard from "./RecipeCard";
+
+const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   const [featured, setFeatured] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,10 +16,13 @@ const Recipes = () => {
     (async () => {
       try {
         setLoading(true);
-        const data = await getRandomRecipes(3);
+        const data = favoritesOnly
+          ? await getFavoriteRecipes()
+          : await getRandomRecipes(3);
         if (alive) setFeatured(data);
       } catch (e) {
-        if (alive) setError(e instanceof Error ? e.message : "Failed to load recipes");
+        if (alive)
+          setError(e instanceof Error ? e.message : "Failed to load recipes");
       } finally {
         if (alive) setLoading(false);
       }
@@ -34,7 +38,7 @@ const Recipes = () => {
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
-            Featured Recipes
+            {favoritesOnly ? "My favorite Recipes" : "Featured Recipes"}
           </h2>
 
           <p className="mx-auto max-w-xl text-sm text-(--text-muted)">
@@ -43,16 +47,15 @@ const Recipes = () => {
           </p>
         </div>
 
-        {loading && <p className="text-center text-(--text-muted)">Loading...</p>}
+        {loading && (
+          <p className="text-center text-(--text-muted)">Loading...</p>
+        )}
         {error && <p className="text-center text-red-400">{error}</p>}
 
         {!loading && !error && (
           <div className="grid gap-10 md:grid-cols-3">
             {featured.map((recipe) => (
-              <RecipeCard
-                key={recipe._id}
-                recipe={recipe}
-              />
+              <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
           </div>
         )}
