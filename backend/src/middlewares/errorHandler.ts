@@ -5,8 +5,23 @@ type ErrorPayload = {
   code?: string;
 };
 
+function isMongoDuplicateKeyError(err: unknown): err is { code: number } {
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "code" in err &&
+    (err as Record<string, unknown>).code === 11000
+  );
+}
+
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.log(err.stack);
+
+// Mongo duplicate key (E11000)
+  if (isMongoDuplicateKeyError(err)) {
+    res.status(409).json({ message: "Slug already exists" });
+    return;
+  }
 
   if (err instanceof Error) {
     const payload: ErrorPayload = { message: err.message };

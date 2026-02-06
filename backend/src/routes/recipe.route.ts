@@ -5,7 +5,8 @@ import {
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
-  getRandomRecipes
+  getRandomRecipes,
+  getRecipeBySlug
 } from '#controllers';
 import {
   recipeFormMiddleware,
@@ -27,6 +28,8 @@ recipeRouter
   cloudUploaderRecipe,
   createRecipe
 );
+
+recipeRouter.route('/slug/:slug').get(getRecipeBySlug);
 
 recipeRouter
   .route('/:id')

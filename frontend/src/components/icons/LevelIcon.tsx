@@ -1,0 +1,10 @@
+import * as React from "react";
+
+export const LevelIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 24 22" fill="none" {...props}>
+    <path
+      d="M24 22H17.1429V0H24V22ZM18.8571 20.3077H22.2857V1.69231H18.8571V20.3077ZM15.4286 22H8.57143V6.76923H15.4286V22ZM10.2857 20.3077H13.7143V8.46154H10.2857V20.3077ZM6.85714 22H0V11.8462H6.85714V22ZM1.71429 20.3077H5.14286V13.5385H1.71429V20.3077Z"
+      fill="currentColor"
+    />
+  </svg>
+);

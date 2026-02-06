@@ -96,3 +96,18 @@ export const getRandomRecipes: RequestHandler = async (req, res) => {
 
   res.json(ordered);
 };
+
+export const getRecipeBySlug: RequestHandler<{ slug: string }> = async (req, res) => {
+  const {
+    params: { slug }
+  } = req;
+
+  const recipe = await Recipe.findOne({ url: slug })
+    .populate('categoryId')
+    .populate('chefId');
+
+  if (!recipe) throw new Error('Recipe not found', { cause: { status: 404 } });
+
+  res.json(recipe);
+};
+
