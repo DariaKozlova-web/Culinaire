@@ -8,7 +8,6 @@ export const updateProfile = async (formData: FormData): Promise<User> => {
     credentials: "include",
   });
 
-  console.log(res);
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(

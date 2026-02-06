@@ -1,6 +1,7 @@
 import { GlobIcon } from "@/components/icons/GlobIcon";
 import { LevelIcon } from "@/components/icons/LevelIcon";
 import { ServesIcon } from "@/components/icons/ServesIcon";
+import { updateProfile } from "@/data/profile";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 
@@ -26,7 +27,7 @@ function makeNoteKey(recipeId: string) {
 }
 
 export default function RecipePage() {
-  const { user, authLoading } = useAuth();
+  const { user, authLoading, setUser } = useAuth();
   const isLoggedIn = !!user;
 
   const { slug } = useParams();
@@ -34,6 +35,9 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // favorites
+  const [isInFavorites, setIsInFavorites] = useState(false);
 
   // notes
   const [note, setNote] = useState("");
@@ -81,8 +85,31 @@ export default function RecipePage() {
     }
   }, [recipe?._id]);
 
+  useEffect(() => {
+    if (!recipe) return;
+    if (user && user.favorites?.includes(recipe._id)) {
+      setIsInFavorites(true);
+    } else {
+      setIsInFavorites(false);
+    }
+  }, [recipe, user]);
+
   const persistNotes = (recipeId: string, notes: SavedNote[]) => {
     localStorage.setItem(makeNoteKey(recipeId), JSON.stringify(notes));
+  };
+
+  const onFavoritesClick = async () => {
+    if (!user || !recipe) return;
+    let favorites = user.favorites || [];
+    if (isInFavorites) {
+      favorites = favorites.filter((id) => id !== recipe._id);
+    } else {
+      favorites.push(recipe._id);
+    }
+    const formData = new FormData();
+    formData.append("favorites", JSON.stringify(favorites));
+    const updatedUser = await updateProfile(formData);
+    setUser(updatedUser);
   };
 
   const onSaveNote = () => {
@@ -160,15 +187,22 @@ export default function RecipePage() {
             <button
               type="button"
               disabled={!isLoggedIn || authLoading}
+              onClick={onFavoritesClick}
               className="mt-7 inline-flex items-center justify-center rounded-xl bg-(--accent-olive) px-8 py-3 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-              title={!isLoggedIn ? "Login required" : "Add to favourites"}
+              title={
+                !isLoggedIn
+                  ? "Login required"
+                  : isInFavorites
+                    ? "Remove from favorites"
+                    : "Add to favorites"
+              }
             >
-              Add to favourites
+              {isInFavorites ? "Remove from favorites" : "Add to favorites"}
             </button>
 
             {!isLoggedIn && (
               <p className="mt-3 text-xs text-(--text-muted)">
-                Login to add favourites, shoplist and notes.
+                Login to add favorites, shoplist and notes.
               </p>
             )}
           </div>
@@ -413,7 +447,9 @@ export default function RecipePage() {
             <button
               type="button"
               onClick={onSaveNote}
-              disabled={!isLoggedIn || authLoading || !note.trim() || savingNote}
+              disabled={
+                !isLoggedIn || authLoading || !note.trim() || savingNote
+              }
               className="inline-flex items-center justify-center rounded-xl border border-black/10 px-6 py-2.5 text-sm font-semibold text-(--text-title) transition hover:border-(--accent-olive) disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10"
             >
               {savingNote ? "Saving..." : "Save note"}
