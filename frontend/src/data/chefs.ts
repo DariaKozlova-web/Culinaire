@@ -7,68 +7,60 @@ if (!API_URL)
   throw new Error("API URL is required, are you missing a .env file?");
 const baseURL: string = `${API_URL}/chefs`;
 
-// type FormData = Omit<Chef, "_id">;
-export type ChefPayload = Omit<Chef, "_id">;
+export const createChef = async (formData: FormData): Promise<Chef> => {
+  const res = await fetch(baseURL, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to create chef");
+  }
+  const data: Chef = await res.json();
+  return data;
+};
 
 export const getAllChefs = async (): Promise<Chef[]> => {
   const res = await fetch(baseURL);
-  if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error("An error occurred while fetching the chefs");
-    }
-    throw new Error(errorData.error);
-  }
+
+  if (!res.ok) throw new Error("Failed to fetch chefs");
+
   const data: Chef[] = await res.json();
   return data;
 };
 
-export const createChef = async (formData: ChefPayload): Promise<Chef> => {
-  const res = await fetch(baseURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
-  if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error("An error occurred while creating the chef");
-    }
-    throw new Error(errorData.error);
-  }
-  const data: Chef = await res.json();
-  return data;
+export const getRandomChefs = async (limit = 4) => {
+  const res = await fetch(`${API_URL}/chefs/random?limit=${limit}`);
+  if (!res.ok) throw new Error("Failed to fetch random chefs");
+  return res.json();
 };
 
 export const getChefById = async (id: string): Promise<Chef> => {
   const res = await fetch(`${baseURL}/${id}`);
+
   if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error("An error occurred while fetching the chef");
-    }
-    throw new Error(errorData.error);
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "Failed to fetch chef");
   }
+
   const data: Chef = await res.json();
   return data;
 };
 
-export const updateChefById = async (id: string, formData: ChefPayload): Promise<Chef> => {
+export const updateChefById = async (
+  id: string,
+  formData: FormData,
+): Promise<Chef> => {
   const res = await fetch(`${baseURL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
+    credentials: "include",
+    body: formData,
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(
-      errorData.error || "An error occurred while updating the chef",
-    );
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to update chef");
   }
 
   const data: Chef = await res.json();
@@ -78,31 +70,23 @@ export const updateChefById = async (id: string, formData: ChefPayload): Promise
 export const deleteChefById = async (id: string): Promise<void> => {
   const res = await fetch(`${baseURL}/${id}`, {
     method: "DELETE",
+    credentials: "include",
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(
-      errorData.error || "An error occurred while deleting the chef",
-    );
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to delete chef");
   }
 };
 
 export const getChefByURL = async (url: string): Promise<Chef> => {
   const res = await fetch(`${baseURL}/url/${url}`);
+
   if (!res.ok) {
-    const errorData = await res.json();
-    if (!errorData.error) {
-      throw new Error("An error occurred while fetching the category");
-    }
-    throw new Error(errorData.error);
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "Failed to fetch chef");
   }
+
   const data: Chef = await res.json();
   return data;
-};
-
-export const getRandomChefs = async (limit = 4) => {
-  const res = await fetch(`${API_URL}/chefs/random?limit=${limit}`);
-  if (!res.ok) throw new Error('Failed to fetch random chefs');
-  return res.json();
 };

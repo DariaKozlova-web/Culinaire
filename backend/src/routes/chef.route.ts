@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateBodyZod } from '#middlewares';
+import { validateBodyZod, chefFormMiddleware, cloudUploaderChef } from '#middlewares';
 import {
   createChef,
   deleteChefById,
@@ -9,11 +9,14 @@ import {
   getChefByURL,
   getRandomChefs
 } from '#controllers';
-import { chefInputSchema } from '#schemas';
+import { chefInputSchema, chefUpdateSchema } from '#schemas';
 
 const chefRouter = Router();
 
-chefRouter.route('/').get(getAllChefs).post(validateBodyZod(chefInputSchema), createChef);
+chefRouter
+  .route('/')
+  .get(getAllChefs)
+  .post(chefFormMiddleware, cloudUploaderChef, validateBodyZod(chefInputSchema), createChef);
 
 chefRouter.get('/random', getRandomChefs);
 
@@ -22,7 +25,7 @@ chefRouter.route('/url/:url').get(getChefByURL);
 chefRouter
   .route('/:id')
   .get(getChefById)
-  .put(validateBodyZod(chefInputSchema), updateChefById)
+  .put(chefFormMiddleware, cloudUploaderChef, validateBodyZod(chefUpdateSchema), updateChefById)
   .delete(deleteChefById);
 
 export default chefRouter;

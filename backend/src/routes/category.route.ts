@@ -12,8 +12,6 @@ import { categoryInputSchema, categoryUpdateSchema } from '#schemas';
 
 const categoryRouter = Router();
 
-categoryRouter.get('/random', getRandomCategories);
-
 categoryRouter
   .route('/')
   .get(getAllCategories)
@@ -23,6 +21,8 @@ categoryRouter
     validateBodyZod(categoryInputSchema),
     createCategory
   );
+
+categoryRouter.get('/random', getRandomCategories);
 
 categoryRouter
   .route('/:id')

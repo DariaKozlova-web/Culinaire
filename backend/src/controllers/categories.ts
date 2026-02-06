@@ -28,13 +28,7 @@ export const createCategory: RequestHandler<{}, categoryDTO, categoryInputDTO> =
   req,
   res
 ) => {
-  const { name, url, image } = req.body;
-  const category = await Category.create({
-    name: name,
-    url: url,
-    image: image
-  });
-
+  const category = await Category.create(req.body);
   res.status(201).json(category);
 };
 
@@ -48,14 +42,19 @@ export const updateCategoryById: RequestHandler<
     body
   } = req;
 
-  const { name, url, image } = body;
-
   const category = await Category.findById(id);
   if (!category) throw new Error('Category not found', { cause: 404 });
 
-  category.name = name;
-  category.url = url || '';
-  category.image = image || '';
+  const { url: _ignoredUrl, image, ...safeBody } = body;
+
+  category.set({
+    ...safeBody
+  });
+
+  if (image) {
+    category.image = image;
+  }
+
   await category.save();
 
   res.json(category);

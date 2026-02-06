@@ -1,27 +1,6 @@
 import { z } from 'zod/v4';
 import { Types } from 'mongoose';
-
-const coerceString = (val: unknown) => (Array.isArray(val) ? val[0] : val);
-
-const parseJSONArray = (val: unknown) => {
-  const v = coerceString(val);
-  if (typeof v !== 'string') return v;
-  try {
-    return JSON.parse(v);
-  } catch {
-    return v;
-  }
-};
-
-const objectIdFromForm = (label: string) =>
-  z.preprocess(
-    val => coerceString(val),
-    z
-      .string({ message: `${label} is required` })
-      .min(1, `${label} is required`)
-      .refine(s => Types.ObjectId.isValid(s), { message: `Invalid ${label}` })
-      .transform(s => new Types.ObjectId(s))
-  );
+import { coerceString } from '#utils';
 
 export const categoryInputSchema = z.object({
   name: z.preprocess(coerceString, z.string().min(1, 'Name is required')),

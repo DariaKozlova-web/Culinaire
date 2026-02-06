@@ -369,7 +369,63 @@ const CreateChef = () => {
                 Current main image will stay unless you upload a new one.
               </p>
             )}
+
+            <label htmlFor="city" className="sr-only">
+              City
+            </label>
+            <input
+              id="city"
+              name="city"
+              type="text"
+              className={inputBase}
+              placeholder="City"
+              value={form.city}
+              onChange={onText("city")}
+              required
+              disabled={loadingChef}
+            />
+            <label htmlFor="cuisine" className="sr-only">
+              Cuisine
+            </label>
+            <input
+              id="cuisine"
+              name="cuisine"
+              type="text"
+              className={inputBase}
+              placeholder="Cuisine"
+              value={form.cuisine}
+              onChange={onText("cuisine")}
+              required
+              disabled={loadingChef}
+            />
+            <label htmlFor="description" className="sr-only">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              className={inputBase}
+              placeholder="Description"
+              value={form.description}
+              onChange={onText("description")}
+              required
+              disabled={loadingChef}
+            />
+            <label htmlFor="signature" className="sr-only">
+              Signature
+            </label>
+            <textarea
+              id="signature"
+              name="signature"
+              className={inputBase}
+              placeholder="Signature"
+              value={form.signature}
+              onChange={onText("signature")}
+              required
+              disabled={loadingChef}
+            />
           </div>
+
           <div className="mt-12">
             <div className="space-y-3">
               {form.story.map((value, idx) => (
@@ -412,10 +468,12 @@ const CreateChef = () => {
               </button>
             </div>
           </div>
+
           <div className="mt-12">
             <h3 className="mb-6 text-center text-2xl font-semibold">
               Restaurant Details
             </h3>
+
             <div className="space-y-4">
               <label htmlFor="restaurant_name" className="sr-only">
                 Restaurat name
