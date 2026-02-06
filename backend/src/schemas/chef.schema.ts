@@ -1,27 +1,48 @@
 import { z } from 'zod/v4';
 import { Types } from 'mongoose';
+import { coerceString } from '#utils';
+
+const parseJSONArray = (val: unknown) => {
+  const v = coerceString(val);
+  if (typeof v !== 'string') return v;
+  try {
+    return JSON.parse(v);
+  } catch {
+    return v;
+  }
+};
 
 export const chefInputSchema = z.object({
-  name: z.string('Name must be a string').min(1, 'Name is required'),
-  url: z.string('URL must be a string').min(1, 'URL is required'),
-  image: z.string('Image must be a string').min(1, 'Image is required'),
-  city: z.string('City must be a string').min(1, 'City is required'),
-  cuisine: z.string('Cuisine must be a string').min(1, 'Cuisine is required'),
-  description: z.string('Description must be a string').min(1, 'Description is required'),
-  story: z
-    .array(z.string().min(1, 'Each story entry must have text'))
-    .min(1, 'Story must contain at least one entry'),
-  signature: z.string('Signature must be a string').min(1, 'Signature is required'),
-  restaurant: z.object({
-    name: z.string('Restaurant name must be a string').min(1, 'Restaurant name is required'),
-    address: z
-      .string('Restaurant address must be a string')
-      .min(1, 'Restaurant address is required'),
-    openingHours: z
-      .string('Opening hours time must be a string')
-      .min(1, 'Opening hours address is required'),
-    closed: z.string('Closed time must be a string').min(1, 'Closed time address is required')
-  })
+  name: z.preprocess(coerceString, z.string().min(1, 'Name is required')),
+  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')),
+  city: z.preprocess(coerceString, z.string().min(1, 'City is required')),
+  cuisine: z.preprocess(coerceString, z.string().min(1, 'Cuisine is required')),
+  description: z.preprocess(coerceString, z.string().min(1, 'Description is required')),
+  story: z.preprocess(
+    parseJSONArray,
+    z.array(z.string().min(1)).min(1, 'At least one ingredient is required')
+  ),
+  signature: z.preprocess(coerceString, z.string().min(1, 'Signature is required')),
+  restaurant: z.preprocess(
+    parseJSONArray,
+    z.object({
+      name: z.string().min(1),
+      address: z.string().min(1),
+      openingHours: z.string().min(1),
+      closed: z.string().min(1)
+    })
+  ),
+  image: z
+    .url({
+      protocol: /^https?$/,
+      hostname: z.regexes.domain
+    })
+    .optional()
+});
+
+// ✅ update: url optional
+export const chefUpdateSchema = chefInputSchema.extend({
+  url: z.preprocess(coerceString, z.string().min(1, 'URL is required')).optional()
 });
 
 export const chefSchema = z

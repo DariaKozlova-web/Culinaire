@@ -10,7 +10,7 @@ const filter = ({ mimetype }: Part) => {
   return true;
 };
 
-const categoryFormMiddleware: RequestHandler = (req, _res, next) => {
+const chefFormMiddleware: RequestHandler = (req, _res, next) => {
   const form = formidable({
     multiples: true,
     maxFileSize,
@@ -31,4 +31,4 @@ const categoryFormMiddleware: RequestHandler = (req, _res, next) => {
   });
 };
 
-export default categoryFormMiddleware;
+export default chefFormMiddleware;

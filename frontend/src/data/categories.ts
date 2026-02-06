@@ -18,7 +18,7 @@ export const createCategory = async (formData: FormData): Promise<Category> => {
     const error = await res.json();
     throw new Error(error.message || "Failed to create category");
   }
-  //Da
+
   const data: Category = await res.json();
   return data;
 };
@@ -67,7 +67,7 @@ export const updateCategoryById = async (
     const error = await res.json().catch(() => null);
     throw new Error(error?.message || "Failed to update category");
   }
-  //Da
+
   const data: Category = await res.json();
   return data;
 };
