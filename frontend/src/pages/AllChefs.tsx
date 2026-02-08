@@ -63,7 +63,7 @@ function AllChefs() {
           </div>
         )}
 
-        <div className="rounded-3xl border border-black/10 bg-white/60 p-6 shadow-sm dark:border-white/10 dark:bg-transparent">
+        <div className="ui-panel p-6">
           {loading ? (
             <div className="text-sm text-(--text-muted)">Loading…</div>
           ) : chefs.length === 0 ? (
@@ -73,7 +73,7 @@ function AllChefs() {
               {chefs.map((r) => (
                 <div
                   key={r._id}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white/50 px-5 py-4 dark:border-white/10 dark:bg-transparent"
+                  className="ui-row flex items-center justify-between gap-4 px-5 py-4"
                 >
                   <div className="min-w-0">
                     <div className="truncate font-medium">{r.name}</div>
@@ -103,6 +103,15 @@ function AllChefs() {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <NavLink
+            to="/dashboard/create-chef"
+            className="text-sm font-semibold text-(--accent-olive) hover:text-(--accent-wine)"
+          >
+            + Create new chef
+          </NavLink>
         </div>
       </div>
     </div>

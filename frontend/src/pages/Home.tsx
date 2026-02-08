@@ -1,9 +1,9 @@
 import About from "../components/About.tsx";
 import Banner from "../components/Banner.tsx";
+import CTASection from "../components/CTASection.tsx";
 import Categories from "../components/Categories.tsx";
 import Chefs from "../components/Chefs.tsx";
-import CTASection from "../components/CTASection.tsx";
-import Recipes from "../components/Recipes.tsx";
+import RecipesSection from "../components/RecipesSection.tsx";
 
 function Home() {
   return (
@@ -11,9 +11,9 @@ function Home() {
       <Banner />
       <Categories />
       <About />
-      <Recipes />
+      <RecipesSection />
       <Chefs />
-      <CTASection/>
+      <CTASection />
     </>
   );
 }

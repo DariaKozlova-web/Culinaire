@@ -91,3 +91,90 @@ h4,
 h5 {
   font-family: "Philosopher", serif;
 }
+
+/* ======================
+   UI Surfaces / Inputs (light/dark theme cards & forms)
+====================== */
+
+.ui-surface {
+  background: var(--bg-overlay-card);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 1.5rem; /* 24px */
+  backdrop-filter: blur(10px);
+}
+
+.dark .ui-surface {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.ui-input {
+  width: 100%;
+  border-radius: 0.75rem; /* 12px */
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.70);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 150ms ease, background-color 150ms ease;
+  color: var(--text-title);
+}
+
+.ui-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ui-input:focus {
+  border-color: var(--accent-olive);
+}
+
+.dark .ui-input {
+  background: rgba(0, 0, 0, 0.22); /* textarea */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: var(--text-muted);
+}
+
+.dark .ui-input::placeholder {
+  color: var(--text-muted);
+}
+
+.dark .ui-input:focus {
+  border-color: var(--accent-olive);
+}
+
+select.ui-input {
+  color: var(--text-muted);
+}
+select.ui-input option {
+  color: var(--text-muted);
+ 
+}
+
+.group-focus-within .select-arrow {
+  color: var(--accent-olive);
+}
+
+.ui-panel {
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px);
+}
+
+.ui-row {
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.dark .ui-panel {
+  border-color: rgba(255, 255, 255, 0.10);
+  background: var(--bg-overlay-card);
+}
+
+.dark .ui-row {
+  border-color: rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.18);
+}
+
