@@ -7,7 +7,7 @@ import { NavLink, useParams } from "react-router";
 
 import { ClockIcon } from "../components/icons/ClockIcon";
 import useAuth from "../contexts/useAuth";
-import { getRecipeBySlug } from "../data/recipes";
+import { getRecipeBySlug, getShoplistById } from "../data/recipes";
 import type { PopulatedChef, Recipe } from "../types/recipe";
 
 type ChefPopulated = Exclude<PopulatedChef, string>;
@@ -169,6 +169,30 @@ export default function RecipePage() {
   const chefRestaurantName = chef?.restaurant?.name ?? "";
   const chefUrl = chef?.url ?? "";
 
+  const handleDownload = async () => {
+    if (!recipe._id) return;
+    setLoading(true);
+    try {
+      const response = await getShoplistById(recipe._id);
+
+      if (!response.ok) throw new Error("Server error when creating PDF");
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Shoplist_${recipe.url}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error("PDF creating error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full">
       {/* HERO */}
@@ -242,6 +266,7 @@ export default function RecipePage() {
 
             <button
               type="button"
+              onClick={handleDownload}
               disabled={!isLoggedIn || authLoading}
               className="mt-8 inline-flex items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
               title={!isLoggedIn ? "Login required" : "Add to shoplist"}

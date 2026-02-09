@@ -66,6 +66,17 @@ export async function getRecipeById(id: string): Promise<Recipe> {
   return res.json();
 }
 
+export async function getShoplistById(id: string): Promise<Response> {
+  const res = await fetch(`${API_URL}/recipes/${id}/pdf`);
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "Failed to fetch PDF");
+  }
+
+  return res;
+}
+
 export async function updateRecipeById(
   id: string,
   formData: FormData,
