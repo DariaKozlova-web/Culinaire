@@ -92,7 +92,7 @@ function Chef() {
             <h2 className="mb-4 text-4xl font-bold text-(--text-title)">
               Restaurant Details
             </h2>
-            <div className="grid grid-cols-1 gap-10 rounded-xl bg-white px-8 py-10 md:grid-cols-2 md:gap-20 md:px-16 lg:grid-cols-5 lg:gap-25 lg:px-24">
+            <div className="ui-surface grid grid-cols-1 gap-10 rounded-xl px-8 py-10 md:grid-cols-2 md:gap-20 md:px-16 lg:grid-cols-5 lg:gap-25 lg:px-24">
               <div className="text-center md:col-span-1 md:text-left lg:col-span-3">
                 <strong className="mb-2 block font-[Philosopher] text-2xl font-bold text-(--text-title)">
                   {chefData.restaurant.name}

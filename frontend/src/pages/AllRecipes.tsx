@@ -59,7 +59,7 @@ export default function AllRecipes() {
           </div>
         )}
 
-        <div className="rounded-3xl border border-black/10 bg-white/60 p-6 shadow-sm dark:border-white/10 dark:bg-transparent">
+        <div className="ui-panel p-6">
           {loading ? (
             <div className="text-sm text-(--text-muted)">Loading…</div>
           ) : recipes.length === 0 ? (
@@ -69,7 +69,7 @@ export default function AllRecipes() {
               {recipes.map((r) => (
                 <div
                   key={r._id}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white/50 px-5 py-4 dark:border-white/10 dark:bg-transparent"
+                  className="flex items-center justify-between gap-4 ui-row px-5 py-4"
                 >
                   <div className="min-w-0">
                     <div className="truncate font-medium">{r.title}</div>
@@ -98,6 +98,15 @@ export default function AllRecipes() {
             </div>
           )}
         </div>
+
+        <div className="mt-8 flex justify-center">
+           <NavLink
+             to="/dashboard/create-recipe"
+             className="text-sm font-semibold text-(--accent-olive) hover:text-(--accent-wine)"
+           >
+             + Create new recipe
+           </NavLink>
+         </div>
       </div>
     </div>
   );

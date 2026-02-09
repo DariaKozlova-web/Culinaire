@@ -1,7 +1,7 @@
-import Recipes from "@/components/Recipes";
+import RecipesSection from "@/components/RecipesSection";
 
 function Favorites() {
-  return <Recipes favoritesOnly={true} />;
+  return <RecipesSection favoritesOnly={true} />;
 }
 
 export default Favorites;

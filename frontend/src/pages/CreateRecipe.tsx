@@ -1,17 +1,17 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
+import { SelectArrowIcon } from "../components/icons/SelectArrowIcon";
 import { getAllCategories } from "../data/categories";
 import { getAllChefs } from "../data/chefs";
 import { createRecipe, getRecipeById, updateRecipeById } from "../data/recipes";
-
 import type { Category } from "../types/category";
 import type { Chef } from "../types/chef";
 import type { Recipe } from "../types/recipe";
 import type { RecipeCreateForm } from "../types/recipeForm";
 
-const inputBase =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
+// const inputBase =
+//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
 
 function makeSlug(v: string) {
   return v
@@ -74,13 +74,17 @@ export default function CreateRecipe() {
     (async () => {
       try {
         setLoadingLists(true);
-        const [cats, ch] = await Promise.all([getAllCategories(), getAllChefs()]);
+        const [cats, ch] = await Promise.all([
+          getAllCategories(),
+          getAllChefs(),
+        ]);
         if (!ignore) {
           setCategories(cats);
           setChefs(ch);
         }
       } catch (e) {
-        if (!ignore) setError(e instanceof Error ? e.message : "Failed to fetch");
+        if (!ignore)
+          setError(e instanceof Error ? e.message : "Failed to fetch");
       } finally {
         if (!ignore) setLoadingLists(false);
       }
@@ -108,9 +112,13 @@ export default function CreateRecipe() {
 
         // categoryId / chefId can be a populated object or a string
         const categoryId =
-          typeof recipe.categoryId === "string" ? recipe.categoryId : recipe.categoryId?._id ?? "";
+          typeof recipe.categoryId === "string"
+            ? recipe.categoryId
+            : (recipe.categoryId?._id ?? "");
         const chefId =
-          typeof recipe.chefId === "string" ? recipe.chefId : recipe.chefId?._id ?? "";
+          typeof recipe.chefId === "string"
+            ? recipe.chefId
+            : (recipe.chefId?._id ?? "");
 
         setForm({
           title: recipe.title ?? "",
@@ -142,7 +150,9 @@ export default function CreateRecipe() {
 
         setExistingMainImage(recipe.image ?? "");
         setExistingStepImages(
-          (recipe.instructions ?? []).map((s) => (s.image ? String(s.image) : ""))
+          (recipe.instructions ?? []).map((s) =>
+            s.image ? String(s.image) : "",
+          ),
         );
 
         // so that the title does not overwrite the slug after loading
@@ -193,24 +203,30 @@ export default function CreateRecipe() {
     if (isEdit && !form.imageFile && !existingMainImage) return false;
 
     const badIngredient = form.ingredients.some(
-      (i) => !i.title.trim() || !i.quantity.trim() || !i.unit.trim()
+      (i) => !i.title.trim() || !i.quantity.trim() || !i.unit.trim(),
     );
     if (badIngredient) return false;
 
     const badStep = form.instructions.some(
-      (s) => !s.number.trim() || !s.title.trim() || !s.description.trim()
+      (s) => !s.number.trim() || !s.title.trim() || !s.description.trim(),
     );
     if (badStep) return false;
 
     return true;
   }, [form, isEdit, existingMainImage]);
 
-  const setField = <K extends keyof RecipeCreateForm>(key: K, value: RecipeCreateForm[K]) =>
-    setForm((p) => ({ ...p, [key]: value }));
+  const setField = <K extends keyof RecipeCreateForm>(
+    key: K,
+    value: RecipeCreateForm[K],
+  ) => setForm((p) => ({ ...p, [key]: value }));
 
   const onText =
     (key: keyof RecipeCreateForm) =>
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    (
+      e: ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
+    ) => {
       setField(key, e.target.value as RecipeCreateForm[typeof key]);
     };
 
@@ -227,7 +243,11 @@ export default function CreateRecipe() {
     }));
   };
 
-  const updateIngredient = (idx: number, key: "title" | "quantity" | "unit", value: string) => {
+  const updateIngredient = (
+    idx: number,
+    key: "title" | "quantity" | "unit",
+    value: string,
+  ) => {
     setForm((p) => {
       const next = [...p.ingredients];
       next[idx] = { ...next[idx], [key]: value };
@@ -238,7 +258,12 @@ export default function CreateRecipe() {
   const removeIngredient = (idx: number) => {
     setForm((p) => {
       const next = p.ingredients.filter((_, i) => i !== idx);
-      return { ...p, ingredients: next.length ? next : [{ title: "", quantity: "", unit: "" }] };
+      return {
+        ...p,
+        ingredients: next.length
+          ? next
+          : [{ title: "", quantity: "", unit: "" }],
+      };
     });
   };
 
@@ -248,7 +273,10 @@ export default function CreateRecipe() {
       const nextNumber = String(p.instructions.length + 1);
       return {
         ...p,
-        instructions: [...p.instructions, { number: nextNumber, title: "", description: "", imageFile: null }],
+        instructions: [
+          ...p.instructions,
+          { number: nextNumber, title: "", description: "", imageFile: null },
+        ],
       };
     });
 
@@ -256,7 +284,11 @@ export default function CreateRecipe() {
     setExistingStepImages((prev) => [...prev, ""]);
   };
 
-  const updateStep = (idx: number, key: "number" | "title" | "description", value: string) => {
+  const updateStep = (
+    idx: number,
+    key: "number" | "title" | "description",
+    value: string,
+  ) => {
     setForm((p) => {
       const next = [...p.instructions];
       next[idx] = { ...next[idx], [key]: value };
@@ -276,7 +308,9 @@ export default function CreateRecipe() {
     setForm((p) => {
       const next = p.instructions.filter((_, i) => i !== idx);
       const normalized = (
-        next.length ? next : [{ number: "1", title: "", description: "", imageFile: null }]
+        next.length
+          ? next
+          : [{ number: "1", title: "", description: "", imageFile: null }]
       ).map((s, i) => ({ ...s, number: String(i + 1) }));
       return { ...p, instructions: normalized };
     });
@@ -302,9 +336,9 @@ export default function CreateRecipe() {
 
       // text
       fd.append("title", form.title);
-     if(!isEdit){
-       fd.append("url", form.url);
-     }
+      if (!isEdit) {
+        fd.append("url", form.url);
+      }
       fd.append("categoryId", form.categoryId);
       fd.append("chefId", form.chefId);
       fd.append("description", form.description);
@@ -322,8 +356,8 @@ export default function CreateRecipe() {
             number: s.number,
             title: s.title,
             description: s.description,
-          }))
-        )
+          })),
+        ),
       );
 
       // files
@@ -358,7 +392,13 @@ export default function CreateRecipe() {
         navigate("/dashboard/recipes");
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : isEdit ? "Failed to update recipe" : "Failed to create recipe");
+      setError(
+        e instanceof Error
+          ? e.message
+          : isEdit
+            ? "Failed to update recipe"
+            : "Failed to create recipe",
+      );
       scrollToTop();
     } finally {
       setSubmitting(false);
@@ -372,7 +412,9 @@ export default function CreateRecipe() {
           {isEdit ? "Edit recipe" : "Create new recipe"}
         </h1>
         <p className="mt-2 text-center text-sm text-(--text-muted)">
-          {isEdit ? "Update recipe details and images" : "Add a new recipe to the Culinaire collection"}
+          {isEdit
+            ? "Update recipe details and images"
+            : "Add a new recipe to the Culinaire collection"}
         </p>
 
         {error && (
@@ -387,17 +429,20 @@ export default function CreateRecipe() {
           </div>
         )}
 
-        <form
-          onSubmit={onSubmit}
-          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
-        >
-          <h3 className="mb-6 text-center text-2xl font-semibold">
+        <form onSubmit={onSubmit} className="ui-surface mt-8 p-8 shadow-sm">
+          <h2 className="mb-6 text-center text-2xl font-semibold">
             Main information
-          </h3>
+          </h2>
 
           <div className="space-y-4">
+            <label htmlFor="recipeTitle" className="sr-only">
+              Recipe title
+            </label>
             <input
-              className={inputBase}
+              id="recipeTitle"
+              name="title"
+              type="text"
+              className="ui-input"
               placeholder="Recipe title"
               value={form.title}
               onChange={onText("title")}
@@ -405,8 +450,14 @@ export default function CreateRecipe() {
               disabled={loadingRecipe}
             />
 
+            <label htmlFor="recipeUrl" className="sr-only">
+              Recipe url (slug)
+            </label>
             <input
-              className={inputBase}
+              id="recipeUrl"
+              name="url"
+              type="text"
+              className="ui-input"
               placeholder="Recipe slug (url)"
               value={form.url}
               onChange={onSlugChange}
@@ -415,28 +466,48 @@ export default function CreateRecipe() {
               readOnly={isEdit}
             />
             <p className="-mt-2 ml-2 text-xs text-(--text-muted)">
-              Tip: slug should be stable. Changing it may create a new Cloudinary folder for this recipe.
+              Tip: slug should be stable. Changing it may create a new
+              Cloudinary folder for this recipe.
             </p>
 
             {/* Main image upload + preview */}
             <div className="space-y-3">
               <div className="flex items-center gap-3">
+                <label htmlFor="recipePreview" className="sr-only">
+                  Preview
+                </label>
                 <input
-                  className={inputBase}
+                  id="recipePreview"
+                  name="preview"
+                  className="ui-input"
                   placeholder="Recipe image"
                   value={form.imageFile?.name ?? ""}
                   readOnly
                 />
-                <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                <label
+                  htmlFor="recipeImage"
+                  className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+                >
                   Upload
-                  <input type="file" accept="image/*" className="hidden" onChange={onMainImage} />
+                  <input
+                    id="recipeImage"
+                    name="image"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={onMainImage}
+                  />
                 </label>
               </div>
 
               {(form.imageFile || existingMainImage) && (
                 <div className="overflow-hidden rounded-2xl border border-black/10 dark:border-white/10">
                   <img
-                    src={form.imageFile ? URL.createObjectURL(form.imageFile) : existingMainImage}
+                    src={
+                      form.imageFile
+                        ? URL.createObjectURL(form.imageFile)
+                        : existingMainImage
+                    }
                     alt="Recipe preview"
                     className="h-48 w-full object-cover"
                   />
@@ -449,38 +520,63 @@ export default function CreateRecipe() {
               )}
             </div>
 
-            <select
-              className={inputBase}
-              value={form.chefId}
-              onChange={onText("chefId")}
-              disabled={loadingLists || loadingRecipe}
-              required
-            >
-              <option value="">{loadingLists ? "Loading chefs..." : "Recipe creator"}</option>
-              {chefs.map((c) => (
-                <option key={c._id} value={c._id}>
-                  {c.name}
+            <div className="relative">
+              <label htmlFor="chefId" className="sr-only">
+                Recipe creator
+              </label>
+              <select
+                id="chefId"
+                name="chefId"
+                className="ui-input appearance-none pr-10"
+                value={form.chefId}
+                onChange={onText("chefId")}
+                disabled={loadingLists || loadingRecipe}
+                required
+              >
+                <option value="" disabled hidden>
+                  {loadingLists ? "Loading chefs..." : "Recipe creator"}
                 </option>
-              ))}
-            </select>
+                {chefs.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <SelectArrowIcon className="group-focus-within:text(--accent-olive) pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-(--text-muted) transition-colors" />
+            </div>
 
-            <select
-              className={inputBase}
-              value={form.categoryId}
-              onChange={onText("categoryId")}
-              disabled={loadingLists || loadingRecipe}
-              required
-            >
-              <option value="">{loadingLists ? "Loading categories..." : "Recipe category"}</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
+            <div className="relative">
+              <label htmlFor="categoryId" className="sr-only">
+                Recipe category
+              </label>
+              <select
+                id="categoryId"
+                name="categoryId"
+                className="ui-input appearance-none pr-10"
+                value={form.categoryId}
+                onChange={onText("categoryId")}
+                disabled={loadingLists || loadingRecipe}
+                required
+              >
+                <option value="" disabled hidden>
+                  {loadingLists ? "Loading categories..." : "Recipe category"}
                 </option>
-              ))}
-            </select>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <SelectArrowIcon className="group-focus-within:text(--accent-olive) pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-(--text-muted) transition-colors" />
+            </div>
 
+            <label htmlFor="recipeDescription" className="sr-only">
+              Recipe description
+            </label>
             <textarea
-              className={`${inputBase} min-h-24 resize-none`}
+              id="recipeDescription"
+              name="description"
+              className="ui-input min-h-24 resize-none"
               placeholder="Recipe description"
               value={form.description}
               onChange={onText("description")}
@@ -490,37 +586,61 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">
+            <h2 className="mb-6 text-center text-2xl font-semibold">
               Recipe details
-            </h3>
+            </h2>
 
             <div className="space-y-4">
+              <label htmlFor="totalTime" className="sr-only">
+                Total time
+              </label>
               <input
-                className={inputBase}
+                id="totalTime"
+                name="totalTime"
+                type="text"
+                className="ui-input"
                 placeholder="Total time"
                 value={form.totalTime}
                 onChange={onText("totalTime")}
                 required
                 disabled={loadingRecipe}
               />
+              <label htmlFor="cuisine" className="sr-only">
+                Cuisine
+              </label>
               <input
-                className={inputBase}
+                id="cuisine"
+                name="cuisine"
+                type="text"
+                className="ui-input"
                 placeholder="Cuisine"
                 value={form.cuisine}
                 onChange={onText("cuisine")}
                 required
                 disabled={loadingRecipe}
               />
+              <label htmlFor="level" className="sr-only">
+                Difficulty
+              </label>
               <input
-                className={inputBase}
+                id="level"
+                name="level"
+                type="text"
+                className="ui-input"
                 placeholder="Difficulty"
                 value={form.level}
                 onChange={onText("level")}
                 required
                 disabled={loadingRecipe}
               />
+              <label htmlFor="service" className="sr-only">
+                Servings
+              </label>
               <input
-                className={inputBase}
+                id="service"
+                name="service"
+                type="text"
+                className="ui-input"
                 placeholder="Servings"
                 value={form.service}
                 onChange={onText("service")}
@@ -531,41 +651,65 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">
+            <h2 className="mb-6 text-center text-2xl font-semibold">
               Ingredients
-            </h3>
+            </h2>
 
             <div className="space-y-3">
               {form.ingredients.map((ing, idx) => (
                 <div key={idx} className="grid grid-cols-12 gap-3">
+                  <label htmlFor={`ingredientTitle-${idx}`} className="sr-only">
+                    Ingredient title
+                  </label>
                   <input
-                    className={`${inputBase} col-span-6`}
+                    id={`ingredientTitle-${idx}`}
+                    name="title"
+                    type="text"
+                    className="ui-input col-span-6"
                     placeholder="Ingredient title"
                     value={ing.title}
-                    onChange={(e) => updateIngredient(idx, "title", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "title", e.target.value)
+                    }
                     required
                     disabled={loadingRecipe}
                   />
+                  <label htmlFor={`ingredientQty-${idx}`} className="sr-only">
+                    Quantity
+                  </label>
                   <input
-                    className={`${inputBase} col-span-3`}
+                    id={`ingredientQty-${idx}`}
+                    name="quantity"
+                    type="text"
+                    className="ui-input col-span-3"
                     placeholder="Quantity"
                     value={ing.quantity}
-                    onChange={(e) => updateIngredient(idx, "quantity", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "quantity", e.target.value)
+                    }
                     required
                     disabled={loadingRecipe}
                   />
+                  <label htmlFor={`ingredientUnit-${idx}`} className="sr-only">
+                    Unit
+                  </label>
                   <input
-                    className={`${inputBase} col-span-2`}
+                    id={`ingredientUnit-${idx}`}
+                    name="unit"
+                    type="text"
+                    className="ui-input col-span-2"
                     placeholder="Unit"
                     value={ing.unit}
-                    onChange={(e) => updateIngredient(idx, "unit", e.target.value)}
+                    onChange={(e) =>
+                      updateIngredient(idx, "unit", e.target.value)
+                    }
                     required
                     disabled={loadingRecipe}
                   />
                   <button
                     type="button"
                     onClick={() => removeIngredient(idx)}
-                    className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) dark:border-white/10 disabled:opacity-50"
+                    className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
                     aria-label="Remove ingredient"
                     title="Remove ingredient"
                     disabled={loadingRecipe}
@@ -589,14 +733,15 @@ export default function CreateRecipe() {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">
+            <h2 className="mb-6 text-center text-2xl font-semibold">
               Cooking Steps
-            </h3>
+            </h2>
 
             <div className="space-y-5">
               {form.instructions.map((s, idx) => {
-                const previewUrl =
-                  s.imageFile ? URL.createObjectURL(s.imageFile) : existingStepImages[idx] || "";
+                const previewUrl = s.imageFile
+                  ? URL.createObjectURL(s.imageFile)
+                  : existingStepImages[idx] || "";
 
                 return (
                   <div
@@ -604,26 +749,42 @@ export default function CreateRecipe() {
                     className="rounded-2xl border border-black/10 p-5 dark:border-white/10"
                   >
                     <div className="grid grid-cols-12 gap-3">
+                      <label htmlFor={`stepNumber-${idx}`} className="sr-only">
+                        Step #
+                      </label>
                       <input
-                        className={`${inputBase} col-span-2`}
+                        id={`stepNumber-${idx}`}
+                        name="number"
+                        type="text"
+                        className="ui-input col-span-2"
                         placeholder="Step #"
                         value={s.number}
-                        onChange={(e) => updateStep(idx, "number", e.target.value)}
+                        onChange={(e) =>
+                          updateStep(idx, "number", e.target.value)
+                        }
                         required
                         disabled={loadingRecipe}
                       />
+                      <label htmlFor={`stepTitle-${idx}`} className="sr-only">
+                        Step title
+                      </label>
                       <input
-                        className={`${inputBase} col-span-9`}
+                        id={`stepTitle-${idx}`}
+                        name="title"
+                        type="text"
+                        className="ui-input col-span-9"
                         placeholder="Step title"
                         value={s.title}
-                        onChange={(e) => updateStep(idx, "title", e.target.value)}
+                        onChange={(e) =>
+                          updateStep(idx, "title", e.target.value)
+                        }
                         required
                         disabled={loadingRecipe}
                       />
                       <button
                         type="button"
                         onClick={() => removeStep(idx)}
-                        className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) dark:border-white/10 disabled:opacity-50"
+                        className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
                         aria-label="Remove step"
                         title="Remove step"
                         disabled={loadingRecipe}
@@ -632,19 +793,31 @@ export default function CreateRecipe() {
                       </button>
 
                       <div className="col-span-12 flex items-center gap-3">
+                        <label htmlFor={`stepPreview-${idx}`} className="sr-only">
+                          Step preview
+                        </label>
                         <input
-                          className={inputBase}
+                          id={`stepPreview-${idx}`}
+                          name="imagePreview"
+                          className="ui-input"
                           placeholder="Step image"
                           value={s.imageFile?.name ?? ""}
                           readOnly
                         />
-                        <label className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)">
+                        <label
+                          htmlFor={`stepImage-${idx}`}
+                          className="shrink-0 cursor-pointer rounded-xl border border-(--accent-olive) px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+                        >
                           Upload
                           <input
+                            id={`stepImage-${idx}`}
+                            name="image"
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => updateStepImage(idx, e.target.files?.[0] ?? null)}
+                            onChange={(e) =>
+                              updateStepImage(idx, e.target.files?.[0] ?? null)
+                            }
                             disabled={loadingRecipe}
                           />
                         </label>
@@ -652,21 +825,33 @@ export default function CreateRecipe() {
 
                       {previewUrl && (
                         <div className="col-span-12 overflow-hidden rounded-2xl border border-black/10 dark:border-white/10">
-                          <img src={previewUrl} alt={`Step ${idx + 1}`} className="h-40 w-full object-cover" />
+                          <img
+                            src={previewUrl}
+                            alt={`Step ${idx + 1}`}
+                            className="h-40 w-full object-cover"
+                          />
                         </div>
                       )}
 
                       {isEdit && !s.imageFile && existingStepImages[idx] && (
                         <p className="col-span-12 -mt-1 ml-2 text-xs text-(--text-muted)">
-                          Current step image will stay unless you upload a new one.
+                          Current step image will stay unless you upload a new
+                          one.
                         </p>
                       )}
 
+                      <label htmlFor={`stepDescription-${idx}`} className="sr-only">
+                        Step description
+                      </label>
                       <textarea
-                        className={`${inputBase} col-span-12 min-h-30 resize-none`}
+                        id={`stepDescription-${idx}`}
+                        name="description"
+                        className="ui-input col-span-12 min-h-30 resize-none"
                         placeholder="Step description"
                         value={s.description}
-                        onChange={(e) => updateStep(idx, "description", e.target.value)}
+                        onChange={(e) =>
+                          updateStep(idx, "description", e.target.value)
+                        }
                         required
                         disabled={loadingRecipe}
                       />
@@ -694,7 +879,11 @@ export default function CreateRecipe() {
               disabled={!canSubmit || submitting || loadingRecipe}
               className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Saving..." : isEdit ? "Save changes" : "Save recipe"}
+              {submitting
+                ? "Saving..."
+                : isEdit
+                  ? "Save changes"
+                  : "Save recipe"}
             </button>
           </div>
 

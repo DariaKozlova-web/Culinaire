@@ -9,8 +9,8 @@ import {
 import type { Category } from "../types/category";
 import type { CategoryCreateForm } from "../types/categoryForm";
 
-const inputBase =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
+// const inputBase =
+//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
 
 function makeSlug(v: string) {
   return v
@@ -204,7 +204,7 @@ const CreateCategory = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
+          className="ui-surface mt-8 p-8 shadow-sm"
         >
           <div className="space-y-4">
             <label htmlFor="name" className="sr-only">
@@ -214,7 +214,7 @@ const CreateCategory = () => {
               id="name"
               name="name"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="Category name"
               value={form.name}
               onChange={onText("name")}
@@ -228,7 +228,7 @@ const CreateCategory = () => {
               id="url"
               name="url"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="Category slug (url)"
               value={form.url}
               onChange={onSlugChange}
@@ -247,7 +247,7 @@ const CreateCategory = () => {
               <input
                 id="preview"
                 name="preview"
-                className={inputBase}
+                className="ui-input"
                 placeholder="Category image"
                 value={form.imageFile?.name ?? ""}
                 readOnly

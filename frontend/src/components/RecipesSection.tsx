@@ -5,7 +5,7 @@ import { getFavoriteRecipes, getRandomRecipes } from "../data/recipes";
 import type { Recipe } from "../types/recipe";
 import RecipeCard from "./RecipeCard";
 
-const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
+const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   const [featured, setFeatured] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [favoritesOnly]);
 
   return (
     <section className="py-24">
@@ -63,7 +63,7 @@ const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
         <div className="mt-14 flex justify-center">
           <NavLink
             to="/recipes"
-            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-medium text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
+            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
           >
             View all recipes
           </NavLink>
@@ -73,4 +73,4 @@ const Recipes = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   );
 };
 
-export default Recipes;
+export default RecipesSection;

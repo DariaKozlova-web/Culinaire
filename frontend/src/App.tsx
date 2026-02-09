@@ -5,7 +5,7 @@ import AllCategories from "./pages/AllCategories.tsx";
 import AllChefs from "./pages/AllChefs.tsx";
 import AllRecipes from "./pages/AllRecipes.tsx";
 import Authentication from "./pages/Authentication.tsx";
-import Category from "./pages/Category.tsx";
+import Recipes from "./pages/Recipes.tsx";
 import Chef from "./pages/Chef.tsx";
 import CreateCategory from "./pages/CreateCategory.tsx";
 import CreateChef from "./pages/CreateChef.tsx";
@@ -15,7 +15,7 @@ import Favorites from "./pages/Favorites.tsx";
 import Home from "./pages/Home.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import Recipe from "./pages/Recipe.tsx";
+import RecipePage from "./pages/Recipe.tsx";
 
 function App() {
   return (
@@ -25,12 +25,9 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="category/:slug" element={<Category />} />
-            <Route path="recipe/:slug" element={<Recipe />} />
+            <Route path="recipes" element={<Recipes />} />
+            <Route path="recipe/:slug" element={<RecipePage />} />
             <Route path="chef/:slug" element={<Chef />} />
-            {/* <Route path="categories" element={<CreateCategory />} />
-            <Route path="chefs" element={<CreateChef />} />
-            <Route path="recipes" element={<CreateRecipe />} /> */}
 
             <Route path="dashboard" element={<Dashboard />}>
               {/* admin */}
