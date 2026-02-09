@@ -179,3 +179,35 @@ select.ui-input option {
   background: rgba(0, 0, 0, 0.18);
 }
 
+/* Dashboard logo animation */
+.dashboard-logo {
+  transform-origin: center;
+  animation: dashboardFloat 4.5s ease-in-out infinite,
+             dashboardPulse 2.8s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+/* gentle floating */
+@keyframes dashboardFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* subtle pulse */
+@keyframes dashboardPulse {
+  0%, 100% { filter: drop-shadow(0 10px 24px rgba(0,0,0,0.10)); }
+  50%      { filter: drop-shadow(0 14px 30px rgba(0,0,0,0.16)); }
+}
+
+/* dark theme: softer shadow */
+.dark .dashboard-logo {
+  animation: dashboardFloat 4.5s ease-in-out infinite,
+             dashboardPulseDark 2.8s ease-in-out infinite;
+}
+
+@keyframes dashboardPulseDark {
+  0%, 100% { filter: drop-shadow(0 10px 26px rgba(0,0,0,0.45)); }
+  50%      { filter: drop-shadow(0 14px 34px rgba(0,0,0,0.55)); }
+}
+

@@ -87,7 +87,7 @@ const Header = () => {
             <>
               {/* User avatar */}
               <NavLink
-                to="/dashboard/my-profile"
+                to="/dashboard"
                 className="group flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
               >
                 {user?.image ? (
