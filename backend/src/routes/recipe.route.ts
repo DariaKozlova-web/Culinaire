@@ -7,7 +7,8 @@ import {
   updateRecipeById,
   getRandomRecipes,
   getRecipeBySlug,
-  getFavoriteRecipes
+  getFavoriteRecipes,
+  getShoplistById
 } from '#controllers';
 import {
   recipeFormMiddleware,
@@ -22,6 +23,8 @@ const recipeRouter = Router();
 recipeRouter.get('/random', getRandomRecipes);
 
 recipeRouter.get('/favorites', authenticate, getFavoriteRecipes);
+
+recipeRouter.get('/:id/pdf', getShoplistById);
 
 recipeRouter
   .route('/')

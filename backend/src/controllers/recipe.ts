@@ -2,6 +2,7 @@ import { Recipe, User } from '#models';
 import type { recipeInputSchema } from '#schemas/recipes.schema';
 import { deleteRecipeFolder } from '#utils';
 import { type RequestHandler } from 'express';
+import { generatePDFShoplist } from '#utils';
 import { z } from 'zod/v4';
 
 type RecipeDTO = z.infer<typeof recipeInputSchema>;
@@ -133,4 +134,21 @@ export const getRecipeBySlug: RequestHandler<{ slug: string }> = async (req, res
   if (!recipe) throw new Error('Recipe not found', { cause: { status: 404 } });
 
   res.json(recipe);
+};
+
+export const getShoplistById: RequestHandler<{ id: string }> = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) throw new Error('Recipe not found', { cause: 404 });
+
+    const recipeData = {
+      items: recipe.ingredients
+    };
+
+    generatePDFShoplist(recipeData as any, res);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
