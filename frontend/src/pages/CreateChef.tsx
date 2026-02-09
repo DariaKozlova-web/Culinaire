@@ -5,8 +5,8 @@ import { createChef, getChefById, updateChefById } from "../data/chefs";
 import type { Chef } from "../types/chef";
 import type { ChefCreateForm } from "../types/chefForm";
 
-const inputBase =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
+// const inputBase =
+//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
 
 function makeSlug(v: string) {
   return v
@@ -283,11 +283,11 @@ const CreateChef = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
+          className="ui-surface mt-8 p-8 shadow-sm"
         >
-          <h3 className="mb-6 text-center text-2xl font-semibold">
+          <h2 className="mb-6 text-center text-2xl font-semibold">
             Main information
-          </h3>
+          </h2>
 
           <div className="space-y-4">
             <label htmlFor="name" className="sr-only">
@@ -297,7 +297,7 @@ const CreateChef = () => {
               id="name"
               name="name"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="Chef name"
               value={form.name}
               onChange={onText("name")}
@@ -311,7 +311,7 @@ const CreateChef = () => {
               id="url"
               name="url"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="Chef slug (url)"
               value={form.url}
               onChange={onSlugChange}
@@ -330,7 +330,7 @@ const CreateChef = () => {
               <input
                 id="preview"
                 name="preview"
-                className={inputBase}
+                className="ui-input"
                 placeholder="Chef image"
                 value={form.imageFile?.name ?? ""}
                 readOnly
@@ -377,7 +377,7 @@ const CreateChef = () => {
               id="city"
               name="city"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="City"
               value={form.city}
               onChange={onText("city")}
@@ -391,7 +391,7 @@ const CreateChef = () => {
               id="cuisine"
               name="cuisine"
               type="text"
-              className={inputBase}
+              className="ui-input"
               placeholder="Cuisine"
               value={form.cuisine}
               onChange={onText("cuisine")}
@@ -404,7 +404,7 @@ const CreateChef = () => {
             <textarea
               id="description"
               name="description"
-              className={inputBase}
+              className="ui-input"
               placeholder="Description"
               value={form.description}
               onChange={onText("description")}
@@ -417,7 +417,7 @@ const CreateChef = () => {
             <textarea
               id="signature"
               name="signature"
-              className={inputBase}
+              className="ui-input"
               placeholder="Signature"
               value={form.signature}
               onChange={onText("signature")}
@@ -436,7 +436,7 @@ const CreateChef = () => {
                   <input
                     id={`story_${idx}`}
                     type="text"
-                    className={`${inputBase} col-span-11`}
+                    className="ui-input col-span-11"
                     placeholder="Story"
                     value={value}
                     onChange={(e) => updateStoryItem(idx, e.target.value)}
@@ -470,9 +470,9 @@ const CreateChef = () => {
           </div>
 
           <div className="mt-12">
-            <h3 className="mb-6 text-center text-2xl font-semibold">
+            <h2 className="mb-6 text-center text-2xl font-semibold">
               Restaurant Details
-            </h3>
+            </h2>
 
             <div className="space-y-4">
               <label htmlFor="restaurant_name" className="sr-only">
@@ -482,7 +482,7 @@ const CreateChef = () => {
                 id="restaurant_name"
                 name="restaurant_name"
                 type="text"
-                className={inputBase}
+                className="ui-input"
                 placeholder="Restaurat name"
                 value={form.restaurant.name}
                 onChange={(e) => updateRestaurant("name", e.target.value)}
@@ -496,7 +496,7 @@ const CreateChef = () => {
                 id="restaurant_address"
                 name="restaurant_address"
                 type="text"
-                className={inputBase}
+                className="ui-input"
                 placeholder="Restaurant address"
                 value={form.restaurant.address}
                 onChange={(e) => updateRestaurant("address", e.target.value)}
@@ -511,7 +511,7 @@ const CreateChef = () => {
                   id="restaurant_opening_hours"
                   name="restaurant_opening_hours"
                   type="text"
-                  className={inputBase}
+                  className="ui-input"
                   placeholder="Opening hours"
                   value={form.restaurant.openingHours}
                   onChange={(e) =>
@@ -527,7 +527,7 @@ const CreateChef = () => {
                   id="restaurant_closed"
                   name="restaurant_closed"
                   type="text"
-                  className={inputBase}
+                  className="ui-input"
                   placeholder="Closed"
                   value={form.restaurant.closed}
                   onChange={(e) => updateRestaurant("closed", e.target.value)}
