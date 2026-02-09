@@ -241,7 +241,7 @@ export default function RecipePage() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-black/10 dark:border-white/10" />
+        <div className="mt-12 border-t border-(--border-soft)" />
       </section>
 
       {/* INGREDIENTS + CHEF/DETAILS */}
@@ -278,7 +278,7 @@ export default function RecipePage() {
           {/* Chef + details */}
           <div className="lg:pl-10">
             <div className="flex items-start gap-5">
-              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-black/5 dark:bg-white/5">
+              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-(--border-soft)">
                 {chefImage ? (
                   <img
                     src={chefImage}
@@ -373,7 +373,7 @@ export default function RecipePage() {
       {/* STEPS */}
       <section className="mx-auto max-w-7xl px-0 pb-10 md:px-0">
         <div className="px-4 md:px-8">
-          <div className="border-t border-black/10 dark:border-white/10" />
+          <div className="border-t border-(--border-soft)" />
         </div>
 
         <div className="mt-10 space-y-14">
@@ -411,7 +411,7 @@ export default function RecipePage() {
                           className="h-65 w-full object-cover md:h-87"
                         />
                       ) : (
-                        <div className="h-55 w-full bg-black/5 md:h-65 dark:bg-white/5" />
+                        <div className="h-55 w-full bg-(--border-soft) md:h-65" />
                       )}
                     </div>
                   </div>
@@ -434,7 +434,7 @@ export default function RecipePage() {
               {savedNotes.map((n) => (
                 <div
                   key={n.id}
-                  className="flex items-start justify-between gap-4 rounded-2xl border border-black/10 bg-transparent px-4 py-3 text-sm text-(--text-body) dark:border-white/10"
+                  className="flex items-start justify-between gap-4 rounded-2xl border border-(--border-soft) bg-transparent px-4 py-3 text-sm text-(--text-body)"
                 >
                   <div>
                     <div className="whitespace-pre-wrap">{n.text}</div>
@@ -447,7 +447,7 @@ export default function RecipePage() {
                     type="button"
                     onClick={() => onDeleteNote(n.id)}
                     disabled={!isLoggedIn || authLoading}
-                    className="shrink-0 rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold text-(--text-title) transition hover:border-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10"
+                    className="shrink-0 rounded-xl border border-(--border-soft) px-3 py-2 text-xs font-semibold text-(--text-title) transition hover:border-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
                     title={!isLoggedIn ? "Login required" : "Delete note"}
                   >
                     Delete
@@ -474,7 +474,7 @@ export default function RecipePage() {
               disabled={
                 !isLoggedIn || authLoading || !note.trim() || savingNote
               }
-              className="inline-flex items-center justify-center rounded-xl border border-black/10 px-6 py-2.5 text-sm font-semibold text-(--text-title) transition hover:border-(--accent-olive) disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/10"
+              className="inline-flex items-center justify-center rounded-xl border border-(--border-soft) px-6 py-2.5 text-sm font-semibold text-(--text-title) transition hover:border-(--accent-olive) disabled:cursor-not-allowed disabled:opacity-50"
             >
               {savingNote ? "Saving..." : "Save note"}
             </button>

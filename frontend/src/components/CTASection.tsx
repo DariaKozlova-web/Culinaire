@@ -21,7 +21,7 @@ const CTASection = () => {
     >
       {/* Divider */}
          <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="h-px w-full bg-black/10 dark:bg-white/10" />
+        <div className="h-px w-full bg-(--border-soft)" />
       </div>
 
       <div className="mx-auto max-w-7xl  pt-24 px-4 md:px-8">

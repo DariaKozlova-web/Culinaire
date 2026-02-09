@@ -1,5 +1,4 @@
 import { NavLink } from "react-router";
-
 import useAuth from "../contexts/useAuth";
 
 const adminMenu = [
@@ -16,7 +15,11 @@ const userMenu = [
   { label: "Favorites", to: "favorites" },
 ];
 
-const DashboardSidebar = () => {
+type Props = {
+  onNavigate?: () => void;
+};
+
+const DashboardSidebar = ({ onNavigate }: Props) => {
   const { user } = useAuth();
   const isAdmin = user?.roles?.some((role) => role === "admin");
   const isUser = user?.roles?.some((role) => role === "user");
@@ -29,12 +32,12 @@ const DashboardSidebar = () => {
             <p className="mb-3 text-xs font-semibold tracking-wide text-(--text-muted) uppercase">
               Admin
             </p>
-
             <ul className="space-y-1">
               {adminMenu.map((item) => (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    onClick={onNavigate}
                     className={({ isActive }) =>
                       `block rounded-lg px-4 py-2 text-sm transition-colors ${
                         isActive
@@ -56,12 +59,12 @@ const DashboardSidebar = () => {
             <p className="mb-3 text-xs font-semibold tracking-wide text-(--text-muted) uppercase">
               Account
             </p>
-
             <ul className="space-y-1">
               {userMenu.map((item) => (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    onClick={onNavigate}
                     className={({ isActive }) =>
                       `block rounded-lg px-4 py-2 text-sm transition-colors ${
                         isActive

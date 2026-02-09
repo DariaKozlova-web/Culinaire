@@ -5,8 +5,6 @@ import { createChef, getChefById, updateChefById } from "../data/chefs";
 import type { Chef } from "../types/chef";
 import type { ChefCreateForm } from "../types/chefForm";
 
-// const inputBase =
-//   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-olive)] dark:border-white/10 dark:bg-transparent";
 
 function makeSlug(v: string) {
   return v

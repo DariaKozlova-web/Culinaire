@@ -9,6 +9,7 @@ import { logout } from "../data";
 const Footer = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const handleLogout = async () => {
     await logout();
@@ -16,22 +17,20 @@ const Footer = () => {
     navigate("/");
   };
 
-  const { theme } = useTheme();
   return (
     <footer className="bg-(--bg-footer)">
-      <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 md:px-8">
-        <div className="grid items-center gap-12 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 pt-14 pb-4 md:px-8">
+        <div className="grid gap-12 text-center md:grid-cols-4 md:text-left">
           {/* Brand */}
-          <div>
-            <div className="mb-4 flex flex-col items-start font-[Philosopher]">
-              {/* <Logo className="h-16"/> */}
+          <div className="flex flex-col items-center md:items-start">
+            <div className="mb-4 flex flex-col items-center font-[Philosopher] md:items-start">
               <img
                 src={theme === "light" ? logoLight : logoDark}
                 className="h-16"
                 alt="Culinaire"
               />
               <span
-                className="mt-2 inline-block bg-clip-text font-bold text-xl text-transparent uppercase"
+                className="mt-2 inline-block bg-clip-text text-xl font-bold text-transparent uppercase"
                 style={{
                   background: "var(--gradient-logo)",
                   WebkitBackgroundClip: "text",
@@ -41,7 +40,8 @@ const Footer = () => {
               </span>
               <span className="text-sm">Elevated home cooking</span>
             </div>
-            <p className="text-sm text-(--text-muted)">
+
+            <p className="max-w-sm text-sm text-(--text-muted) md:max-w-none">
               Fine-dining recipes by professional chefs, designed for home
               kitchens.
             </p>
@@ -168,7 +168,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 border-t border-black/10 pt-6 text-center text-sm text-(--text-muted)">
+        <div className="mt-14 border-t border-(--border-soft) pt-6 text-center text-sm text-(--text-muted)">
           © 2026 Culinaire. All rights reserved.
         </div>
       </div>

@@ -8,6 +8,9 @@
   --bg-main: #faf7f2;
   --bg-footer: #e8e2d8;
 
+  /* border */
+  --border-soft: rgba(0, 0, 0, 0.08);
+
   /* text */
   --text-title: #2b2a27;
   --text-body: #4a4a4a;
@@ -47,6 +50,9 @@
 .dark {
   --bg-main: #1e1712;
   --bg-footer: #261e18;
+
+  /* border */
+  --border-soft: rgba(255, 255, 255, 0.10);
 
   --text-title: #f3ede6;
   --text-body: #cfc6bb;
