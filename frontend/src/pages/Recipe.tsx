@@ -182,7 +182,7 @@ export default function RecipePage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Shoplist_${recipe._id}.pdf`;
+      a.download = `Shoplist_${recipe.url}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

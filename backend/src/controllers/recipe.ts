@@ -143,11 +143,7 @@ export const getShoplistById: RequestHandler<{ id: string }> = async (req, res) 
     const recipe = await Recipe.findById(id);
     if (!recipe) throw new Error('Recipe not found', { cause: 404 });
 
-    const recipeData = {
-      items: recipe.ingredients
-    };
-
-    generatePDFShoplist(recipeData as any, res);
+    generatePDFShoplist(recipe as any, res);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
