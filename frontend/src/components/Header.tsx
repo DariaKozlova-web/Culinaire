@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router";
 
-import logoDark from "../assets/images/logo-dark.svg";
-import logoLight from "../assets/images/logo-light.svg";
+import logoDark from "../assets/images/logo-dark-new.svg";
+import logoLight from "../assets/images/logo-light-new.svg";
 import { useTheme } from "../contexts/themeContext";
 import useAuth from "../contexts/useAuth";
 import { logout } from "../data";
@@ -33,10 +33,10 @@ const Header = () => {
           <img
             src={theme === "light" ? `${logoLight}` : `${logoDark}`}
             alt="Culinaire"
-            className="h-10"
+            className="h-12"
           />
           <span
-            className="inline-block bg-clip-text font-bold text-transparent uppercase"
+            className="inline-block bg-clip-text font-bold text-xl text-transparent uppercase"
             style={{
               background: "var(--gradient-logo)",
               WebkitBackgroundClip: "text",

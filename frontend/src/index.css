@@ -33,12 +33,13 @@
   --gradient-logo: linear-gradient(
     309deg,
     #6a3f22 0%,
-    #a86a3d 22%,
+    #a86a3d 36.19%,
     #f2c9a0 50%,
-    #a86a3d 78%,
+    #a86a3d 66.08%,
     #6a3f22 100%
   );
 }
+
 
 /* ======================
    Dark theme
@@ -147,7 +148,7 @@ select.ui-input {
 }
 select.ui-input option {
   color: var(--text-muted);
- 
+
 }
 
 .group-focus-within .select-arrow {

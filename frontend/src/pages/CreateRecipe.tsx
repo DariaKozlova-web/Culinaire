@@ -509,7 +509,7 @@ export default function CreateRecipe() {
                         : existingMainImage
                     }
                     alt="Recipe preview"
-                    className="h-48 w-full object-cover"
+                    className="h-150 w-full object-cover"
                   />
                 </div>
               )}
@@ -828,7 +828,7 @@ export default function CreateRecipe() {
                           <img
                             src={previewUrl}
                             alt={`Step ${idx + 1}`}
-                            className="h-40 w-full object-cover"
+                            className="h-150 w-full object-cover"
                           />
                         </div>
                       )}

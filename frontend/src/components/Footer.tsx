@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router";
 
-import logoDark from "../assets/images/logo-dark.svg";
-import logoLight from "../assets/images/logo-light.svg";
+import logoDark from "../assets/images/logo-dark-new.svg";
+import logoLight from "../assets/images/logo-light-new.svg";
 import { useTheme } from "../contexts/themeContext";
 import useAuth from "../contexts/useAuth";
 import { logout } from "../data";
@@ -31,7 +31,7 @@ const Footer = () => {
                 alt="Culinaire"
               />
               <span
-                className="mt-2 inline-block bg-clip-text font-bold text-transparent uppercase"
+                className="mt-2 inline-block bg-clip-text font-bold text-xl text-transparent uppercase"
                 style={{
                   background: "var(--gradient-logo)",
                   WebkitBackgroundClip: "text",
