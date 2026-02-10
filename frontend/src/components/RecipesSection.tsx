@@ -34,7 +34,7 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   }, [favoritesOnly]);
 
   return (
-    <section className="py-24">
+    <section className="py-14 md:py-18">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
@@ -53,9 +53,20 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
         {error && <p className="text-center text-red-400">{error}</p>}
 
         {!loading && !error && (
-          <div className="grid gap-10 md:grid-cols-3">
-            {featured.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((recipe, idx) => (
+              <div
+                key={recipe._id}
+                className={
+                  idx === 2
+                    ? "sm:col-span-2 sm:flex sm:justify-center lg:col-span-1 lg:block"
+                    : ""
+                }
+              >
+                <div className={idx===2? "sm:max-w-md lg:max-w-none":""}>
+                  <RecipeCard recipe={recipe} />
+                </div>
+              </div>
             ))}
           </div>
         )}

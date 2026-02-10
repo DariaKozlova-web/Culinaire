@@ -29,13 +29,13 @@ const Chefs = () => {
   }, []);
 
   return (
-    <section className="py-24">
+    <section className="py-14 md:py-18">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 font-[Philosopher] text-4xl text-(--text-title) font-bold">
+        <div className="mb-12 text-center md:mb-16">
+          <h2 className="mb-4 font-[Philosopher] text-3xl font-bold text-(--text-title) md:text-4xl">
             Meet Our Chefs
           </h2>
-          <p className="mx-auto max-w-xl text-sm text-(--text-muted)">
+          <p className="mx-auto max-w-xl text-sm text-(--text-muted) md:text-base">
             Professional chefs sharing their signature dishes — straight from
             their restaurants to your home.
           </p>
@@ -45,7 +45,7 @@ const Chefs = () => {
         {error && <p className="text-center text-red-400">{error}</p>}
 
         {!loading && !error && (
-          <div className="grid gap-10 md:grid-cols-4">
+          <div className="grid grid-cols-1 justify-items-center gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {chefs.map((chef) => (
               <ChefCard key={chef._id} chef={chef} />
             ))}

@@ -17,13 +17,13 @@ const RecipeCard = ({ recipe }: Props) => {
       : "https://placehold.co/600x400?text=No+image";
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-(--bg-card) p-4 shadow-[0_0_40px_rgba(0,0,0,0.4)] transition hover:shadow-[0_0_55px_rgba(0,0,0,0.6)]">
+    <article className="mx-auto w-full max-w-105 sm:max-w-none flex h-full flex-col overflow-hidden rounded-2xl bg-(--bg-card) p-4 shadow-(--shadow-card) transition hover:shadow-(--shadow-card-hover)">
       {/* Image */}
       <div className="mb-4 overflow-hidden rounded-xl">
         <img
           src={imageSrc}
           alt={recipe.title}
-          className="h-52 w-full object-cover transition-transform duration-500 hover:scale-105"
+          className="aspect-4/3 w-full object-cover transition-transform duration-500 hover:scale-105"
         />
       </div>
 
@@ -44,22 +44,13 @@ const RecipeCard = ({ recipe }: Props) => {
       {/* Footer pinned */}
       <div className="mt-auto pt-5">
         <div className="flex items-center justify-between gap-3">
-
-          {/* {recipe.tag ? (
-            <span className="inline-block rounded-full bg-(--accent-wine) px-3 py-1 text-xs text-white">
-              {recipe.tag}
-            </span>
-          ) : (
-            <span />
-          )} */}
           <span className="inline-block rounded-full border border-(--accent-olive) px-3 py-1 text-xs text-(--accent-olive)">
             {recipe.level ?? "—"}
           </span>
 
-
           <NavLink
             to={`/recipe/${recipe.url}`}
-            className="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-(--accent-olive) transition hover:text-(--accent-wine)"
+            className="inline-flex items-center gap-2 pr-1 text-sm font-semibold text-(--accent-olive) transition hover:text-(--accent-wine)"
           >
             View recipe <span aria-hidden>→</span>
           </NavLink>

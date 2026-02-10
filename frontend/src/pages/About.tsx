@@ -1,6 +1,4 @@
 import { NavLink } from "react-router";
-
-// ✅ Replace with your image:
 // import aboutImage from "../assets/images/about-hero.jpg";
 import aboutImage from "../assets/images/about-hero-1.jpg";
 
