@@ -5,7 +5,6 @@ import { createChef, getChefById, updateChefById } from "../data/chefs";
 import type { Chef } from "../types/chef";
 import type { ChefCreateForm } from "../types/chefForm";
 
-
 function makeSlug(v: string) {
   return v
     .trim()
@@ -279,10 +278,7 @@ const CreateChef = () => {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="ui-surface mt-8 p-8 shadow-sm"
-        >
+        <form onSubmit={handleSubmit} className="ui-surface mt-8 p-8 shadow-sm">
           <h2 className="mb-6 text-center text-2xl font-semibold">
             Main information
           </h2>
@@ -444,7 +440,7 @@ const CreateChef = () => {
                   <button
                     type="button"
                     onClick={() => removeStoryItem(idx)}
-                    className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                    className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
                     aria-label="Remove story item"
                     title="Remove story item"
                     disabled={loadingChef}
@@ -459,7 +455,7 @@ const CreateChef = () => {
               <button
                 type="button"
                 onClick={addStoryItem}
-                className="rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
+                className="cursor-pointer rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
                 disabled={loadingChef}
               >
                 + Add story item
@@ -539,10 +535,10 @@ const CreateChef = () => {
           <div className="mt-10 flex justify-center">
             <button
               type="submit"
-              disabled={!canSubmit || submitting}
-              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!canSubmit || submitting || loadingChef}
+              className="min-w-70 cursor-pointer rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Saving..." : "Save chef"}
+              {submitting ? "Saving..." : isEdit ? "Save changes" : "Save chef"}
             </button>
           </div>
 
@@ -551,7 +547,7 @@ const CreateChef = () => {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard/chefs")}
-                className="text-sm text-(--accent-olive) hover:text-(--accent-wine)"
+                className="cursor-pointer text-sm text-(--accent-olive) hover:text-(--accent-wine)"
               >
                 ← Back to chefs
               </button>

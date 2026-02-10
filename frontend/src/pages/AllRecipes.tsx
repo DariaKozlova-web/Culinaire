@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
+
 import { deleteRecipeById, getAllRecipes } from "../data/recipes";
 import type { Recipe } from "../types/recipe";
 
@@ -17,7 +18,8 @@ export default function AllRecipes() {
         const data = await getAllRecipes();
         if (!ignore) setRecipes(data);
       } catch (e) {
-        if (!ignore) setError(e instanceof Error ? e.message : "Failed to fetch recipes");
+        if (!ignore)
+          setError(e instanceof Error ? e.message : "Failed to fetch recipes");
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -29,7 +31,9 @@ export default function AllRecipes() {
   }, []);
 
   const onDelete = async (id: string) => {
-    const ok = window.confirm("Delete this recipe? This will also remove images from Cloudinary.");
+    const ok = window.confirm(
+      "Delete this recipe? This will also remove images from Cloudinary.",
+    );
     if (!ok) return;
 
     try {
@@ -69,11 +73,13 @@ export default function AllRecipes() {
               {recipes.map((r) => (
                 <div
                   key={r._id}
-                  className="flex items-center justify-between gap-4 ui-row px-5 py-4"
+                  className="ui-row flex items-center justify-between gap-4 px-5 py-4"
                 >
                   <div className="min-w-0">
                     <div className="truncate font-medium">{r.title}</div>
-                    <div className="truncate text-xs text-(--text-muted)">{r.url}</div>
+                    <div className="truncate text-xs text-(--text-muted)">
+                      {r.url}
+                    </div>
                   </div>
 
                   <div className="flex shrink-0 items-center gap-2">
@@ -88,7 +94,7 @@ export default function AllRecipes() {
                       type="button"
                       onClick={() => onDelete(r._id)}
                       disabled={busyId === r._id}
-                      className="inline-flex h-10 items-center justify-center rounded-xl border border-black/10 px-4 text-sm font-medium transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10"
+                      className="inline-flex h-10 cursor-pointer items-center justify-center rounded-xl border border-black/10 px-4 text-sm font-medium transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10"
                     >
                       {busyId === r._id ? "Deleting…" : "Delete"}
                     </button>
@@ -100,13 +106,13 @@ export default function AllRecipes() {
         </div>
 
         <div className="mt-8 flex justify-center">
-           <NavLink
-             to="/dashboard/create-recipe"
-             className="text-sm font-semibold text-(--accent-olive) hover:text-(--accent-wine)"
-           >
-             + Create new recipe
-           </NavLink>
-         </div>
+          <NavLink
+            to="/dashboard/create-recipe"
+            className="text-sm font-semibold text-(--accent-olive) hover:text-(--accent-wine)"
+          >
+            + Create new recipe
+          </NavLink>
+        </div>
       </div>
     </div>
   );

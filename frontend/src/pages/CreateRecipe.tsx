@@ -709,7 +709,7 @@ export default function CreateRecipe() {
                   <button
                     type="button"
                     onClick={() => removeIngredient(idx)}
-                    className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                    className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
                     aria-label="Remove ingredient"
                     title="Remove ingredient"
                     disabled={loadingRecipe}
@@ -724,7 +724,7 @@ export default function CreateRecipe() {
               <button
                 type="button"
                 onClick={addIngredient}
-                className="rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
+                className="cursor-pointer rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
                 disabled={loadingRecipe}
               >
                 + Add ingredient
@@ -784,7 +784,7 @@ export default function CreateRecipe() {
                       <button
                         type="button"
                         onClick={() => removeStep(idx)}
-                        className="col-span-1 flex items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                        className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
                         aria-label="Remove step"
                         title="Remove step"
                         disabled={loadingRecipe}
@@ -793,7 +793,10 @@ export default function CreateRecipe() {
                       </button>
 
                       <div className="col-span-12 flex items-center gap-3">
-                        <label htmlFor={`stepPreview-${idx}`} className="sr-only">
+                        <label
+                          htmlFor={`stepPreview-${idx}`}
+                          className="sr-only"
+                        >
                           Step preview
                         </label>
                         <input
@@ -840,7 +843,10 @@ export default function CreateRecipe() {
                         </p>
                       )}
 
-                      <label htmlFor={`stepDescription-${idx}`} className="sr-only">
+                      <label
+                        htmlFor={`stepDescription-${idx}`}
+                        className="sr-only"
+                      >
                         Step description
                       </label>
                       <textarea
@@ -865,7 +871,7 @@ export default function CreateRecipe() {
               <button
                 type="button"
                 onClick={addStep}
-                className="rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
+                className="cursor-pointer rounded-xl border border-(--accent-olive) px-5 py-3 text-sm font-medium text-(--accent-olive) hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:opacity-50"
                 disabled={loadingRecipe}
               >
                 + Add step
@@ -877,7 +883,7 @@ export default function CreateRecipe() {
             <button
               type="submit"
               disabled={!canSubmit || submitting || loadingRecipe}
-              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-w-70 cursor-pointer rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting
                 ? "Saving..."
@@ -892,7 +898,7 @@ export default function CreateRecipe() {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard/recipes")}
-                className="text-sm text-(--accent-olive) hover:text-(--accent-wine)"
+                className="cursor-pointer text-sm text-(--accent-olive) hover:text-(--accent-wine)"
               >
                 ← Back to recipes
               </button>
