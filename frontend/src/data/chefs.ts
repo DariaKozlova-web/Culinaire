@@ -1,4 +1,5 @@
 import type { Chef } from "../types/chef";
+import type { Recipe } from "../types/recipe";
 
 const API_URL: string | undefined = import.meta.env.VITE_APP_SERVER_URL as
   | string
@@ -79,8 +80,8 @@ export const deleteChefById = async (id: string): Promise<void> => {
   }
 };
 
-export const getChefByURL = async (url: string): Promise<Chef> => {
-  const res = await fetch(`${baseURL}/url/${url}`);
+export const getChefBySlug = async (slug: string): Promise<Chef> => {
+  const res = await fetch(`${baseURL}/slug/${slug}`);
 
   if (!res.ok) {
     const err = await res.json().catch(() => null);
@@ -90,3 +91,12 @@ export const getChefByURL = async (url: string): Promise<Chef> => {
   const data: Chef = await res.json();
   return data;
 };
+
+export async function getRecipesByChefId(id: string): Promise<Recipe[]> {
+  const res = await fetch(`${API_URL}/chefs/${id}/recipes`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch chef's recipes");
+  }
+  return res.json();
+}

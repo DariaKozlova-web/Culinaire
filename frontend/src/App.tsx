@@ -32,9 +32,8 @@ function App() {
             <Route path="recipes" element={<Recipes />} />
             <Route path="recipe/:slug" element={<Recipe />} />
             <Route path="chefs" element={<Chefs />} />
-            <Route path="recipe/:slug" element={<RecipePage />} />
-            <Route path="about" element={<About />} />
             <Route path="chef/:slug" element={<Chef />} />
+            <Route path="about" element={<About />} />
 
             <Route path="dashboard" element={<Dashboard />}>
               <Route index element={<DashboardHome />} />

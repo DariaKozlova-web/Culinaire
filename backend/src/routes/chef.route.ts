@@ -7,7 +7,8 @@ import {
   getChefById,
   updateChefById,
   getChefByURL,
-  getRandomChefs
+  getRandomChefs,
+  getRecipesByChefId
 } from '#controllers';
 import { chefInputSchema, chefUpdateSchema } from '#schemas';
 
@@ -20,7 +21,9 @@ chefRouter
 
 chefRouter.get('/random', getRandomChefs);
 
-chefRouter.route('/url/:url').get(getChefByURL);
+chefRouter.route('/slug/:slug').get(getChefByURL);
+
+chefRouter.get('/:id/recipes', getRecipesByChefId);
 
 chefRouter
   .route('/:id')
