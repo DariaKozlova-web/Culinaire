@@ -7,7 +7,7 @@ import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<null | User>(null);
-  const [authLoading, setAuthLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const refreshLogin = async () => {
