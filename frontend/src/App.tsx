@@ -18,8 +18,8 @@ import Home from "./pages/Home.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
-import RecipePage from "./pages/Recipe.tsx";
 import Recipes from "./pages/Recipes.tsx";
+import Contact from "./pages/Contact.tsx";
 
 function App() {
   return (
@@ -32,9 +32,9 @@ function App() {
             <Route path="recipes" element={<Recipes />} />
             <Route path="recipe/:slug" element={<Recipe />} />
             <Route path="chefs" element={<Chefs />} />
-            <Route path="recipe/:slug" element={<RecipePage />} />
-            <Route path="about" element={<About />} />
+            <Route path="about" element={<About/>}/>
             <Route path="chef/:slug" element={<Chef />} />
+            <Route path="contact" element={<Contact/>}/>
 
             <Route element={<ProtectedOnlyUser />}>
               <Route path="dashboard" element={<Dashboard />}>
