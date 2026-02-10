@@ -246,14 +246,14 @@ export default function RecipePage() {
 
       {/* INGREDIENTS + CHEF/DETAILS */}
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Ingredients */}
-          <div>
-            <h2 className="text-3xl font-semibold text-(--text-title)">
+          <div >
+            <h2 className="text-center text-3xl font-semibold text-(--text-title) md:text-left">
               Ingredients
             </h2>
 
-            <ul className="mt-8 space-y-3 text-sm md:text-base">
+            <ul className="mx-auto mt-8 max-w-xl space-y-3 text-sm justify-items-center md:justify-items-start md:mx-0 md:max-w-none md:text-base">
               {recipe.ingredients.map((ing, idx) => (
                 <li key={idx} className="text-(--text-title)">
                   {ing.title} —{" "}
@@ -264,20 +264,23 @@ export default function RecipePage() {
               ))}
             </ul>
 
-            <button
+
+            <div className="mt-8 flex justify-center md:block">
+              <button
               type="button"
               onClick={handleDownload}
               disabled={!isLoggedIn || authLoading}
               className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
               title={!isLoggedIn ? "Login required" : "Add to shoplist"}
             >
-              Add to shoplist
+              Download shoplist
             </button>
+            </div>
           </div>
 
           {/* Chef + details */}
           <div className="lg:pl-10">
-            <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-start md:text-left">
               <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-(--border-soft)">
                 {chefImage ? (
                   <img
@@ -317,8 +320,8 @@ export default function RecipePage() {
               </div>
             </div>
 
-            <div className="mt-10 space-y-6">
-              <div className="flex items-center gap-3">
+            <div className="mt-10 space-y-6 md:mt-10">
+              <div className="flex items-center justify-center gap-3 md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <GlobIcon className="h-6 w-6" />
                 </span>
@@ -330,7 +333,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 justify-center md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <ClockIcon className="h-6 w-6" />
                 </span>
@@ -342,7 +345,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 justify-center md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <ServesIcon className="h-6 w-6" />
                 </span>
@@ -354,7 +357,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 justify-center md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <LevelIcon className="h-6 w-6" />
                 </span>
@@ -474,7 +477,7 @@ export default function RecipePage() {
               disabled={
                 !isLoggedIn || authLoading || !note.trim() || savingNote
               }
-              className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--border-soft) px-6 py-2.5 text-sm font-semibold text-(--text-title) transition hover:border-(--accent-olive) disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
             >
               {savingNote ? "Saving..." : "Save note"}
             </button>
