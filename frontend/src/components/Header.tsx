@@ -58,7 +58,7 @@ const Header = () => {
               className="h-12"
             />
             <span
-              className="inline-block bg-clip-text text-xl font-bold text-transparent uppercase"
+              className="hidden sm:inline-block bg-clip-text text-xl font-bold text-transparent uppercase"
               style={{
                 background: "var(--gradient-logo)",
                 WebkitBackgroundClip: "text",

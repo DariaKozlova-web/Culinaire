@@ -23,7 +23,7 @@ const Banner = () => {
       {/* Content */}
       <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 md:px-8">
         <div className="max-w-xl">
-          <h1 className="mb-6 text-5xl font-bold text-(--text-title) md:text-5xl">
+          <h1 className="mb-6 text-4xl font-bold text-(--text-title) sm:text-5xl">
             <span className="uppercase">Culinaire</span>
             <br />
             Elevated home cooking
@@ -32,17 +32,17 @@ const Banner = () => {
             Discover classic fine-dining recipes adapted for home kitchens.
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
             <NavLink
-              to="/register"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-(--accent-olive) px-7 text-sm font-semibold text-white transition-colors hover:bg-(--accent-wine)"
+              to="/recipes"
+              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-(--accent-olive) px-7 text-sm font-semibold text-white transition-colors hover:bg-(--accent-wine) sm:w-auto"
             >
               Explore recipes
             </NavLink>
 
             <button
               onClick={scrollToWhy}
-              className="inline-flex h-12 items-center justify-center rounded-xl border border-(--accent-olive) px-7 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              className="bg-(--btn-ghost-bg) inline-flex h-12 w-full items-center justify-center rounded-xl border-2 border-(--accent-olive) px-7 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine) sm:w-auto"
             >
               How it works
             </button>

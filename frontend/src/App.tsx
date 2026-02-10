@@ -18,6 +18,9 @@ import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
 import Recipes from "./pages/Recipes.tsx";
+import RecipePage from "./pages/Recipe.tsx";
+import DashboardHome from "./pages/DashboardHome.tsx";
+import About from "./pages/About.tsx";
 
 function App() {
   return (
@@ -30,6 +33,8 @@ function App() {
             <Route path="recipes" element={<Recipes />} />
             <Route path="recipe/:slug" element={<Recipe />} />
             <Route path="chefs" element={<Chefs />} />
+            <Route path="recipe/:slug" element={<RecipePage />} />
+            <Route path="about" element={<About/>}/>
             <Route path="chef/:slug" element={<Chef />} />
 
             <Route path="dashboard" element={<Dashboard />}>

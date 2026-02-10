@@ -4,7 +4,7 @@ import { ShoppingCartIcon } from "./icons/ShoppingCartIcon";
 
 const About = () => {
   return (
-    <section id="why-culinaire" className="py-20">
+    <section id="why-culinaire" className="py-14 md:py-18">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Header */}
         <div className="mb-14 text-center">
@@ -21,7 +21,7 @@ const About = () => {
         {/* Features */}
         <div className="grid grid-cols-1 justify-items-center gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Feature 1 */}
-          <div className="flex max-w-77 flex-col items-center gap-5 text-center">
+          <div className="flex max-w-77 flex-col items-center gap-5 text-center sm:justify-self-end lg:justify-self-auto">
             <ClocheIcon className="h-12 w-12 text-(--accent-olive)" />
 
             <h3 className="text-lg font-semibold">Restaurant-Level Recipes</h3>
@@ -33,7 +33,7 @@ const About = () => {
           </div>
 
           {/* Feature 2 */}
-          <div className="flex max-w-77 flex-col items-center gap-5 text-center">
+          <div className="flex max-w-77 flex-col items-center gap-5 text-center sm:justify-self-start lg:justify-self-auto">
             <ChefHatIcon className="h-12 w-12 text-(--accent-olive)" />
 
             <h3 className="text-lg font-semibold">Elevated, Yet Accessible</h3>
@@ -45,7 +45,7 @@ const About = () => {
           </div>
 
           {/* Feature 3 */}
-          <div className="flex max-w-77 flex-col items-center gap-5 text-center">
+          <div className="flex max-w-77 flex-col items-center gap-5 text-center sm:col-span-2 sm:justify-self-center lg:col-span-1">
             <ShoppingCartIcon className="h-12 w-12 text-(--accent-olive)" />
 
             <h3 className="text-lg font-semibold">Cook Smarter</h3>

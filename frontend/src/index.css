@@ -7,6 +7,8 @@
   /* backgrounds */
   --bg-main: #faf7f2;
   --bg-footer: #e8e2d8;
+  --bg-card: rgba(255, 255, 255, 0.45);
+  --btn-ghost-bg: rgba(255, 255, 255, 0.3);
 
   /* border */
   --border-soft: rgba(0, 0, 0, 0.08);
@@ -41,8 +43,11 @@
     #a86a3d 66.08%,
     #6a3f22 100%
   );
-}
 
+  /* cards shadows */
+  --shadow-card: 0 0 40px rgba(0, 0, 0, 0.14);
+  --shadow-card-hover: 0 0 55px rgba(0, 0, 0, 0.20);
+}
 
 /* ======================
    Dark theme
@@ -50,9 +55,11 @@
 .dark {
   --bg-main: #1e1712;
   --bg-footer: #261e18;
+  --bg-card: rgba(0, 0, 0, 0.18);
+  --btn-ghost-bg: rgba(0, 0, 0, 0.3);
 
   /* border */
-  --border-soft: rgba(255, 255, 255, 0.10);
+  --border-soft: rgba(255, 255, 255, 0.1);
 
   --text-title: #f3ede6;
   --text-body: #cfc6bb;
@@ -79,6 +86,10 @@
     #c9a24d 75%,
     #6e4a1e 100%
   );
+
+  /* cards shadows */
+  --shadow-card: 0 0 40px rgba(255, 255, 255, 0.06);
+  --shadow-card-hover: 0 0 55px rgba(255, 243, 176, 0.10);
 }
 
 /* ======================
@@ -104,26 +115,28 @@ h5 {
 ====================== */
 
 .ui-surface {
-  background: var(--bg-overlay-card);
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(230, 201, 180, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 1.5rem; /* 24px */
   backdrop-filter: blur(10px);
 }
 
 .dark .ui-surface {
   background: rgba(0, 0, 0, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .ui-input {
   width: 100%;
   border-radius: 0.75rem; /* 12px */
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   outline: none;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
   color: var(--text-title);
 }
 
@@ -137,7 +150,7 @@ h5 {
 
 .dark .ui-input {
   background: rgba(0, 0, 0, 0.22); /* textarea */
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-muted);
 }
 
@@ -154,7 +167,6 @@ select.ui-input {
 }
 select.ui-input option {
   color: var(--text-muted);
-
 }
 
 .group-focus-within .select-arrow {
@@ -162,7 +174,7 @@ select.ui-input option {
 }
 
 .ui-panel {
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.45);
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
@@ -170,50 +182,67 @@ select.ui-input option {
 }
 
 .ui-row {
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.35);
 }
 
 .dark .ui-panel {
-  border-color: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.1);
   background: var(--bg-overlay-card);
 }
 
 .dark .ui-row {
-  border-color: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.18);
 }
 
 /* Dashboard logo animation */
 .dashboard-logo {
   transform-origin: center;
-  animation: dashboardFloat 4.5s ease-in-out infinite,
-             dashboardPulse 2.8s ease-in-out infinite;
+  animation:
+    dashboardFloat 4.5s ease-in-out infinite,
+    dashboardPulse 2.8s ease-in-out infinite;
   will-change: transform, filter;
 }
 
 /* gentle floating */
 @keyframes dashboardFloat {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* subtle pulse */
 @keyframes dashboardPulse {
-  0%, 100% { filter: drop-shadow(0 10px 24px rgba(0,0,0,0.10)); }
-  50%      { filter: drop-shadow(0 14px 30px rgba(0,0,0,0.16)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.1));
+  }
+  50% {
+    filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.16));
+  }
 }
 
 /* dark theme: softer shadow */
 .dark .dashboard-logo {
-  animation: dashboardFloat 4.5s ease-in-out infinite,
-             dashboardPulseDark 2.8s ease-in-out infinite;
+  animation:
+    dashboardFloat 4.5s ease-in-out infinite,
+    dashboardPulseDark 2.8s ease-in-out infinite;
 }
 
 @keyframes dashboardPulseDark {
-  0%, 100% { filter: drop-shadow(0 10px 26px rgba(0,0,0,0.45)); }
-  50%      { filter: drop-shadow(0 14px 34px rgba(0,0,0,0.55)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.55));
+  }
 }
-
