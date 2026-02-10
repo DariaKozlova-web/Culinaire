@@ -277,7 +277,7 @@ const CreateCategory = () => {
                       : existingMainImage
                   }
                   alt="Category preview"
-                  className="h-48 w-full object-cover"
+                  className="h-150 w-full object-cover"
                 />
               </div>
             )}

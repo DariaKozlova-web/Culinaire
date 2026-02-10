@@ -16,6 +16,7 @@ import Home from "./pages/Home.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import RecipePage from "./pages/Recipe.tsx";
+import DashboardHome from "./pages/DashboardHome.tsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="chef/:slug" element={<Chef />} />
 
             <Route path="dashboard" element={<Dashboard />}>
+              <Route index element={<DashboardHome/>}/>
               {/* admin */}
               <Route element={<ProtectedOnlyAdmin />}>
                 {/* create */}

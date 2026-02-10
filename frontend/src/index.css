@@ -8,6 +8,9 @@
   --bg-main: #faf7f2;
   --bg-footer: #e8e2d8;
 
+  /* border */
+  --border-soft: rgba(0, 0, 0, 0.08);
+
   /* text */
   --text-title: #2b2a27;
   --text-body: #4a4a4a;
@@ -33,12 +36,13 @@
   --gradient-logo: linear-gradient(
     309deg,
     #6a3f22 0%,
-    #a86a3d 22%,
+    #a86a3d 36.19%,
     #f2c9a0 50%,
-    #a86a3d 78%,
+    #a86a3d 66.08%,
     #6a3f22 100%
   );
 }
+
 
 /* ======================
    Dark theme
@@ -46,6 +50,9 @@
 .dark {
   --bg-main: #1e1712;
   --bg-footer: #261e18;
+
+  /* border */
+  --border-soft: rgba(255, 255, 255, 0.10);
 
   --text-title: #f3ede6;
   --text-body: #cfc6bb;
@@ -147,7 +154,7 @@ select.ui-input {
 }
 select.ui-input option {
   color: var(--text-muted);
- 
+
 }
 
 .group-focus-within .select-arrow {
@@ -176,5 +183,37 @@ select.ui-input option {
 .dark .ui-row {
   border-color: rgba(255, 255, 255, 0.10);
   background: rgba(0, 0, 0, 0.18);
+}
+
+/* Dashboard logo animation */
+.dashboard-logo {
+  transform-origin: center;
+  animation: dashboardFloat 4.5s ease-in-out infinite,
+             dashboardPulse 2.8s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+/* gentle floating */
+@keyframes dashboardFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* subtle pulse */
+@keyframes dashboardPulse {
+  0%, 100% { filter: drop-shadow(0 10px 24px rgba(0,0,0,0.10)); }
+  50%      { filter: drop-shadow(0 14px 30px rgba(0,0,0,0.16)); }
+}
+
+/* dark theme: softer shadow */
+.dark .dashboard-logo {
+  animation: dashboardFloat 4.5s ease-in-out infinite,
+             dashboardPulseDark 2.8s ease-in-out infinite;
+}
+
+@keyframes dashboardPulseDark {
+  0%, 100% { filter: drop-shadow(0 10px 26px rgba(0,0,0,0.45)); }
+  50%      { filter: drop-shadow(0 14px 34px rgba(0,0,0,0.55)); }
 }
 

@@ -67,7 +67,6 @@ export default function Recipes() {
   }, [activeCategoryId, categories]);
 
   const clearFilter = () => {
-    // убираем параметр category из URL
     searchParams.delete("category");
     setSearchParams(searchParams, { replace: true });
   };
@@ -128,7 +127,7 @@ export default function Recipes() {
           })}
         </div>
 
-        <div className="mt-10 border-t border-black/10 dark:border-white/10" />
+        <div className="mt-10 border-t border-(--border-soft)" />
       </section>
 
       {/* Cards */}

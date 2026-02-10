@@ -2,7 +2,6 @@ import { UserIcon } from "@/components/icons/UserIcon";
 import useAuth from "@/contexts/useAuth";
 import { updateProfile } from "@/data/profile";
 import type { User } from "@/types/user";
-import { inputBase } from "@/utils";
 import { useEffect, useState } from "react";
 
 export type ProfileForm = Pick<User, "name"> & {
@@ -101,11 +100,11 @@ function MyProfile() {
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-8 shadow-sm dark:border-white/10 dark:bg-transparent"
+          className="ui-surface mt-8 p-8 shadow-sm"
         >
           <div className="space-y-4">
             <input
-              className={inputBase}
+              className="ui-input"
               placeholder="Name"
               name="name"
               value={form.name}
@@ -116,7 +115,7 @@ function MyProfile() {
             {/* File upload (English) */}
             <div className="flex items-center gap-3">
               <input
-                className={inputBase}
+                className="ui-input"
                 placeholder="Profile image"
                 value={form.image}
                 readOnly
