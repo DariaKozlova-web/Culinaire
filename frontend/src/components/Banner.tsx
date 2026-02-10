@@ -34,7 +34,7 @@ const Banner = () => {
 
           <div className="flex gap-4">
             <NavLink
-              to="/register"
+              to="/recipes"
               className="inline-flex h-12 items-center justify-center rounded-xl bg-(--accent-olive) px-7 text-sm font-semibold text-white transition-colors hover:bg-(--accent-wine)"
             >
               Explore recipes
