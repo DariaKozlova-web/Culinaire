@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import ChefCard from "./ChefCard";
 import type { Chef } from "../types/chef";
-import { getAllChefs } from "../data/chefs";
+import { getRandomChefs } from "../data/chefs";
 
 const Chefs = () => {
   const [chefs, setChefs] = useState<Chef[]>([]);
@@ -15,7 +15,7 @@ const Chefs = () => {
     (async () => {
       try {
         setLoading(true);
-        const data = await getAllChefs();
+        const data = await getRandomChefs();
         if (alive) setChefs(data);
       } catch (e) {
         if (alive) setError(e instanceof Error ? e.message : "Failed to load chefs");
