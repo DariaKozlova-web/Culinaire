@@ -202,10 +202,7 @@ const CreateCategory = () => {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="ui-surface mt-8 p-8 shadow-sm"
-        >
+        <form onSubmit={handleSubmit} className="ui-surface mt-8 p-8 shadow-sm">
           <div className="space-y-4">
             <label htmlFor="name" className="sr-only">
               Category title
@@ -290,10 +287,14 @@ const CreateCategory = () => {
           <div className="mt-10 flex justify-center">
             <button
               type="submit"
-              disabled={!canSubmit || submitting}
-              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!canSubmit || submitting || loadingCategory}
+              className="min-w-70 cursor-pointer rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Saving..." : "Save category"}
+              {submitting
+                ? "Saving..."
+                : isEdit
+                  ? "Save changes"
+                  : "Save category"}
             </button>
           </div>
 
@@ -302,7 +303,7 @@ const CreateCategory = () => {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard/categories")}
-                className="text-sm text-(--accent-olive) hover:text-(--accent-wine)"
+                className="cursor-pointer text-sm text-(--accent-olive) hover:text-(--accent-wine)"
               >
                 ← Back to categories
               </button>
