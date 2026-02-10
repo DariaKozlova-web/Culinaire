@@ -98,7 +98,7 @@ function AllCategories() {
                       type="button"
                       onClick={() => onDelete(r._id)}
                       disabled={busyId === r._id}
-                      className="inline-flex h-10 items-center justify-center rounded-xl border border-black/10 px-4 text-sm font-medium transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10"
+                      className="inline-flex h-10 cursor-pointer items-center justify-center rounded-xl border border-black/10 px-4 text-sm font-medium transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10"
                     >
                       {busyId === r._id ? "Deleting…" : "Delete"}
                     </button>

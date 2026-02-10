@@ -1,10 +1,10 @@
+import RecipeCard from "@/components/RecipeCard";
+import { getAllCategories } from "@/data/categories";
+import { getAllRecipes } from "@/data/recipes";
+import type { Category } from "@/types/category";
+import type { Recipe } from "@/types/recipe";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
-import { getAllRecipes } from "@/data/recipes";
-import { getAllCategories } from "@/data/categories";
-import type { Recipe } from "@/types/recipe";
-import type { Category } from "@/types/category";
-import RecipeCard from "@/components/RecipeCard";
 
 function getCategoryIdFromRecipe(recipe: Recipe): string {
   const c = recipe.categoryId;
@@ -42,7 +42,8 @@ export default function Recipes() {
           setCategories(allCategories);
         }
       } catch (e) {
-        if (!ignore) setError(e instanceof Error ? e.message : "Failed to fetch");
+        if (!ignore)
+          setError(e instanceof Error ? e.message : "Failed to fetch");
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -57,7 +58,9 @@ export default function Recipes() {
 
   const filteredRecipes = useMemo(() => {
     if (!activeCategoryId) return recipes;
-    return recipes.filter((r) => getCategoryIdFromRecipe(r) === activeCategoryId);
+    return recipes.filter(
+      (r) => getCategoryIdFromRecipe(r) === activeCategoryId,
+    );
   }, [recipes, activeCategoryId]);
 
   const activeCategoryName = useMemo(() => {
@@ -117,8 +120,8 @@ export default function Recipes() {
                 onClick={() => setFilter(cat._id)}
                 className={
                   active
-                    ? "rounded-full bg-(--accent-olive) px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-(--accent-wine)"
-                    : "rounded-full border border-(--accent-olive) px-5 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
+                    ? "cursor-pointer rounded-full bg-(--accent-olive) px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-(--accent-wine)"
+                    : "cursor-pointer rounded-full border border-(--accent-olive) px-5 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
                 }
               >
                 {cat.name}
@@ -150,7 +153,7 @@ export default function Recipes() {
             <button
               type="button"
               onClick={clearFilter}
-              className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
+              className="cursor-pointer rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
             >
               View all recipes
             </button>
