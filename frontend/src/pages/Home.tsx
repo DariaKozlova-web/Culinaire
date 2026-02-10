@@ -10,9 +10,9 @@ function Home() {
     <>
       <Banner />
       <Categories />
+      <Chefs />
       <About />
       <RecipesSection />
-      <Chefs />
       <CTASection />
     </>
   );

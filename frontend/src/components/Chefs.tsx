@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router";
 import ChefCard from "./ChefCard";
 import type { Chef } from "../types/chef";
 import { getAllChefs } from "../data/chefs";
@@ -52,6 +53,14 @@ const Chefs = () => {
           </div>
         )}
       </div>
+      <div className="mt-10 flex justify-center">
+          <NavLink
+            to="/chefs"
+            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
+          >
+            View all chefs
+          </NavLink>
+        </div>
     </section>
   );
 };

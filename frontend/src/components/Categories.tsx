@@ -53,7 +53,7 @@ const Categories = () => {
         <div className="mt-10 flex justify-center">
           <NavLink
             to="/recipes"
-            className="inline-flex h-12 items-center justify-center rounded-xl bg-(--accent-olive) px-7 text-sm font-semibold text-white transition-colors hover:bg-(--accent-wine)"
+            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
           >
             View all recipes
           </NavLink>

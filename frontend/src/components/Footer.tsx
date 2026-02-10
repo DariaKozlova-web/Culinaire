@@ -72,7 +72,7 @@ const Footer = () => {
                   to="/about"
                   className="text-(--accent-olive) hover:text-(--accent-wine)"
                 >
-                  About Us
+                  About
                 </NavLink>
               </li>
             </ul>
