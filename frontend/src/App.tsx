@@ -19,7 +19,6 @@ import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
 import Recipes from "./pages/Recipes.tsx";
-import About from "./pages/About.tsx";
 import Contact from "./pages/Contact.tsx";
 
 function App() {
