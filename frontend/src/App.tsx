@@ -1,6 +1,7 @@
 import { MainLayout, ProtectedOnlyAdmin, ProtectedOnlyGuest } from "@/layouts";
 import { BrowserRouter, Route, Routes } from "react-router";
 
+import About from "./pages/About.tsx";
 import AllCategories from "./pages/AllCategories.tsx";
 import AllChefs from "./pages/AllChefs.tsx";
 import AllRecipes from "./pages/AllRecipes.tsx";
@@ -17,10 +18,8 @@ import Home from "./pages/Home.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
-import Recipes from "./pages/Recipes.tsx";
 import RecipePage from "./pages/Recipe.tsx";
-import DashboardHome from "./pages/DashboardHome.tsx";
-import About from "./pages/About.tsx";
+import Recipes from "./pages/Recipes.tsx";
 
 function App() {
   return (
@@ -34,7 +33,7 @@ function App() {
             <Route path="recipe/:slug" element={<Recipe />} />
             <Route path="chefs" element={<Chefs />} />
             <Route path="recipe/:slug" element={<RecipePage />} />
-            <Route path="about" element={<About/>}/>
+            <Route path="about" element={<About />} />
             <Route path="chef/:slug" element={<Chef />} />
 
             <Route path="dashboard" element={<Dashboard />}>
