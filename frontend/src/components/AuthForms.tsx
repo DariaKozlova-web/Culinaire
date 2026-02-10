@@ -88,10 +88,15 @@ export const AuthForms = ({
                             initialValues={initialLogIn}
                             onSubmit={(values, actions) => {
                               onLoginSubmit(values);
+                              const form = document.querySelector("#log-form");
+                              console.log(form);
+                              const creds = new PasswordCredential(form);
+                              // Store the credentials.
+                              navigator.credentials.store(creds);
                               actions.resetForm();
                             }}
                           >
-                            <Form>
+                            <Form id="log-form">
                               {loginLoading === false && (
                                 <>
                                   <div className="relative mb-2">
@@ -101,7 +106,7 @@ export const AuthForms = ({
                                       className="form-style"
                                       placeholder="Your Email"
                                       id="logemail"
-                                      autoComplete="off"
+                                      autoComplete="username"
                                     />
                                     <div>
                                       <SiMaildotru className="input-icon" />
@@ -114,7 +119,7 @@ export const AuthForms = ({
                                       className="form-style"
                                       placeholder="Your Password"
                                       id="logpass"
-                                      autoComplete="off"
+                                      autoComplete="current-password"
                                     />
                                     <div>
                                       <RiLockPasswordLine className="input-icon uil" />
