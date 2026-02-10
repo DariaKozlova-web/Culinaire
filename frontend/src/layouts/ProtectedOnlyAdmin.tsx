@@ -1,21 +1,12 @@
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 
 import useAuth from "../contexts/useAuth";
 
 const ProtectedOnlyAdmin = () => {
-  const navigate = useNavigate();
-  const { user, authLoading } = useAuth();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user) navigate("/login");
-  }, [user, navigate, authLoading]);
-
-  if (authLoading) return <p>Loading...</p>;
-  if (!user) return null;
-  if (!user.roles?.some((role) => role === "admin"))
-    return <p>"Access denied. Only admins allowed."</p>;
+  if (!user!.roles?.some((role) => role === "admin"))
+    return <p className="text-red-600">Access denied! Only admins allowed!</p>;
   return <Outlet />;
 };
 
