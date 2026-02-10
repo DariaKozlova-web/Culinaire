@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import type { Chef as ChefType } from "../types/chef";
+
 import { ClockIcon } from "../components/icons/ClockIcon";
 import { LocationIcon } from "../components/icons/LocationIcon";
 import { getChefByURL } from "../data/chefs";
+import type { Chef as ChefType } from "../types/chef";
 
 function Chef() {
   const { slug } = useParams<{ slug: string }>();
@@ -38,13 +39,16 @@ function Chef() {
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-20 lg:grid-cols-5">
-            <div className="relative h-auto md:col-span-1 md:h-120 lg:col-span-2">
-              {chefData.image && (
+            <div className="relative aspect-4/5 overflow-hidden rounded-xl bg-(--border-soft) md:aspect-auto md:h-120 lg:col-span-2">
+              {chefData.image ? (
                 <img
                   src={chefData.image}
                   alt={chefData.name}
-                  className="h-auto w-full rounded-xl object-cover md:h-full"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
                 />
+              ) : (
+                <div className="h-full w-full" />
               )}
             </div>
             <div className="flex items-center text-center md:col-span-1 md:text-left lg:col-span-3">
