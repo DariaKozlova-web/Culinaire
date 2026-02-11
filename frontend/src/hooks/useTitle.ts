@@ -72,17 +72,3 @@ export function usePageMeta({ title, description, image }: MetaProps) {
     }
   }, [title, description, image]);
 }
-
-
-// import { useEffect } from "react";
-
-// export function useTitle(title: string) {
-//   useEffect(() => {
-//     const prevTitle = document.title;
-//     document.title = `${title} | Culinaire`;
-
-//     return () => {
-//       document.title = prevTitle;
-//     };
-//   }, [title]);
-// }

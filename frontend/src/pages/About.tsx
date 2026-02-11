@@ -1,11 +1,9 @@
-// import { useTitle } from "../hooks/useTitle";
 import { usePageMeta } from "@/hooks/useTitle";
 import { NavLink } from "react-router";
 
 import aboutImage from "../assets/images/about-hero-1.jpg";
 
 export default function About() {
-  // useTitle("About");
   usePageMeta({
     title: "About",
     description:
