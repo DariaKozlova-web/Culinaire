@@ -2,8 +2,16 @@ import ChefCard from "@/components/ChefCard";
 import { getAllChefs } from "@/data/chefs";
 import type { Chef } from "@/types/chef";
 import { useEffect, useState } from "react";
+import { usePageMeta } from "@/hooks/useTitle";
 
 function Chefs() {
+usePageMeta({
+    title: "Chefs",
+    description:
+      "Meet the chefs behind the recipes. Explore culinary styles, restaurant details, and signature approaches — then cook their dishes at home.",
+    image: "/og-default.png",
+  });
+
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

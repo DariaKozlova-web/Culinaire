@@ -5,6 +5,7 @@ import type { Category } from "@/types/category";
 import type { Recipe } from "@/types/recipe";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
+import { usePageMeta } from "@/hooks/useTitle";
 
 function getCategoryIdFromRecipe(recipe: Recipe): string {
   const c = recipe.categoryId;
@@ -14,6 +15,13 @@ function getCategoryIdFromRecipe(recipe: Recipe): string {
 }
 
 export default function Recipes() {
+ usePageMeta({
+    title: "Recipes",
+    description:
+      "Browse elevated recipes by cuisine, category, and chef. Save favorites, plan cooking, and follow step-by-step guidance designed for home kitchens.",
+    image: "/og-default.png",
+  });
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
