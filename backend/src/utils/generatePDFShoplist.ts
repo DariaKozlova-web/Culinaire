@@ -23,7 +23,7 @@ export async function generatePDFShoplist(recipe: RecipeDTO, res: Response): Pro
 
   const startY = 25;
   try {
-    const svgUrl = `${process.env.CLIENT_BASE_URL}/logo-dark.svg`;
+    const svgUrl = `${process.env.CLIENT_BASE_URL}/logo-light.svg`;
     const svgResponse = await axios.get(svgUrl);
     SVGtoPDF(doc, svgResponse.data as string, 40, startY, { width: 35 });
 
