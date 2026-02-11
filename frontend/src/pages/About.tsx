@@ -1,8 +1,11 @@
 import { NavLink } from "react-router";
+
 // import aboutImage from "../assets/images/about-hero.jpg";
 import aboutImage from "../assets/images/about-hero-1.jpg";
+import { useTitle } from "../hooks/useTitle";
 
 export default function About() {
+  useTitle("About");
   return (
     <div className="w-full">
       {/* HERO */}
