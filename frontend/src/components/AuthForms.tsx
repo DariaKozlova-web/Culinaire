@@ -141,7 +141,7 @@ export const AuthForms = ({
                               )}
                               {loginLoading && (
                                 <div className="text-Green flex-center-center h-57.5 flex-col uppercase">
-                                  <PropagateLoader color="vat(--accent-olive)" />
+                                  <PropagateLoader color="var(--accent-olive)" />
                                 </div>
                               )}
                             </Form>
