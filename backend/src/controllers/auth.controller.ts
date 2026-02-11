@@ -4,21 +4,22 @@ import { createAccessToken, createRefreshToken, hashPassword } from '#utils';
 import { ACCESS_JWT_SECRET, REFRESH_TOKEN_TTL } from '#config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import type { z } from 'zod/v4';
+import { type z } from 'zod/v4';
 import type { loginSchema, meSchema, registerSchema } from '#schemas';
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+  const isProduction = process.env.NODE_ENV === 'production';
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'strict',
     maxAge: REFRESH_TOKEN_TTL * 1000
   });
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none'
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'strict'
   });
 }
 
@@ -102,10 +103,11 @@ export const logout: RequestHandler = async (req, res) => {
     await RefreshToken.findOneAndDelete({ token: refreshToken });
   }
 
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none' as const
+    secure: isProduction,
+    sameSite: isProduction ? ('none' as const) : ('strict' as const)
   };
 
   res.clearCookie('refreshToken', cookieOptions);
