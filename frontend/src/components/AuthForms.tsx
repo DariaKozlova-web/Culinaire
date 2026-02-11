@@ -8,6 +8,19 @@ import { HashLoader, PropagateLoader } from "react-spinners";
 import { ModalWindowBackdrop } from "../components/ModalBackDrop";
 import "../styles/AuthForms.css";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let PasswordCredential: any; // PasswordCredential is not available in all browsers, so we declare it as any to avoid TypeScript errors. In a production environment, you should check for its existence before using it.
+if (typeof window !== "undefined" && "PasswordCredential" in window) {
+  PasswordCredential = window.PasswordCredential;
+}
+function storeCredentials() {
+  const form = document.querySelector("#log-form");
+  if (PasswordCredential && form) {
+    const creds = new PasswordCredential(form);
+    navigator.credentials.store(creds);
+  }
+}
+
 export interface IUserAuth {
   email: string;
   password: string;
@@ -88,11 +101,7 @@ export const AuthForms = ({
                             initialValues={initialLogIn}
                             onSubmit={(values, actions) => {
                               onLoginSubmit(values);
-                              const form = document.querySelector("#log-form");
-                              console.log(form);
-                              const creds = new PasswordCredential(form);
-                              // Store the credentials.
-                              navigator.credentials.store(creds);
+                              storeCredentials();
                               actions.resetForm();
                             }}
                           >
