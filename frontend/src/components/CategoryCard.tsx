@@ -28,10 +28,17 @@ const CategoryCard = ({ category }: Props) => {
         <div className="absolute inset-0 bg-(--bg-overlay-card) transition-opacity group-hover:opacity-70" />
 
         {/* Title */}
-        <div className="absolute inset-0 flex items-center justify-center p-6">
+        {/* <div className="absolute inset-0 flex items-center justify-center p-6">
           <h3 className="text-center text-xl font-semibold text-(--text-title) md:text-2xl">
             {category.name}
           </h3>
+        </div> */}
+
+        {/* Category badge */}
+        <div className="absolute bottom-4 left-4">
+          <span className="ui-badge">
+            {category.name}
+          </span>
         </div>
       </div>
     </NavLink>

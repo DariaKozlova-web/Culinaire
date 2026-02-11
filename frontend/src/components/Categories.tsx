@@ -2,7 +2,7 @@ import CategoryCard from "./CategoryCard";
 import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
 import type { Category } from "../types/category";
-import { getAllCategories } from "../data/categories";
+import { getRandomCategories } from "../data/categories";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -15,7 +15,7 @@ const Categories = () => {
     (async () => {
       try {
         setLoading(true);
-        const data = await getAllCategories();
+        const data = await getRandomCategories();
         if (alive) setCategories(data);
       } catch (e) {
         if (alive)
@@ -53,7 +53,7 @@ const Categories = () => {
         <div className="mt-10 flex justify-center">
           <NavLink
             to="/recipes"
-            className="inline-flex h-12 items-center justify-center rounded-xl bg-(--accent-olive) px-7 text-sm font-semibold text-white transition-colors hover:bg-(--accent-wine)"
+            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
           >
             View all recipes
           </NavLink>

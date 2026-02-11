@@ -10,7 +10,7 @@ const ChefCard = ({ chef }: Props) => {
   return (
     <NavLink
       to={`/chef/${chef.url}`}
-      className="group w-full max-w-70 rounded-2xl bg-(--bg-card) p-5 text-center shadow-(--shadow-card) transition hover:shadow-(--shadow-card-hover) sm:max-w-none sm:p-6"
+      className="group w-full max-w-70 rounded-2xl bg-(--bg-card) p-5 text-center shadow-(--shadow-card) transition hover:shadow-(--shadow-card-hover) md:max-w-none sm:p-6"
     >
       {/* Avatar */}
       <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full sm:h-28 sm:w-28">

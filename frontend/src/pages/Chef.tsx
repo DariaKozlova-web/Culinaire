@@ -69,6 +69,13 @@ function Chef() {
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-20 lg:grid-cols-5">
+            <div className="relative aspect-4/5 overflow-hidden rounded-xl bg-(--border-soft) md:aspect-auto md:h-120 lg:col-span-2">
+              {chefData.image ? (
+                <img
+                  src={chefData.image}
+                  alt={chefData.name}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
             <div className="relative h-auto md:col-span-1 md:h-120 lg:col-span-2">
               {chef.image && (
                 <img
@@ -76,6 +83,8 @@ function Chef() {
                   alt={chef.name}
                   className="h-auto w-full rounded-xl object-cover md:h-full"
                 />
+              ) : (
+                <div className="h-full w-full" />
               )}
             </div>
             <div className="flex items-center text-center md:col-span-1 md:text-left lg:col-span-3">

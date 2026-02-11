@@ -25,10 +25,11 @@ const Header = () => {
     navigate("/");
   };
 
-   const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     { to: "/", label: "Home" },
+    { to: "/chefs", label: "Chefs" },
     { to: "/recipes", label: "Recipes" },
     { to: "/about", label: "About" },
   ];
@@ -58,7 +59,7 @@ const Header = () => {
               className="h-12"
             />
             <span
-              className="hidden sm:inline-block bg-clip-text text-xl font-bold text-transparent uppercase"
+              className="hidden bg-clip-text text-xl font-bold text-transparent uppercase sm:inline-block"
               style={{
                 background: "var(--gradient-logo)",
                 WebkitBackgroundClip: "text",
@@ -173,7 +174,7 @@ const Header = () => {
 
           <div className="absolute top-0 right-0 h-full w-[86%] max-w-85 bg-(--bg-main) shadow-2xl">
             <div className="flex items-center justify-between border-b border-(--border-soft) px-4 py-3">
-              <div className="text-sm font-medium uppercase pl-4 text-(--text-title)">
+              <div className="pl-4 text-sm font-medium text-(--text-title) uppercase">
                 Menu
               </div>
 

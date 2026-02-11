@@ -75,7 +75,7 @@ function Chefs() {
             No chefs found.
           </p>
         ) : (
-          <div className="grid gap-10 md:grid-cols-4">
+          <div className="grid justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-4">
             {chefs.map((c) => (
               <ChefCard key={c._id} chef={c} />
             ))}
