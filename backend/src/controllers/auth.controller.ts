@@ -11,14 +11,14 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'none',
     maxAge: REFRESH_TOKEN_TTL * 1000
   });
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: 'none'
   });
 }
 
@@ -102,10 +102,16 @@ export const logout: RequestHandler = async (req, res) => {
     await RefreshToken.findOneAndDelete({ token: refreshToken });
   }
 
-  res.clearCookie('refreshToken');
-  res.clearCookie('accessToken');
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none' as const
+  };
 
-  res.status(200).json({ message: 'Successfully logged out' });
+  res.clearCookie('refreshToken', cookieOptions);
+  res.clearCookie('accessToken', cookieOptions);
+
+  res.status(200).json({ message: 'Logged out' });
 };
 
 export const me: RequestHandler<{}, MeDTO, {}> = async (req, res, next) => {
