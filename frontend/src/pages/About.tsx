@@ -1,11 +1,17 @@
+// import { useTitle } from "../hooks/useTitle";
+import { usePageMeta } from "@/hooks/useTitle";
 import { NavLink } from "react-router";
 
-// import aboutImage from "../assets/images/about-hero.jpg";
 import aboutImage from "../assets/images/about-hero-1.jpg";
-import { useTitle } from "../hooks/useTitle";
 
 export default function About() {
-  useTitle("About");
+  // useTitle("About");
+  usePageMeta({
+    title: "About",
+    description:
+      "Culinaire connects home cooks and chefs. Discover elevated recipes with clear structure — and learn the stories behind the dishes and restaurants.",
+    image: "/og-default.png",
+  });
   return (
     <div className="w-full">
       {/* HERO */}
@@ -40,7 +46,7 @@ export default function About() {
 
       {/* CONTENT */}
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
-        {/* PROBLEM + IDEA (polished) */}
+        {/* PROBLEM + IDEA */}
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-semibold text-(--text-title) md:text-4xl">
             Why Culinaire exists
@@ -91,30 +97,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div className="ui-surface p-8">
-            <h2 className="text-2xl font-semibold text-(--text-title)">
-              The problem
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-(--text-body) md:text-base">
-              Many recipe websites feel messy. You often find very basic recipes
-              or very complex professional ones. Clear step-by-step guidance and
-              planning tools are missing.
-            </p>
-          </div>
-
-          <div className="ui-surface p-8">
-            <h2 className="text-2xl font-semibold text-(--text-title)">
-              Our idea
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-(--text-body) md:text-base">
-              Culinaire combines refined cuisine with clean structure:
-              ingredients, clear steps, and helpful chef info — so home cooks
-              can create impressive dishes without stress.
-            </p>
-          </div>
-        </div> */}
-
         <div className="ui-surface mt-12 p-10">
           {/* Section title */}
           <h2 className="text-center text-2xl font-semibold text-(--text-title) md:text-3xl">
@@ -151,35 +133,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* <div className="ui-surface mt-10 p-8">
-          <h2 className="text-2xl font-semibold text-(--text-title)">
-            Who is Culinaire for?
-          </h2>
-
-          <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div>
-              <h3 className="text-lg font-semibold text-(--accent-olive)">
-                For home cooks
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm text-(--text-body) md:text-base">
-                <li>• structured recipes with clear steps</li>
-                <li>• easy browsing and filtering</li>
-                <li>• favorites / notes (login-based)</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-(--accent-olive)">
-                For chefs
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm text-(--text-body) md:text-base">
-                <li>• each recipe is linked to a chef profile</li>
-                <li>• users see the chef and the restaurant</li>
-                <li>• local restaurants can get noticed by new guests</li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
         {/* CTA */}
         <div className="ui-surface mt-12 p-10 text-center">
           <h2 className="text-2xl font-semibold text-(--text-title) md:text-3xl">
@@ -204,15 +157,6 @@ export default function About() {
             </NavLink>
           </div>
         </div>
-
-        {/* Option B: mailto (use instead of NavLink)
-            <a
-              href="mailto:culinaire.project@example.com?subject=Culinaire%20—%20Chef%20Collaboration"
-              className="inline-flex items-center justify-center rounded-xl bg-(--accent-olive) px-8 py-3 text-sm font-semibold text-white transition hover:bg-(--accent-wine)"
-            >
-              Contact us
-            </a>
-            */}
       </section>
     </div>
   );

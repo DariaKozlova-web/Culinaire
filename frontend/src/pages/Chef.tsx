@@ -1,3 +1,4 @@
+import { usePageMeta } from "@/hooks/useTitle";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
@@ -45,6 +46,18 @@ function Chef() {
       ignore = true;
     };
   }, [slug]);
+
+  const metaTitle = chef?.name ? `${chef.name}` : "Chef";
+  const metaDescription = chef?.description?.trim()
+    ? chef.description
+    : "Meet professional chefs and explore their signature approach.";
+  const metaImage = chef?.image?.trim() ? chef.image : "/og-default.png";
+
+  usePageMeta({
+    title: metaTitle,
+    description: metaDescription,
+    image: metaImage,
+  });
 
   if (loading) {
     return (

@@ -1,6 +1,7 @@
 import { type ChangeEvent, useState } from "react";
 
 import { SelectArrowIcon } from "../components/icons/SelectArrowIcon";
+import { usePageMeta } from "@/hooks/useTitle";
 
 type ContactForm = {
   name: string;
@@ -17,6 +18,13 @@ const initialForm: ContactForm = {
 };
 
 export default function Contact() {
+usePageMeta({
+    title: "Contact",
+    description:
+      "Questions, feedback, or chef collaboration? Contact Culinaire — we’d love to hear from you and explore new culinary stories together.",
+    image: "/og-default.png",
+  });
+
   const [form, setForm] = useState<ContactForm>(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState("");

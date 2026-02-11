@@ -68,7 +68,7 @@ export const AuthForms = ({
   return (
     <div className="authFormsWrapper relative z-50">
       <div className="section">
-        <div className="ralative container mx-auto">
+        <div className="relative container mx-auto">
           {registerSuccess && registerLoading === false && loginLoading && (
             <div className="flex-center-center absolute top-0 left-0 z-50 h-full w-full bg-[#1f2029]">
               <HashLoader color="#fff" />
@@ -135,13 +135,13 @@ export const AuthForms = ({
                                     </div>
                                   </div>
                                   <button type="submit" className="btn mt-4">
-                                    submit
+                                    Submit
                                   </button>
                                 </>
                               )}
                               {loginLoading && (
-                                <div className="text-Green flex-center-center h-[230px] flex-col uppercase">
-                                  <PropagateLoader color="#36d7b7" />
+                                <div className="text-Green flex-center-center h-57.5 flex-col uppercase">
+                                  <PropagateLoader color="vat(--accent-olive)" />
                                 </div>
                               )}
                             </Form>
@@ -232,13 +232,13 @@ export const AuthForms = ({
                                   </>
                                 )}
                               {registerSuccess === false && registerLoading && (
-                                <div className="text-Green flex-center-center h-[230px] flex-col uppercase">
-                                  <PropagateLoader color="#36d7b7" />
+                                <div className="text-Green flex-center-center h-57.5 flex-col uppercase">
+                                  <PropagateLoader color="#var(--accent-olive)" />
                                 </div>
                               )}
 
                               {registerSuccess && registerLoading === false && (
-                                <div className="text-Green flex h-[230px] flex-col items-center uppercase">
+                                <div className="text-Green flex h-57.5 flex-col items-center uppercase">
                                   <FiCheckCircle size={80} />
                                   <h4 className="text-GreenLight my-6">
                                     Congratulations
@@ -260,7 +260,7 @@ export const AuthForms = ({
                                   </button>
                                 ) : (
                                   <button type="submit" className="btn mt-4">
-                                    submit
+                                    Submit
                                   </button>
                                 ))}
                             </Form>

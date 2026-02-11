@@ -2,6 +2,7 @@ import { GlobIcon } from "@/components/icons/GlobIcon";
 import { LevelIcon } from "@/components/icons/LevelIcon";
 import { ServesIcon } from "@/components/icons/ServesIcon";
 import { updateProfile } from "@/data/profile";
+import { usePageMeta } from "@/hooks/useTitle";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 
@@ -97,6 +98,20 @@ export default function RecipePage() {
   const persistNotes = (recipeId: string, notes: SavedNote[]) => {
     localStorage.setItem(makeNoteKey(recipeId), JSON.stringify(notes));
   };
+
+  const metaTitle = recipe?.title
+    ? `${recipe.title}`
+    : "Recipe";
+  const metaDescription = recipe?.description?.trim()
+    ? recipe.description
+    : "Discover elevated home cooking recipes by professional chefs.";
+  const metaImage = recipe?.image?.trim() ? recipe.image : "/og-default.png";
+
+  usePageMeta({
+    title: metaTitle,
+    description: metaDescription,
+    image: metaImage,
+  });
 
   const onFavoritesClick = async () => {
     if (!user || !recipe) return;
@@ -248,12 +263,12 @@ export default function RecipePage() {
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Ingredients */}
-          <div >
+          <div>
             <h2 className="text-center text-3xl font-semibold text-(--text-title) md:text-left">
               Ingredients
             </h2>
 
-            <ul className="mx-auto mt-8 max-w-xl space-y-3 text-sm justify-items-center md:justify-items-start md:mx-0 md:max-w-none md:text-base">
+            <ul className="mx-auto mt-8 max-w-xl justify-items-center space-y-3 text-sm md:mx-0 md:max-w-none md:justify-items-start md:text-base">
               {recipe.ingredients.map((ing, idx) => (
                 <li key={idx} className="text-(--text-title)">
                   {ing.title} —{" "}
@@ -264,17 +279,16 @@ export default function RecipePage() {
               ))}
             </ul>
 
-
             <div className="mt-8 flex justify-center md:block">
               <button
-              type="button"
-              onClick={handleDownload}
-              disabled={!isLoggedIn || authLoading}
-              className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-              title={!isLoggedIn ? "Login required" : "Add to shoplist"}
-            >
-              Download shoplist
-            </button>
+                type="button"
+                onClick={handleDownload}
+                disabled={!isLoggedIn || authLoading}
+                className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
+                title={!isLoggedIn ? "Login required" : "Add to shoplist"}
+              >
+                Download shoplist
+              </button>
             </div>
           </div>
 
@@ -333,7 +347,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 justify-center md:justify-start">
+              <div className="flex items-center justify-center gap-3 md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <ClockIcon className="h-6 w-6" />
                 </span>
@@ -345,7 +359,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 justify-center md:justify-start">
+              <div className="flex items-center justify-center gap-3 md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <ServesIcon className="h-6 w-6" />
                 </span>
@@ -357,7 +371,7 @@ export default function RecipePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 justify-center md:justify-start">
+              <div className="flex items-center justify-center gap-3 md:justify-start">
                 <span className="inline-flex h-8 w-8 items-center justify-center text-(--accent-olive)">
                   <LevelIcon className="h-6 w-6" />
                 </span>
