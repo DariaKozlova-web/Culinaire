@@ -32,7 +32,21 @@ const userSchema = new Schema(
     favorites: {
       type: [Schema.Types.ObjectId],
       default: []
-    }
+    },
+    notes: [
+      {
+        recipeId: { type: Schema.Types.ObjectId, ref: 'Recipe', required: true },
+        noteItems: {
+          type: [
+            {
+              text: { type: String, required: true },
+              createdAt: { type: Date, required: true }
+            }
+          ],
+          default: []
+        }
+      }
+    ]
   },
   {
     timestamps: { createdAt: true, updatedAt: true }
