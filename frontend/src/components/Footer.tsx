@@ -141,7 +141,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li>
                 <NavLink
-                  to="/privacy"
+                  to="/policy"
                   className="text-(--accent-olive) hover:text-(--accent-wine)"
                 >
                   Privacy Policy

@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Recipe from "./pages/Recipe.tsx";
 import Recipes from "./pages/Recipes.tsx";
 import Contact from "./pages/Contact.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="about" element={<About/>}/>
             <Route path="chef/:slug" element={<Chef />} />
             <Route path="contact" element={<Contact/>}/>
+            <Route path="policy" element={<PrivacyPolicy/>}/>
 
             <Route element={<ProtectedOnlyUser />}>
               <Route path="dashboard" element={<Dashboard />}>
