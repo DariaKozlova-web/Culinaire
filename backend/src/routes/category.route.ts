@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { validateBodyZod, categoryFormMiddleware, cloudUploaderCategory } from '#middlewares';
+import {
+  validateBodyZod,
+  categoryFormMiddleware,
+  cloudUploaderCategory,
+  isAdmin,
+  authenticate
+} from '#middlewares';
 import {
   createCategory,
   deleteCategoryById,
@@ -16,6 +22,8 @@ categoryRouter
   .route('/')
   .get(getAllCategories)
   .post(
+    authenticate,
+    isAdmin,
     categoryFormMiddleware,
     cloudUploaderCategory,
     validateBodyZod(categoryInputSchema),
@@ -28,11 +36,13 @@ categoryRouter
   .route('/:id')
   .get(getCategoryById)
   .put(
+    authenticate,
+    isAdmin,
     categoryFormMiddleware,
     cloudUploaderCategory,
     validateBodyZod(categoryUpdateSchema),
     updateCategoryById
   )
-  .delete(deleteCategoryById);
+  .delete(authenticate, isAdmin, deleteCategoryById);
 
 export default categoryRouter;
