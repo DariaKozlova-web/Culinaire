@@ -84,7 +84,6 @@ export default function RecipePage() {
   }, [recipe, user?.favorites]);
 
   const persistNotes = (updatedNotes: NoteItem[]) => {
-    console.log("Persisting user notes:", updatedNotes);
     if (!user || !recipe) return;
     const notes = user.notes ? user.notes : [];
     const noteIndexForRecipe = notes.findIndex(
@@ -102,7 +101,6 @@ export default function RecipePage() {
     const formData = new FormData();
     const json = JSON.stringify(value);
     formData.append(field, json);
-    console.log(`Updating profile field ${field} with value:`, value);
     updateProfile(formData)
       .then((updatedUser) => {
         setUser(updatedUser);

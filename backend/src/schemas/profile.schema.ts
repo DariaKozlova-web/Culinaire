@@ -12,9 +12,7 @@ export const profileInputSchema = z.object({
       hostname: z.regexes.domain
     })
     .optional(),
-  favorites: z
-    .preprocess(parseJSONArray, z.array(z.preprocess(coerceString, z.string())))
-    .optional(),
+  favorites: z.preprocess(parseJSONArray, z.array(z.string())).optional(),
   notes: z
     .preprocess(
       parseJSONArray,
@@ -23,8 +21,8 @@ export const profileInputSchema = z.object({
           recipeId: z.string(),
           noteItems: z.array(
             z.object({
-              text: z.preprocess(coerceString, z.string()),
-              createdAt: z.preprocess(coerceString, z.string())
+              text: z.string(),
+              createdAt: z.string()
             })
           )
         })

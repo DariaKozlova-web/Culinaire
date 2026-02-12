@@ -39,5 +39,5 @@ app.use('*splat', (req, res) => {
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Auth server listening on port ${port}`);
+  console.info(`Auth server listening on port ${port}`);
 });
