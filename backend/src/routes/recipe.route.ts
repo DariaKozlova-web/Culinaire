@@ -14,7 +14,8 @@ import {
   recipeFormMiddleware,
   cloudUploaderRecipe,
   validateBodyZod,
-  authenticate
+  authenticate,
+  isAdmin
 } from '#middlewares';
 import { recipeInputSchema, recipeUpdateSchema } from '#schemas';
 
@@ -30,6 +31,8 @@ recipeRouter
   .route('/')
   .get(getAllRecipes)
   .post(
+    authenticate,
+    isAdmin,
     recipeFormMiddleware,
     validateBodyZod(recipeInputSchema),
     cloudUploaderRecipe,
@@ -42,11 +45,13 @@ recipeRouter
   .route('/:id')
   .get(getRecipeById)
   .put(
+    authenticate,
+    isAdmin,
     recipeFormMiddleware,
     validateBodyZod(recipeUpdateSchema),
     cloudUploaderRecipe,
     updateRecipeById
   )
-  .delete(deleteRecipeById);
+  .delete(authenticate, isAdmin, deleteRecipeById);
 
 export default recipeRouter;

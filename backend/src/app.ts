@@ -2,7 +2,14 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRouter, categoryRouter, chefRouter, recipeRouter, profileRouter } from '#routes';
+import {
+  authRouter,
+  categoryRouter,
+  chefRouter,
+  recipeRouter,
+  profileRouter,
+  reviewRouter
+} from '#routes';
 import { errorHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
 
@@ -32,6 +39,8 @@ app.use('/categories', categoryRouter);
 app.use('/chefs', chefRouter);
 
 app.use('/recipes', recipeRouter);
+
+app.use('/reviews', reviewRouter);
 
 app.use('*splat', (req, res) => {
   res.status(404).json({ message: 'Not found' });

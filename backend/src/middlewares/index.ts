@@ -9,3 +9,4 @@ export { default as cloudUploaderChef } from './chefCloudUploader.ts';
 export { default as authenticate } from './authenticate.ts';
 export { default as profileFormMiddleware } from './profileFormMiddleware.ts';
 export { default as profileCloudUploader } from './profileCloudUploader.ts';
+export { default as isAdmin } from './isAdmin.ts';

@@ -1,5 +1,6 @@
 import { FavoritesButton } from "@/components/FovoritesButton";
 import Notes from "@/components/Notes";
+import { Reviews } from "@/components/Reviews";
 import { GlobIcon } from "@/components/icons/GlobIcon";
 import { LevelIcon } from "@/components/icons/LevelIcon";
 import { ServesIcon } from "@/components/icons/ServesIcon";
@@ -339,6 +340,11 @@ export default function RecipePage() {
       {/* NOTES */}
       <section className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:px-8">
         <Notes recipe={recipe} />
+      </section>
+
+      {/* REVIEWS */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:px-8">
+        <Reviews recipeId={recipe._id} />
       </section>
     </div>
   );
