@@ -21,8 +21,6 @@ const chefFormMiddleware: RequestHandler = (req, _res, next) => {
     if (err) return next(err);
 
     req.body = fields;
-    console.log('FIELDS keys:', Object.keys(fields));
-
     if (files.image && files.image.length > 0) {
       req.image = files.image[0];
     }
