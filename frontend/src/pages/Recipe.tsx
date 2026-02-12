@@ -3,6 +3,7 @@ import { LevelIcon } from "@/components/icons/LevelIcon";
 import { ServesIcon } from "@/components/icons/ServesIcon";
 import { updateProfile } from "@/data/profile";
 import { usePageMeta } from "@/hooks/useTitle";
+import type { NoteItem } from "@/types/user";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 
@@ -15,16 +16,6 @@ type ChefPopulated = Exclude<PopulatedChef, string>;
 
 function isChefPopulated(val: PopulatedChef): val is ChefPopulated {
   return typeof val === "object" && val !== null && "_id" in val;
-}
-
-type SavedNote = {
-  id: string;
-  text: string;
-  createdAt: number;
-};
-
-function makeNoteKey(recipeId: string) {
-  return `culinaire:notes:${recipeId}`;
 }
 
 export default function RecipePage() {
@@ -41,8 +32,8 @@ export default function RecipePage() {
   const [isInFavorites, setIsInFavorites] = useState(false);
 
   // notes
-  const [note, setNote] = useState("");
-  const [savedNotes, setSavedNotes] = useState<SavedNote[]>([]);
+  const [newNote, setNewNote] = useState("");
+  const [userNotes, setUserNotes] = useState<NoteItem[]>([]);
   const [savingNote, setSavingNote] = useState(false);
 
   // fetch recipe
@@ -75,16 +66,12 @@ export default function RecipePage() {
 
   // load notes from localStorage when recipe changes
   useEffect(() => {
-    if (!recipe?._id) return;
-
-    try {
-      const raw = localStorage.getItem(makeNoteKey(recipe._id));
-      const parsed = raw ? (JSON.parse(raw) as unknown) : [];
-      setSavedNotes(Array.isArray(parsed) ? (parsed as SavedNote[]) : []);
-    } catch {
-      setSavedNotes([]);
-    }
-  }, [recipe?._id]);
+    if (!recipe?._id || !user) return;
+    const noteItems =
+      user.notes?.find((note) => note.recipeId === recipe._id)?.noteItems || [];
+    setUserNotes(noteItems);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipe, user?.notes]);
 
   useEffect(() => {
     if (!recipe) return;
@@ -93,15 +80,37 @@ export default function RecipePage() {
     } else {
       setIsInFavorites(false);
     }
-  }, [recipe, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipe, user?.favorites]);
 
-  const persistNotes = (recipeId: string, notes: SavedNote[]) => {
-    localStorage.setItem(makeNoteKey(recipeId), JSON.stringify(notes));
+  const persistNotes = (updatedNotes: NoteItem[]) => {
+    if (!user || !recipe) return;
+    const notes = user.notes ? user.notes : [];
+    const noteIndexForRecipe = notes.findIndex(
+      (note) => note.recipeId === recipe._id,
+    );
+    if (noteIndexForRecipe >= 0) {
+      notes[noteIndexForRecipe].noteItems = updatedNotes;
+    } else {
+      notes.push({ recipeId: recipe._id, noteItems: updatedNotes });
+    }
+    updateProfileFor("notes", notes);
   };
 
-  const metaTitle = recipe?.title
-    ? `${recipe.title}`
-    : "Recipe";
+  function updateProfileFor<T>(field: string, value: T) {
+    const formData = new FormData();
+    const json = JSON.stringify(value);
+    formData.append(field, json);
+    updateProfile(formData)
+      .then((updatedUser) => {
+        setUser(updatedUser);
+      })
+      .catch((error) => {
+        console.error(`Failed to update ${field}`, error);
+      });
+  }
+
+  const metaTitle = recipe?.title ? `${recipe.title}` : "Recipe";
   const metaDescription = recipe?.description?.trim()
     ? recipe.description
     : "Discover elevated home cooking recipes by professional chefs.";
@@ -113,7 +122,7 @@ export default function RecipePage() {
     image: metaImage,
   });
 
-  const onFavoritesClick = async () => {
+  const onFavoritesClick = () => {
     if (!user || !recipe) return;
     let favorites = user.favorites || [];
     if (isInFavorites) {
@@ -121,40 +130,31 @@ export default function RecipePage() {
     } else {
       favorites.push(recipe._id);
     }
-    const formData = new FormData();
-    formData.append("favorites", JSON.stringify(favorites));
-    const updatedUser = await updateProfile(formData);
-    setUser(updatedUser);
+    updateProfileFor("favorites", favorites);
   };
 
   const onSaveNote = () => {
     if (!recipe?._id) return;
     if (!isLoggedIn || authLoading) return;
-    if (!note.trim()) return;
+    if (!newNote.trim()) return;
 
     try {
       setSavingNote(true);
-
-      const newNote: SavedNote = {
-        id: crypto.randomUUID(),
-        text: note.trim(),
-        createdAt: Date.now(),
-      };
-
-      const next = [newNote, ...savedNotes];
-      setSavedNotes(next);
-      persistNotes(recipe._id, next);
-      setNote("");
+      const updatedNotes = [
+        ...userNotes,
+        { text: newNote.trim(), createdAt: new Date() },
+      ];
+      persistNotes(updatedNotes);
+      setNewNote("");
     } finally {
       setSavingNote(false);
     }
   };
 
-  const onDeleteNote = (id: string) => {
+  const onDeleteNote = (date: Date) => {
     if (!recipe?._id) return;
-    const next = savedNotes.filter((n) => n.id !== id);
-    setSavedNotes(next);
-    persistNotes(recipe._id, next);
+    const updatedNotes = userNotes.filter((note) => note.createdAt !== date);
+    persistNotes(updatedNotes);
   };
 
   if (loading) {
@@ -227,13 +227,7 @@ export default function RecipePage() {
               disabled={!isLoggedIn || authLoading}
               onClick={onFavoritesClick}
               className="mt-7 inline-flex cursor-pointer items-center justify-center rounded-xl bg-(--accent-olive) px-8 py-3 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-              title={
-                !isLoggedIn
-                  ? "Login required"
-                  : isInFavorites
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-              }
+              title={!isLoggedIn ? "Login required" : ""}
             >
               {isInFavorites ? "Remove from favorites" : "Add to favorites"}
             </button>
@@ -285,7 +279,7 @@ export default function RecipePage() {
                 onClick={handleDownload}
                 disabled={!isLoggedIn || authLoading}
                 className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-                title={!isLoggedIn ? "Login required" : "Add to shoplist"}
+                title={!isLoggedIn ? "Login required" : ""}
               >
                 Download shoplist
               </button>
@@ -446,26 +440,26 @@ export default function RecipePage() {
         </h2>
 
         <div className="mx-auto mt-8 max-w-xl">
-          {savedNotes.length > 0 && (
+          {userNotes.length > 0 && (
             <div className="mb-5 space-y-3">
-              {savedNotes.map((n) => (
+              {userNotes.map((noteItem) => (
                 <div
-                  key={n.id}
+                  key={noteItem.createdAt.toString()}
                   className="flex items-start justify-between gap-4 rounded-2xl border border-(--border-soft) bg-transparent px-4 py-3 text-sm text-(--text-body)"
                 >
                   <div>
-                    <div className="whitespace-pre-wrap">{n.text}</div>
+                    <div className="whitespace-pre-wrap">{noteItem.text}</div>
                     <div className="mt-2 text-xs text-(--text-muted)">
-                      {new Date(n.createdAt).toLocaleString()}
+                      {new Date(noteItem.createdAt).toLocaleString()}
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => onDeleteNote(n.id)}
+                    onClick={() => onDeleteNote(noteItem.createdAt)}
                     disabled={!isLoggedIn || authLoading}
                     className="shrink-0 cursor-pointer rounded-xl border border-(--border-soft) px-3 py-2 text-xs font-semibold text-(--text-title) transition hover:border-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-                    title={!isLoggedIn ? "Login required" : "Delete note"}
+                    title={!isLoggedIn ? "Login required" : ""}
                   >
                     Delete
                   </button>
@@ -475,13 +469,14 @@ export default function RecipePage() {
           )}
 
           <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
             placeholder={
               isLoggedIn ? "Write your notes here..." : "Login to write notes"
             }
             disabled={!isLoggedIn || authLoading}
             className="ui-input min-h-35 px-4 py-3 text-sm transition outline-none disabled:cursor-not-allowed disabled:opacity-60"
+            title={!isLoggedIn ? "Login required" : ""}
           />
 
           <div className="mt-4 flex justify-center">
@@ -489,9 +484,10 @@ export default function RecipePage() {
               type="button"
               onClick={onSaveNote}
               disabled={
-                !isLoggedIn || authLoading || !note.trim() || savingNote
+                !isLoggedIn || authLoading || !newNote.trim() || savingNote
               }
               className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
+              title={!isLoggedIn ? "Login required" : ""}
             >
               {savingNote ? "Saving..." : "Save note"}
             </button>

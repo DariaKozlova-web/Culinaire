@@ -1,16 +1,6 @@
 import { z } from 'zod/v4';
 import { Types } from 'mongoose';
-import { coerceString } from '#utils';
-
-const parseJSONArray = (val: unknown) => {
-  const v = coerceString(val);
-  if (typeof v !== 'string') return v;
-  try {
-    return JSON.parse(v);
-  } catch {
-    return v;
-  }
-};
+import { coerceString, parseJSONArray } from '#utils';
 
 const objectIdFromForm = (label: string) =>
   z.preprocess(
