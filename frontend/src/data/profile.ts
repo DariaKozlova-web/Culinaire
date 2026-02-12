@@ -18,3 +18,20 @@ export const updateProfile = async (formData: FormData): Promise<User> => {
   const data: User = await res.json();
   return data;
 };
+
+export function updateProfileField<T>(
+  field: string,
+  value: T,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>,
+) {
+  const formData = new FormData();
+  const json = JSON.stringify(value);
+  formData.append(field, json);
+  updateProfile(formData)
+    .then((updatedUser) => {
+      setUser(updatedUser);
+    })
+    .catch((error) => {
+      console.error(`Failed to update ${field}`, error);
+    });
+}
