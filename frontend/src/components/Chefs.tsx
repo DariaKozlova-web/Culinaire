@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
-import ChefCard from "./ChefCard";
-import type { Chef } from "../types/chef";
+import FadeLoader from "react-spinners/FadeLoader";
+
 import { getRandomChefs } from "../data/chefs";
+import type { Chef } from "../types/chef";
+import ChefCard from "./ChefCard";
 
 const Chefs = () => {
   const [chefs, setChefs] = useState<Chef[]>([]);
@@ -18,7 +20,8 @@ const Chefs = () => {
         const data = await getRandomChefs();
         if (alive) setChefs(data);
       } catch (e) {
-        if (alive) setError(e instanceof Error ? e.message : "Failed to load chefs");
+        if (alive)
+          setError(e instanceof Error ? e.message : "Failed to load chefs");
       } finally {
         if (alive) setLoading(false);
       }
@@ -42,7 +45,11 @@ const Chefs = () => {
           </p>
         </div>
 
-        {loading && <p className="text-center text-(--text-muted)">Loading...</p>}
+        {loading && (
+          <div className="flex h-110 w-full scale-200 items-center justify-center">
+            <FadeLoader color={"#f2c9a0"} />
+          </div>
+        )}
         {error && <p className="text-center text-red-400">{error}</p>}
 
         {!loading && !error && (
@@ -54,13 +61,13 @@ const Chefs = () => {
         )}
       </div>
       <div className="mt-10 flex justify-center">
-          <NavLink
-            to="/chefs"
-            className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
-          >
-            View all chefs
-          </NavLink>
-        </div>
+        <NavLink
+          to="/chefs"
+          className="rounded-xl border border-(--accent-olive) px-6 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine)"
+        >
+          View all chefs
+        </NavLink>
+      </div>
     </section>
   );
 };

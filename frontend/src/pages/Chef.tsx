@@ -8,6 +8,7 @@ import { LocationIcon } from "../components/icons/LocationIcon";
 import { getChefBySlug, getRecipesByChefId } from "../data/chefs";
 import type { Chef as ChefType } from "../types/chef";
 import type { Recipe as RecipeType } from "../types/recipe";
+import FadeLoader from "react-spinners/FadeLoader";
 
 function Chef() {
   const { slug } = useParams<{ slug: string }>();
@@ -61,8 +62,8 @@ function Chef() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
-        <p className="text-sm text-(--text-muted)">Loading...</p>
+      <div className="flex h-110 w-full scale-200 items-center justify-center">
+        <FadeLoader color={"#f2c9a0"} />
       </div>
     );
   }

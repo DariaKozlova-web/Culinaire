@@ -1,8 +1,10 @@
-import CategoryCard from "./CategoryCard";
-import { NavLink } from "react-router";
 import { useEffect, useState } from "react";
-import type { Category } from "../types/category";
+import { NavLink } from "react-router";
+import FadeLoader from "react-spinners/FadeLoader";
+
 import { getRandomCategories } from "../data/categories";
+import type { Category } from "../types/category";
+import CategoryCard from "./CategoryCard";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -19,7 +21,9 @@ const Categories = () => {
         if (alive) setCategories(data);
       } catch (e) {
         if (alive)
-          setError(e instanceof Error ? e.message : "Failed to load categories");
+          setError(
+            e instanceof Error ? e.message : "Failed to load categories",
+          );
       } finally {
         if (alive) setLoading(false);
       }
@@ -38,7 +42,9 @@ const Categories = () => {
         </h2>
 
         {loading && (
-          <p className="text-center text-(--text-muted)">Loading...</p>
+          <div className="flex h-110 w-full scale-200 items-center justify-center">
+            <FadeLoader color={"#f2c9a0"} />
+          </div>
         )}
         {error && <p className="text-center text-red-400">{error}</p>}
 
