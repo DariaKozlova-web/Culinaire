@@ -1,14 +1,13 @@
 import type { Category } from "../types/category";
 
-const API_URL: string | undefined = import.meta.env.VITE_APP_SERVER_URL as
-  | string
-  | undefined;
-if (!API_URL)
+const API_URL = import.meta.env.VITE_APP_SERVER_URL;
+
+if (!API_URL) {
   throw new Error("API URL is required, are you missing a .env file?");
-const baseURL: string = `${API_URL}/categories`;
+}
 
 export const createCategory = async (formData: FormData): Promise<Category> => {
-  const res = await fetch(baseURL, {
+  const res = await fetch(`${API_URL}/categories`, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -24,7 +23,7 @@ export const createCategory = async (formData: FormData): Promise<Category> => {
 };
 
 export const getAllCategories = async (): Promise<Category[]> => {
-  const res = await fetch(baseURL);
+  const res = await fetch(`${API_URL}/categories`);
 
   if (!res.ok) throw new Error("Failed to fetch categories");
 
@@ -42,7 +41,7 @@ export async function getRandomCategories(limit = 4) {
 }
 
 export const getCategoryById = async (id: string): Promise<Category> => {
-  const res = await fetch(`${baseURL}/${id}`);
+  const res = await fetch(`${`${API_URL}/categories`}/${id}`);
 
   if (!res.ok) {
     const err = await res.json().catch(() => null);
@@ -57,7 +56,7 @@ export const updateCategoryById = async (
   id: string,
   formData: FormData,
 ): Promise<Category> => {
-  const res = await fetch(`${baseURL}/${id}`, {
+  const res = await fetch(`${`${API_URL}/categories`}/${id}`, {
     method: "PUT",
     credentials: "include",
     body: formData,
@@ -73,7 +72,7 @@ export const updateCategoryById = async (
 };
 
 export const deleteCategoryById = async (id: string): Promise<void> => {
-  const res = await fetch(`${baseURL}/${id}`, {
+  const res = await fetch(`${`${API_URL}/categories`}/${id}`, {
     method: "DELETE",
     credentials: "include",
   });

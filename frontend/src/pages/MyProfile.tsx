@@ -48,14 +48,7 @@ function MyProfile() {
 
     try {
       setSubmitting(true);
-
       const formData = new FormData(e.target as HTMLFormElement);
-
-      console.log("Submitting profile form with data:");
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-
       const updatedUser = await updateProfile(formData);
       setSuccess("Profile updated successfully!");
       setUser(updatedUser);
@@ -98,10 +91,7 @@ function MyProfile() {
           </div>
         )}
 
-        <form
-          onSubmit={onSubmit}
-          className="ui-surface mt-8 p-8 shadow-sm"
-        >
+        <form onSubmit={onSubmit} className="ui-surface mt-8 p-8 shadow-sm">
           <div className="space-y-4">
             <input
               className="ui-input"
@@ -136,9 +126,9 @@ function MyProfile() {
             <button
               type="submit"
               disabled={submitting}
-              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-w-70 cursor-pointer rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Saving..." : "Save Changes"}
+              {submitting ? "Saving..." : "Save changes"}
             </button>
           </div>
         </form>

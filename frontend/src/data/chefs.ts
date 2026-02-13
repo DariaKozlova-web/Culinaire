@@ -1,15 +1,14 @@
 import type { Chef } from "../types/chef";
 import type { Recipe } from "../types/recipe";
 
-const API_URL: string | undefined = import.meta.env.VITE_APP_SERVER_URL as
-  | string
-  | undefined;
-if (!API_URL)
+const API_URL = import.meta.env.VITE_APP_SERVER_URL;
+
+if (!API_URL) {
   throw new Error("API URL is required, are you missing a .env file?");
-const baseURL: string = `${API_URL}/chefs`;
+}
 
 export const createChef = async (formData: FormData): Promise<Chef> => {
-  const res = await fetch(baseURL, {
+  const res = await fetch(`${API_URL}/chefs`, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -23,7 +22,7 @@ export const createChef = async (formData: FormData): Promise<Chef> => {
 };
 
 export const getAllChefs = async (): Promise<Chef[]> => {
-  const res = await fetch(baseURL);
+  const res = await fetch(`${API_URL}/chefs`);
 
   if (!res.ok) throw new Error("Failed to fetch chefs");
 
@@ -38,7 +37,7 @@ export const getRandomChefs = async (limit = 4) => {
 };
 
 export const getChefById = async (id: string): Promise<Chef> => {
-  const res = await fetch(`${baseURL}/${id}`);
+  const res = await fetch(`${`${API_URL}/chefs`}/${id}`);
 
   if (!res.ok) {
     const err = await res.json().catch(() => null);
@@ -53,7 +52,7 @@ export const updateChefById = async (
   id: string,
   formData: FormData,
 ): Promise<Chef> => {
-  const res = await fetch(`${baseURL}/${id}`, {
+  const res = await fetch(`${API_URL}/chefs/${id}`, {
     method: "PUT",
     credentials: "include",
     body: formData,
@@ -69,7 +68,7 @@ export const updateChefById = async (
 };
 
 export const deleteChefById = async (id: string): Promise<void> => {
-  const res = await fetch(`${baseURL}/${id}`, {
+  const res = await fetch(`${API_URL}/chefs/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -81,7 +80,7 @@ export const deleteChefById = async (id: string): Promise<void> => {
 };
 
 export const getChefBySlug = async (slug: string): Promise<Chef> => {
-  const res = await fetch(`${baseURL}/slug/${slug}`);
+  const res = await fetch(`${API_URL}/chefs/slug/${slug}`);
 
   if (!res.ok) {
     const err = await res.json().catch(() => null);

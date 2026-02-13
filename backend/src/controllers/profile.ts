@@ -8,10 +8,10 @@ type ProfileDTO = z.infer<typeof meSchema>;
 
 export const updateProfile: RequestHandler<{}, ProfileDTO, ProfileInputDTO> = async (req, res) => {
   const { id } = req.user!;
-  const { name, image, favorites } = req.body;
+  const { name, image, favorites, notes } = req.body;
   const user = await User.findByIdAndUpdate(
     id,
-    { name, image, favorites },
+    { name, image, favorites, notes },
     { new: true, runValidators: true }
   ).lean();
   if (!user) throw new Error('User not found', { cause: { status: 404 } });

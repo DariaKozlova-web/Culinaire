@@ -1,5 +1,6 @@
 import { coerceString, parseJSONArray } from '#utils';
 import { z } from 'zod/v4';
+import type { no } from 'zod/v4/locales';
 
 export const profileInputSchema = z.object({
   name: z
@@ -11,5 +12,21 @@ export const profileInputSchema = z.object({
       hostname: z.regexes.domain
     })
     .optional(),
-  favorites: z.preprocess(parseJSONArray, z.array(z.string())).optional()
+  favorites: z.preprocess(parseJSONArray, z.array(z.string())).optional(),
+  notes: z
+    .preprocess(
+      parseJSONArray,
+      z.array(
+        z.object({
+          recipeId: z.string(),
+          noteItems: z.array(
+            z.object({
+              text: z.string(),
+              createdAt: z.string()
+            })
+          )
+        })
+      )
+    )
+    .optional()
 });

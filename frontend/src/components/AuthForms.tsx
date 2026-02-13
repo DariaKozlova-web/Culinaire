@@ -74,7 +74,7 @@ export const AuthForms = ({
               <HashLoader color="#fff" />
             </div>
           )}
-          <div className="row full-height justify-content-center">
+          <div className="row justify-content-center">
             <div className="align-self-center col-12 py-5 text-center">
               <div className="section pt-sm-2 pt-5 pb-5 text-center">
                 <h6 className="mb-0 pb-3">
@@ -134,7 +134,10 @@ export const AuthForms = ({
                                       <RiLockPasswordLine className="input-icon uil" />
                                     </div>
                                   </div>
-                                  <button type="submit" className="btn mt-4">
+                                  <button
+                                    type="submit"
+                                    className="btn mt-4 cursor-pointer"
+                                  >
                                     Submit
                                   </button>
                                 </>
@@ -253,13 +256,16 @@ export const AuthForms = ({
                                 (registerSuccess ? (
                                   <button
                                     type="button"
-                                    className="btn"
+                                    className="btn cursor-pointer"
                                     onClick={onOkBtnClick}
                                   >
                                     Ok
                                   </button>
                                 ) : (
-                                  <button type="submit" className="btn mt-4">
+                                  <button
+                                    type="submit"
+                                    className="btn mt-4 cursor-pointer"
+                                  >
                                     Submit
                                   </button>
                                 ))}

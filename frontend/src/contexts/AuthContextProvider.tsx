@@ -17,7 +17,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         const { user } = await getMe();
         setUser(user);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setAuthLoading(false);
       }

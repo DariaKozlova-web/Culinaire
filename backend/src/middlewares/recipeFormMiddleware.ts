@@ -21,12 +21,6 @@ const recipeFormMiddleware: RequestHandler = (req, _res, next) => {
     if (err) return next(err);
 
     req.body = fields;
-    console.log('FIELDS keys:', Object.keys(fields));
-    console.log('categoryId:', fields.categoryId);
-    console.log('chefId:', fields.chefId);
-    console.log('ingredients raw:', fields.ingredients);
-    console.log('instructions raw:', fields.instructions);
-
     req.images = {
       main: files.image?.[0], // main recipe image
       steps: files.instructionImages || [] // step images

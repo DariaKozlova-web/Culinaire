@@ -2,7 +2,14 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRouter, categoryRouter, chefRouter, recipeRouter, profileRouter } from '#routes';
+import {
+  authRouter,
+  categoryRouter,
+  chefRouter,
+  recipeRouter,
+  profileRouter,
+  contactRouter
+} from '#routes';
 import { errorHandler } from '#middlewares';
 import { CLIENT_BASE_URL } from '#config';
 
@@ -33,11 +40,13 @@ app.use('/chefs', chefRouter);
 
 app.use('/recipes', recipeRouter);
 
+app.use('/contact', contactRouter);
+
 app.use('*splat', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Auth server listening on port ${port}`);
+  console.info(`Auth server listening on port ${port}`);
 });

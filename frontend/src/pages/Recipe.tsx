@@ -1,7 +1,8 @@
+import { FavoritesButton } from "@/components/FovoritesButton";
+import Notes from "@/components/Notes";
 import { GlobIcon } from "@/components/icons/GlobIcon";
 import { LevelIcon } from "@/components/icons/LevelIcon";
 import { ServesIcon } from "@/components/icons/ServesIcon";
-import { updateProfile } from "@/data/profile";
 import { usePageMeta } from "@/hooks/useTitle";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
@@ -18,18 +19,8 @@ function isChefPopulated(val: PopulatedChef): val is ChefPopulated {
   return typeof val === "object" && val !== null && "_id" in val;
 }
 
-type SavedNote = {
-  id: string;
-  text: string;
-  createdAt: number;
-};
-
-function makeNoteKey(recipeId: string) {
-  return `culinaire:notes:${recipeId}`;
-}
-
 export default function RecipePage() {
-  const { user, authLoading, setUser } = useAuth();
+  const { user, authLoading } = useAuth();
   const isLoggedIn = !!user;
 
   const { slug } = useParams();
@@ -37,14 +28,6 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // favorites
-  const [isInFavorites, setIsInFavorites] = useState(false);
-
-  // notes
-  const [note, setNote] = useState("");
-  const [savedNotes, setSavedNotes] = useState<SavedNote[]>([]);
-  const [savingNote, setSavingNote] = useState(false);
 
   // fetch recipe
   useEffect(() => {
@@ -74,35 +57,7 @@ export default function RecipePage() {
     };
   }, [slug]);
 
-  // load notes from localStorage when recipe changes
-  useEffect(() => {
-    if (!recipe?._id) return;
-
-    try {
-      const raw = localStorage.getItem(makeNoteKey(recipe._id));
-      const parsed = raw ? (JSON.parse(raw) as unknown) : [];
-      setSavedNotes(Array.isArray(parsed) ? (parsed as SavedNote[]) : []);
-    } catch {
-      setSavedNotes([]);
-    }
-  }, [recipe?._id]);
-
-  useEffect(() => {
-    if (!recipe) return;
-    if (user && user.favorites?.includes(recipe._id)) {
-      setIsInFavorites(true);
-    } else {
-      setIsInFavorites(false);
-    }
-  }, [recipe, user]);
-
-  const persistNotes = (recipeId: string, notes: SavedNote[]) => {
-    localStorage.setItem(makeNoteKey(recipeId), JSON.stringify(notes));
-  };
-
-  const metaTitle = recipe?.title
-    ? `${recipe.title}`
-    : "Recipe";
+  const metaTitle = recipe?.title ? `${recipe.title}` : "Recipe";
   const metaDescription = recipe?.description?.trim()
     ? recipe.description
     : "Discover elevated home cooking recipes by professional chefs.";
@@ -113,50 +68,6 @@ export default function RecipePage() {
     description: metaDescription,
     image: metaImage,
   });
-
-  const onFavoritesClick = async () => {
-    if (!user || !recipe) return;
-    let favorites = user.favorites || [];
-    if (isInFavorites) {
-      favorites = favorites.filter((id) => id !== recipe._id);
-    } else {
-      favorites.push(recipe._id);
-    }
-    const formData = new FormData();
-    formData.append("favorites", JSON.stringify(favorites));
-    const updatedUser = await updateProfile(formData);
-    setUser(updatedUser);
-  };
-
-  const onSaveNote = () => {
-    if (!recipe?._id) return;
-    if (!isLoggedIn || authLoading) return;
-    if (!note.trim()) return;
-
-    try {
-      setSavingNote(true);
-
-      const newNote: SavedNote = {
-        id: crypto.randomUUID(),
-        text: note.trim(),
-        createdAt: Date.now(),
-      };
-
-      const next = [newNote, ...savedNotes];
-      setSavedNotes(next);
-      persistNotes(recipe._id, next);
-      setNote("");
-    } finally {
-      setSavingNote(false);
-    }
-  };
-
-  const onDeleteNote = (id: string) => {
-    if (!recipe?._id) return;
-    const next = savedNotes.filter((n) => n.id !== id);
-    setSavedNotes(next);
-    persistNotes(recipe._id, next);
-  };
 
   if (loading) {
     return (
@@ -223,21 +134,7 @@ export default function RecipePage() {
               {recipe.description}
             </p>
 
-            <button
-              type="button"
-              disabled={!isLoggedIn || authLoading}
-              onClick={onFavoritesClick}
-              className="mt-7 inline-flex cursor-pointer items-center justify-center rounded-xl bg-(--accent-olive) px-8 py-3 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-              title={
-                !isLoggedIn
-                  ? "Login required"
-                  : isInFavorites
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-              }
-            >
-              {isInFavorites ? "Remove from favorites" : "Add to favorites"}
-            </button>
+            <FavoritesButton recipe={recipe} />
 
             {!isLoggedIn && (
               <p className="mt-3 text-xs text-(--text-muted)">
@@ -286,7 +183,7 @@ export default function RecipePage() {
                 onClick={handleDownload}
                 disabled={!isLoggedIn || authLoading}
                 className="mt-8 inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-7 py-3 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-                title={!isLoggedIn ? "Login required" : "Add to shoplist"}
+                title={!isLoggedIn ? "Login required" : ""}
               >
                 Download shoplist
               </button>
@@ -442,62 +339,7 @@ export default function RecipePage() {
 
       {/* NOTES */}
       <section className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:px-8">
-        <h2 className="text-center text-3xl font-semibold text-(--text-title)">
-          Your Notes
-        </h2>
-
-        <div className="mx-auto mt-8 max-w-xl">
-          {savedNotes.length > 0 && (
-            <div className="mb-5 space-y-3">
-              {savedNotes.map((n) => (
-                <div
-                  key={n.id}
-                  className="flex items-start justify-between gap-4 rounded-2xl border border-(--border-soft) bg-transparent px-4 py-3 text-sm text-(--text-body)"
-                >
-                  <div>
-                    <div className="whitespace-pre-wrap">{n.text}</div>
-                    <div className="mt-2 text-xs text-(--text-muted)">
-                      {new Date(n.createdAt).toLocaleString()}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => onDeleteNote(n.id)}
-                    disabled={!isLoggedIn || authLoading}
-                    className="shrink-0 cursor-pointer rounded-xl border border-(--border-soft) px-3 py-2 text-xs font-semibold text-(--text-title) transition hover:border-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-                    title={!isLoggedIn ? "Login required" : "Delete note"}
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder={
-              isLoggedIn ? "Write your notes here..." : "Login to write notes"
-            }
-            disabled={!isLoggedIn || authLoading}
-            className="ui-input min-h-35 px-4 py-3 text-sm transition outline-none disabled:cursor-not-allowed disabled:opacity-60"
-          />
-
-          <div className="mt-4 flex justify-center">
-            <button
-              type="button"
-              onClick={onSaveNote}
-              disabled={
-                !isLoggedIn || authLoading || !note.trim() || savingNote
-              }
-              className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {savingNote ? "Saving..." : "Save note"}
-            </button>
-          </div>
-        </div>
+        <Notes recipe={recipe} />
       </section>
     </div>
   );

@@ -32,8 +32,6 @@ export const register: RequestHandler<{}, {}, RegisterDTO> = async (req, res) =>
   const userExists = await User.exists({ email });
   if (userExists) throw new Error('Email already exists', { cause: { status: 400 } });
 
-  console.log(roles);
-  // hash password
   const hashedPassword = await hashPassword(password);
 
   const newUser = await User.create({
