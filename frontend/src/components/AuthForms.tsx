@@ -134,7 +134,10 @@ export const AuthForms = ({
                                       <RiLockPasswordLine className="input-icon uil" />
                                     </div>
                                   </div>
-                                  <button type="submit" className="btn mt-4">
+                                  <button
+                                    type="submit"
+                                    className="btn mt-4 cursor-pointer"
+                                  >
                                     Submit
                                   </button>
                                 </>
@@ -253,13 +256,16 @@ export const AuthForms = ({
                                 (registerSuccess ? (
                                   <button
                                     type="button"
-                                    className="btn"
+                                    className="btn cursor-pointer"
                                     onClick={onOkBtnClick}
                                   >
                                     Ok
                                   </button>
                                 ) : (
-                                  <button type="submit" className="btn mt-4">
+                                  <button
+                                    type="submit"
+                                    className="btn mt-4 cursor-pointer"
+                                  >
                                     Submit
                                   </button>
                                 ))}
