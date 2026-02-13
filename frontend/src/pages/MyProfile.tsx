@@ -126,9 +126,9 @@ function MyProfile() {
             <button
               type="submit"
               disabled={submitting}
-              className="min-w-70 rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-w-70 cursor-pointer rounded-xl bg-(--accent-olive) px-10 py-4 text-sm font-semibold text-white transition hover:bg-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Saving..." : "Save Changes"}
+              {submitting ? "Saving..." : "Save changes"}
             </button>
           </div>
         </form>

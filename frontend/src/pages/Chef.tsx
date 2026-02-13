@@ -169,9 +169,9 @@ function Chef() {
       <section className="pb-14 md:pb-18">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="mb-16 text-center">
-            <h4 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
+            <h2 className="mb-4 font-[Philosopher] text-4xl font-bold text-(--text-title)">
               Recipes by {chef.name}
-            </h4>
+            </h2>
           </div>
 
           {loading && (
