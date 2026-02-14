@@ -55,7 +55,7 @@ const Header = () => {
           >
             <img
               src={theme === "light" ? `${logoLight}` : `${logoDark}`}
-              alt="Culinaire"
+              alt="Culinaire - Elevated home cooking"
               className="h-12"
             />
             <span
@@ -78,8 +78,8 @@ const Header = () => {
                 className={({ isActive }) =>
                   `transition-colors ${
                     isActive
-                      ? "font-medium text-(--accent-wine)"
-                      : "text-(--accent-olive) hover:text-(--accent-wine)"
+                      ? "font-semibold text-(--accent-wine)"
+                      : "text-(--accent-olive) font-semibold hover:text-(--accent-wine)"
                   }`
                 }
               >
@@ -124,7 +124,7 @@ const Header = () => {
                 {/* Log out desktop */}
                 <button
                   onClick={handleLogout}
-                  className="hidden cursor-pointer items-center gap-2 text-sm text-(--accent-olive) transition-colors hover:text-(--accent-wine) md:flex"
+                  className="hidden cursor-pointer items-center gap-2 text-sm font-semibold text-(--accent-olive) transition-colors hover:text-(--accent-wine) md:flex"
                 >
                   <LogoutIcon className="h-6 w-6" />
                   Log out
@@ -134,7 +134,7 @@ const Header = () => {
               <>
                 <NavLink
                   to="/login"
-                  className="hidden text-sm text-(--accent-olive) transition-colors hover:text-(--accent-wine) md:inline"
+                  className="hidden text-sm font-semibold text-(--accent-olive) transition-colors hover:text-(--accent-wine) md:inline"
                 >
                   Sign in
                 </NavLink>
@@ -174,7 +174,7 @@ const Header = () => {
 
           <div className="absolute top-0 right-0 h-full w-[86%] max-w-85 bg-(--bg-main) shadow-2xl">
             <div className="flex items-center justify-between border-b border-(--border-soft) px-4 py-3">
-              <div className="pl-4 text-sm font-medium text-(--text-title) uppercase">
+              <div className="pl-4 text-sm font-semibold text-(--text-title) uppercase">
                 Menu
               </div>
 
@@ -213,7 +213,7 @@ const Header = () => {
                 {user ? (
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-sm text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
+                    className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-(--accent-olive) transition-colors hover:text-(--accent-wine)"
                   >
                     <LogoutIcon className="h-6 w-6" />
                     Log out

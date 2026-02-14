@@ -111,7 +111,7 @@ const Notes = ({ recipe }: Props) => {
             type="button"
             onClick={onSaveNote}
             disabled={!user || authLoading || !newNote.trim() || savingNote}
-            className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-(--accent-olive) px-6 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex cursor-pointer items-center justify-center rounded-xl border-2 border-(--accent-olive) px-6 py-2.5 text-sm font-semibold text-(--accent-olive) transition hover:border-(--accent-wine) hover:text-(--accent-wine) disabled:cursor-not-allowed disabled:opacity-50"
             title={!user ? "Login required" : ""}
           >
             {savingNote ? "Saving..." : "Save note"}
