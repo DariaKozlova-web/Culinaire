@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 
-import heroImg from "../assets/images/hero-bg2.png";
+import heroImg from "../assets/images/hero-bg.webp";
 
 const Banner = () => {
   const scrollToWhy = () => {
@@ -15,6 +15,9 @@ const Banner = () => {
         src={heroImg}
         alt="Fine dining dish"
         className="absolute inset-0 h-full w-full object-cover"
+        fetchPriority="high"
+        decoding="async"
+        loading="eager"
       />
 
       {/* Overlay */}
@@ -42,7 +45,7 @@ const Banner = () => {
 
             <button
               onClick={scrollToWhy}
-              className="bg-(--btn-ghost-bg) inline-flex h-12 w-full items-center justify-center rounded-xl border-2 border-(--accent-olive) px-7 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine) sm:w-auto"
+              className="inline-flex h-12 w-full items-center justify-center rounded-xl border-2 border-(--accent-olive) bg-(--btn-ghost-bg) px-7 text-sm font-semibold text-(--accent-olive) transition-colors hover:border-(--accent-wine) hover:text-(--accent-wine) sm:w-auto"
             >
               How it works
             </button>

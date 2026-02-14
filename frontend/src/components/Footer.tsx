@@ -49,7 +49,7 @@ const Footer = () => {
 
           {/* Explore */}
           <div>
-            <h4 className="mb-4 font-medium">Explore</h4>
+            <b className="block mb-4 font-[Philosopher] font-medium">Explore</b>
             <ul className="space-y-2 text-sm">
               <li>
                 <NavLink
@@ -80,7 +80,7 @@ const Footer = () => {
 
           {/* Account */}
           <div>
-            <h4 className="mb-4 font-medium">Account</h4>
+            <b className="block mb-4 font-[Philosopher] font-medium">Account</b>
             <ul className="space-y-2 text-sm">
               {user?.roles?.some((role) => role === "user") && (
                 <li>
@@ -137,7 +137,7 @@ const Footer = () => {
 
           {/* Legal */}
           <div>
-            <h4 className="mb-4 font-medium">Legal</h4>
+            <b className="block mb-4 font-[Philosopher] font-medium">Legal</b>
             <ul className="space-y-2 text-sm">
               <li>
                 <NavLink

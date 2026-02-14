@@ -88,7 +88,11 @@ export const AuthForms = ({
                   id="reg-log"
                   name="reg-log"
                 />
-                <label htmlFor="reg-log"></label>
+                <label htmlFor="reg-log">
+                  <span className="sr-only">
+                    Toggle between Log In and Sign Up
+                  </span>
+                </label>
                 <div className="card-3d-wrap mx-auto">
                   <div className="card-3d-wrapper">
                     <div className="card-front">
@@ -109,6 +113,12 @@ export const AuthForms = ({
                               {loginLoading === false && (
                                 <>
                                   <div className="relative mb-2">
+                                    <label
+                                      className="sr-only"
+                                      htmlFor="logemail"
+                                    >
+                                      Email
+                                    </label>
                                     <Field
                                       type="email"
                                       name="email"
@@ -118,10 +128,20 @@ export const AuthForms = ({
                                       autoComplete="username"
                                     />
                                     <div>
-                                      <SiMaildotru className="input-icon" />
+                                      <SiMaildotru
+                                        className="input-icon"
+                                        aria-hidden="true"
+                                        focusable="false"
+                                      />
                                     </div>
                                   </div>
                                   <div className="relative">
+                                    <label
+                                      className="sr-only"
+                                      htmlFor="logpass"
+                                    >
+                                      Password
+                                    </label>
                                     <Field
                                       type="password"
                                       name="password"
@@ -131,7 +151,11 @@ export const AuthForms = ({
                                       autoComplete="current-password"
                                     />
                                     <div>
-                                      <RiLockPasswordLine className="input-icon uil" />
+                                      <RiLockPasswordLine
+                                        className="input-icon uil"
+                                        aria-hidden="true"
+                                        focusable="false"
+                                      />
                                     </div>
                                   </div>
                                   <button
@@ -181,6 +205,12 @@ export const AuthForms = ({
                                 registerLoading === false && (
                                   <>
                                     <div className="relative mb-2">
+                                      <label
+                                        className="sr-only"
+                                        htmlFor="regname"
+                                      >
+                                        Full name
+                                      </label>
                                       <Field
                                         type="text"
                                         name="name"
@@ -190,10 +220,20 @@ export const AuthForms = ({
                                         autoComplete="off"
                                       />
                                       <div>
-                                        <TbUser className="input-icon" />
+                                        <TbUser
+                                          className="input-icon"
+                                          aria-hidden="true"
+                                          focusable="false"
+                                        />
                                       </div>
                                     </div>
                                     <div className="relative mb-2">
+                                      <label
+                                        className="sr-only"
+                                        htmlFor="regemail"
+                                      >
+                                        Email
+                                      </label>
                                       <Field
                                         type="email"
                                         name="email"
@@ -203,10 +243,20 @@ export const AuthForms = ({
                                         autoComplete="off"
                                       />
                                       <div>
-                                        <SiMaildotru className="input-icon" />
+                                        <SiMaildotru
+                                          className="input-icon"
+                                          aria-hidden="true"
+                                          focusable="false"
+                                        />
                                       </div>
                                     </div>
                                     <div className="relative mb-2">
+                                      <label
+                                        className="sr-only"
+                                        htmlFor="regpass"
+                                      >
+                                        Password
+                                      </label>
                                       <Field
                                         type="password"
                                         name="password"
@@ -216,10 +266,20 @@ export const AuthForms = ({
                                         autoComplete="off"
                                       />
                                       <div>
-                                        <RiLockPasswordLine className="input-icon" />
+                                        <RiLockPasswordLine
+                                          className="input-icon"
+                                          aria-hidden="true"
+                                          focusable="false"
+                                        />
                                       </div>
                                     </div>
                                     <div className="relative">
+                                      <label
+                                        className="sr-only"
+                                        htmlFor="regconfirmpass"
+                                      >
+                                        Confirm password
+                                      </label>
                                       <Field
                                         type="password"
                                         name="confirmPassword"
@@ -229,7 +289,11 @@ export const AuthForms = ({
                                         autoComplete="off"
                                       />
                                       <div>
-                                        <RiLockPasswordLine className="input-icon uil" />
+                                        <RiLockPasswordLine
+                                          className="input-icon uil"
+                                          aria-hidden="true"
+                                          focusable="false"
+                                        />
                                       </div>
                                     </div>
                                   </>

@@ -1,3 +1,4 @@
+import { cld } from "@/utils";
 import { NavLink } from "react-router";
 
 import type { Chef } from "../types/chef";
@@ -8,16 +9,15 @@ interface Props {
 
 const ChefCard = ({ chef }: Props) => {
   return (
-    <NavLink
-      to={`/chef/${chef.url}`}
-      className="group w-full max-w-70 rounded-2xl bg-(--bg-card) p-5 text-center shadow-(--shadow-card) transition hover:shadow-(--shadow-card-hover) md:max-w-none sm:p-6"
-    >
+    <article className="group w-full max-w-70 rounded-2xl bg-(--bg-card) p-5 text-center shadow-(--shadow-card) transition hover:shadow-(--shadow-card-hover) sm:p-6 md:max-w-none">
       {/* Avatar */}
       <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full sm:h-28 sm:w-28">
         <img
-          src={chef.image}
-          alt={chef.name}
+          src={cld(chef.image, { w: 224, h: 336, mode: "fill" })}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          alt={`Photo of ${chef.name}`}
+          loading="lazy"
+          decoding="async"
         />
       </div>
 
@@ -28,11 +28,13 @@ const ChefCard = ({ chef }: Props) => {
         <br />
         {chef.city}
       </p>
-
-      <span className="text-sm font-medium text-(--accent-olive) transition group-hover:text-(--accent-wine)">
+      <NavLink
+        to={`/chef/${chef.url}`}
+        className="text-sm font-semibold text-(--accent-olive) transition group-hover:text-(--accent-wine)"
+      >
         View more
-      </span>
-    </NavLink>
+      </NavLink>
+    </article>
   );
 };
 
