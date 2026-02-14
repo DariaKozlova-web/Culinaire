@@ -11,6 +11,7 @@ import { ClockIcon } from "../components/icons/ClockIcon";
 import useAuth from "../contexts/useAuth";
 import { getRecipeBySlug, getShoplistById } from "../data/recipes";
 import type { PopulatedChef, Recipe } from "../types/recipe";
+import FadeLoader from "react-spinners/FadeLoader";
 
 type ChefPopulated = Exclude<PopulatedChef, string>;
 
@@ -70,8 +71,8 @@ export default function RecipePage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
-        <p className="text-sm text-(--text-muted)">Loading...</p>
+       <div className="flex h-110 w-full scale-200 items-center justify-center">
+        <FadeLoader color={"#f2c9a0"} />
       </div>
     );
   }

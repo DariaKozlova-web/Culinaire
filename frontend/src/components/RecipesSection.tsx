@@ -4,6 +4,7 @@ import { NavLink } from "react-router";
 import { getFavoriteRecipes, getRandomRecipes } from "../data/recipes";
 import type { Recipe } from "../types/recipe";
 import RecipeCard from "./RecipeCard";
+import FadeLoader from "react-spinners/FadeLoader";
 
 const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   const [featured, setFeatured] = useState<Recipe[]>([]);
@@ -48,7 +49,9 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
         </div>
 
         {loading && (
-          <p className="text-center text-(--text-muted)">Loading...</p>
+          <div className="flex h-110 w-full scale-200 items-center justify-center">
+            <FadeLoader color={"#f2c9a0"} />
+          </div>
         )}
         {error && <p className="text-center text-red-400">{error}</p>}
 

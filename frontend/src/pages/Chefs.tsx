@@ -3,6 +3,7 @@ import { getAllChefs } from "@/data/chefs";
 import type { Chef } from "@/types/chef";
 import { useEffect, useState } from "react";
 import { usePageMeta } from "@/hooks/useTitle";
+import FadeLoader from "react-spinners/FadeLoader";
 
 function Chefs() {
 usePageMeta({
@@ -44,8 +45,8 @@ usePageMeta({
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
-        <p className="text-sm text-(--text-muted)">Loading chefs…</p>
+      <div className="flex h-110 w-full scale-200 items-center justify-center">
+        <FadeLoader color={"#f2c9a0"} />
       </div>
     );
   }

@@ -6,6 +6,7 @@ import type { Recipe } from "@/types/recipe";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { usePageMeta } from "@/hooks/useTitle";
+import FadeLoader from "react-spinners/FadeLoader";
 
 function getCategoryIdFromRecipe(recipe: Recipe): string {
   const c = recipe.categoryId;
@@ -88,8 +89,8 @@ export default function Recipes() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
-        <p className="text-sm text-(--text-muted)">Loading recipes…</p>
+       <div className="flex h-110 w-full scale-200 items-center justify-center">
+        <FadeLoader color={"#f2c9a0"} />
       </div>
     );
   }
