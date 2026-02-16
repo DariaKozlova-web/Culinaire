@@ -430,7 +430,7 @@ const CreateChef = () => {
                   <input
                     id={`story_${idx}`}
                     type="text"
-                    className="ui-input col-span-11"
+                    className="ui-input col-span-10 md:col-span-11"
                     placeholder="Story"
                     value={value}
                     onChange={(e) => updateStoryItem(idx, e.target.value)}
@@ -440,7 +440,7 @@ const CreateChef = () => {
                   <button
                     type="button"
                     onClick={() => removeStoryItem(idx)}
-                    className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                    className="col-span-2 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 md:col-span-1 dark:border-white/10"
                     aria-label="Remove story item"
                     title="Remove story item"
                     disabled={loadingChef}

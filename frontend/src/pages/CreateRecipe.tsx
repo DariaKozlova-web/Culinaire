@@ -665,7 +665,7 @@ export default function CreateRecipe() {
                     id={`ingredientTitle-${idx}`}
                     name="title"
                     type="text"
-                    className="ui-input col-span-6"
+                    className="ui-input col-span-5 md:col-span-6"
                     placeholder="Ingredient title"
                     value={ing.title}
                     onChange={(e) =>
@@ -709,7 +709,7 @@ export default function CreateRecipe() {
                   <button
                     type="button"
                     onClick={() => removeIngredient(idx)}
-                    className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                    className="col-span-2 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 md:col-span-1 dark:border-white/10"
                     aria-label="Remove ingredient"
                     title="Remove ingredient"
                     disabled={loadingRecipe}
@@ -772,7 +772,7 @@ export default function CreateRecipe() {
                         id={`stepTitle-${idx}`}
                         name="title"
                         type="text"
-                        className="ui-input col-span-9"
+                        className="ui-input col-span-8 md:col-span-9"
                         placeholder="Step title"
                         value={s.title}
                         onChange={(e) =>
@@ -784,7 +784,7 @@ export default function CreateRecipe() {
                       <button
                         type="button"
                         onClick={() => removeStep(idx)}
-                        className="col-span-1 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 dark:border-white/10"
+                        className="col-span-2 flex cursor-pointer items-center justify-center rounded-xl border border-black/10 text-lg hover:border-(--accent-wine) disabled:opacity-50 md:col-span-1 dark:border-white/10"
                         aria-label="Remove step"
                         title="Remove step"
                         disabled={loadingRecipe}
