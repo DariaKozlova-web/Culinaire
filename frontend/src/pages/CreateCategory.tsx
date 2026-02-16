@@ -202,7 +202,10 @@ const CreateCategory = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="ui-surface mt-8 p-8 shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="ui-surface mt-8 p-4 shadow-sm md:p-8"
+        >
           <div className="space-y-4">
             <label htmlFor="name" className="sr-only">
               Category title

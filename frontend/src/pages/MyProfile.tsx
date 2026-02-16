@@ -91,7 +91,10 @@ function MyProfile() {
           </div>
         )}
 
-        <form onSubmit={onSubmit} className="ui-surface mt-8 p-8 shadow-sm">
+        <form
+          onSubmit={onSubmit}
+          className="ui-surface mt-8 p-4 shadow-sm md:p-8"
+        >
           <div className="space-y-4">
             <input
               className="ui-input"
