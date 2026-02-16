@@ -13,13 +13,15 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'strict',
+    partitioned: true,
     maxAge: REFRESH_TOKEN_TTL * 1000
   });
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'none' : 'strict'
+    sameSite: isProduction ? 'none' : 'strict',
+    partitioned: true,
   });
 }
 
@@ -105,7 +107,8 @@ export const logout: RequestHandler = async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? ('none' as const) : ('strict' as const)
+    sameSite: isProduction ? ('none' as const) : ('strict' as const),
+    partitioned: true,
   };
 
   res.clearCookie('refreshToken', cookieOptions);
