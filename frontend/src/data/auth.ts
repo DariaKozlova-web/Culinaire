@@ -56,7 +56,9 @@ export async function login(body: { email: string; password: string }) {
 }
 
 export async function getMe() {
-  const userRes = await fetch(`${authServiceURL}/me`);
+  const userRes = await fetch(`${authServiceURL}/me`, {
+    credentials: "include",
+  });
   if (!userRes.ok) throw new Error("Get user data failed");
   return userRes.json();
 }
@@ -64,12 +66,16 @@ export async function getMe() {
 export async function refresh() {
   const res = await fetch(`${authServiceURL}/refresh`, {
     method: "POST",
+    credentials: "include",
   });
 
   if (!res.ok) return;
 }
 
 export async function logout() {
-  const res = await fetch(`${authServiceURL}/logout`, { method: "DELETE" });
+  const res = await fetch(`${authServiceURL}/logout`, {
+    method: "DELETE",
+    credentials: "include",
+  });
   if (!res.ok) throw new Error("Logout failed");
 }
