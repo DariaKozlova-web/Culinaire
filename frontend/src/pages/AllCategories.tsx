@@ -41,7 +41,8 @@ function AllCategories() {
     try {
       setBusyId(id);
       await deleteCategoryById(id);
-      setCategories((prev) => prev.filter((r) => r._id !== id));
+      const data = await getAllCategories();
+      setCategories(data)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to delete category");
     } finally {

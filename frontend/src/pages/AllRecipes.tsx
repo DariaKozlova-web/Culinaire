@@ -39,7 +39,8 @@ export default function AllRecipes() {
     try {
       setBusyId(id);
       await deleteRecipeById(id);
-      setRecipes((prev) => prev.filter((r) => r._id !== id));
+      const data = await getAllRecipes();
+      setRecipes(data);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to delete recipe");
     } finally {

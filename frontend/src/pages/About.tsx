@@ -1,7 +1,7 @@
 import { usePageMeta } from "@/hooks/useTitle";
 import { NavLink } from "react-router";
 
-import aboutImage from "../assets/images/about-hero-1.jpg";
+import aboutImage from "../assets/images/about-hero.webp";
 
 export default function About() {
   usePageMeta({

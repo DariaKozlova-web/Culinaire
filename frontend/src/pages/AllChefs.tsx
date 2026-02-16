@@ -39,7 +39,8 @@ function AllChefs() {
     try {
       setBusyId(id);
       await deleteChefById(id);
-      setChefs((prev) => prev.filter((r) => r._id !== id));
+      const data = await getAllChefs();
+      setChefs(data);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to delete chef");
     } finally {

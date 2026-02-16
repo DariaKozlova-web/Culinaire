@@ -42,8 +42,14 @@ const Categories = () => {
         </h2>
 
         {loading && (
-          <div className="flex h-110 w-full scale-200 items-center justify-center">
-            <FadeLoader color={"#f2c9a0"} />
+          <div className="flex min-h-[60vh] w-full items-center justify-center">
+            <FadeLoader
+              color="#f2c9a0"
+              height={20}
+              width={6}
+              radius={2}
+              margin={4}
+            />
           </div>
         )}
         {error && <p className="text-center text-red-400">{error}</p>}

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
+import FadeLoader from "react-spinners/FadeLoader";
 
 import { getFavoriteRecipes, getRandomRecipes } from "../data/recipes";
 import type { Recipe } from "../types/recipe";
 import RecipeCard from "./RecipeCard";
-import FadeLoader from "react-spinners/FadeLoader";
 
 const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
   const [featured, setFeatured] = useState<Recipe[]>([]);
@@ -49,8 +49,14 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
         </div>
 
         {loading && (
-          <div className="flex h-110 w-full scale-200 items-center justify-center">
-            <FadeLoader color={"#f2c9a0"} />
+          <div className="flex min-h-[60vh] w-full items-center justify-center">
+            <FadeLoader
+              color="#f2c9a0"
+              height={20}
+              width={6}
+              radius={2}
+              margin={4}
+            />
           </div>
         )}
         {error && <p className="text-center text-red-400">{error}</p>}
@@ -66,7 +72,7 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
                     : ""
                 }
               >
-                <div className={idx===2? "sm:max-w-md lg:max-w-none":""}>
+                <div className={idx === 2 ? "sm:max-w-md lg:max-w-none" : ""}>
                   <RecipeCard recipe={recipe} />
                 </div>
               </div>
