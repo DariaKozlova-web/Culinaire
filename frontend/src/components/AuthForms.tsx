@@ -123,7 +123,7 @@ export const AuthForms = ({
                                       type="email"
                                       name="email"
                                       className="form-style"
-                                      placeholder="Your Email"
+                                      placeholder="Email"
                                       id="logemail"
                                       autoComplete="username"
                                     />
@@ -146,7 +146,7 @@ export const AuthForms = ({
                                       type="password"
                                       name="password"
                                       className="form-style"
-                                      placeholder="Your Password"
+                                      placeholder="Password"
                                       id="logpass"
                                       autoComplete="current-password"
                                     />
@@ -215,7 +215,7 @@ export const AuthForms = ({
                                         type="text"
                                         name="name"
                                         className="form-style"
-                                        placeholder="Your Full Name"
+                                        placeholder="Full name"
                                         id="regname"
                                         autoComplete="off"
                                       />
@@ -238,7 +238,7 @@ export const AuthForms = ({
                                         type="email"
                                         name="email"
                                         className="form-style"
-                                        placeholder="Your Email"
+                                        placeholder="Email"
                                         id="regemail"
                                         autoComplete="off"
                                       />
@@ -261,7 +261,7 @@ export const AuthForms = ({
                                         type="password"
                                         name="password"
                                         className="form-style"
-                                        placeholder="Your Password"
+                                        placeholder="Password"
                                         id="regpass"
                                         autoComplete="off"
                                       />
@@ -284,7 +284,7 @@ export const AuthForms = ({
                                         type="password"
                                         name="confirmPassword"
                                         className="form-style"
-                                        placeholder="Confirm Password"
+                                        placeholder="Confirm password"
                                         id="regconfirmpass"
                                         autoComplete="off"
                                       />
