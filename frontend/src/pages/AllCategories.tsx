@@ -42,7 +42,7 @@ function AllCategories() {
       setBusyId(id);
       await deleteCategoryById(id);
       const data = await getAllCategories();
-      setCategories(data)
+      setCategories(data);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to delete category");
     } finally {
@@ -78,11 +78,13 @@ function AllCategories() {
               {categories.map((r) => (
                 <div
                   key={r._id}
-                  className="ui-row flex items-center justify-between gap-4 px-5 py-4"
+                  className="ui-row flex flex-col items-start justify-start gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between"
                 >
                   <div className="min-w-0">
-                    <div className="truncate font-medium">{r.name}</div>
-                    <div className="truncate text-xs text-(--text-muted)">
+                    <div className="font-medium break-all md:truncate">
+                      {r.name}
+                    </div>
+                    <div className="text-xs break-all text-(--text-muted) md:truncate">
                       {r.url}
                     </div>
                   </div>
