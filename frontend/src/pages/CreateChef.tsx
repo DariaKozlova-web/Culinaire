@@ -278,7 +278,10 @@ const CreateChef = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="ui-surface mt-8 p-8 shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="ui-surface mt-8 p-4 shadow-sm md:p-8"
+        >
           <h2 className="mb-6 text-center text-2xl font-semibold">
             Main information
           </h2>
