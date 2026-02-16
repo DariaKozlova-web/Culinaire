@@ -1,12 +1,12 @@
 import ChefCard from "@/components/ChefCard";
 import { getAllChefs } from "@/data/chefs";
+import { usePageMeta } from "@/hooks/useTitle";
 import type { Chef } from "@/types/chef";
 import { useEffect, useState } from "react";
-import { usePageMeta } from "@/hooks/useTitle";
 import FadeLoader from "react-spinners/FadeLoader";
 
 function Chefs() {
-usePageMeta({
+  usePageMeta({
     title: "Chefs",
     description:
       "Meet the chefs behind the recipes. Explore culinary styles, restaurant details, and signature approaches — then cook their dishes at home.",
@@ -45,8 +45,8 @@ usePageMeta({
 
   if (loading) {
     return (
-      <div className="flex h-110 w-full scale-200 items-center justify-center">
-        <FadeLoader color={"#f2c9a0"} />
+      <div className="flex min-h-[60vh] w-full items-center justify-center">
+        <FadeLoader color="#f2c9a0" height={20} width={6} radius={2} margin={4}/>
       </div>
     );
   }

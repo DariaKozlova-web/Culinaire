@@ -1,4 +1,5 @@
 import { usePageMeta } from "@/hooks/useTitle";
+import { cld } from "@/utils";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -9,7 +10,6 @@ import { LocationIcon } from "../components/icons/LocationIcon";
 import { getChefBySlug, getRecipesByChefId } from "../data/chefs";
 import type { Chef as ChefType } from "../types/chef";
 import type { Recipe as RecipeType } from "../types/recipe";
-import { cld } from "@/utils";
 
 function Chef() {
   const { slug } = useParams<{ slug: string }>();
@@ -63,8 +63,8 @@ function Chef() {
 
   if (loading) {
     return (
-      <div className="flex h-110 w-full scale-200 items-center justify-center">
-        <FadeLoader color={"#f2c9a0"} />
+      <div className="flex min-h-[60vh] w-full items-center justify-center">
+        <FadeLoader color="#f2c9a0" height={20} width={6} radius={2} margin={4}/>
       </div>
     );
   }
