@@ -17,7 +17,14 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         const { user } = await getMe();
         setUser(user);
       } catch (error) {
-        console.warn(error);
+        if (
+          error instanceof Error &&
+          error.message.includes("Get user data failed")
+        ) {
+          console.warn(error.toString().replace("Error: ", "Warning: "));
+        } else {
+          console.error(error);
+        }
       } finally {
         setAuthLoading(false);
       }
