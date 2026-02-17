@@ -1,9 +1,13 @@
+export type TurnstileTheme = "light" | "dark" | "auto";
+export type TurnstileSize = "normal" | "compact";
+
 export interface TurnstileOptions {
   sitekey: string;
   callback?: (token: string) => void;
   "error-callback"?: () => void;
   "expired-callback"?: () => void;
-  theme?: "light" | "dark" | "auto";
+  theme?: TurnstileTheme;
+  size?: TurnstileSize;
 }
 
 export interface TurnstileInstance {

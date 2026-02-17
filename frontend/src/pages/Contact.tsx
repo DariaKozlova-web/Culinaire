@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/themeContext";
 import { usePageMeta } from "@/hooks/useTitle";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 
@@ -26,9 +27,14 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const { theme } = useTheme();
 
   // State für das Sicherheits-Token, das nach erfolgreicher Verifizierung von Cloudflare kommt
   const [turnstileToken, setTurnstileToken] = useState<string>("");
+
+  const [turnstileSize, setTurnstileSize] = useState<"compact" | "normal">(
+    "normal",
+  );
 
   // Referenz auf das HTML-Element (div), in dem das Widget erscheinen soll
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -37,6 +43,18 @@ export default function Contact() {
   const widgetId = useRef<string | null>(null);
 
   useEffect(() => {
+    const calc = () => (window.innerWidth < 380 ? "compact" : "normal");
+    const onResize = () => setTurnstileSize(calc());
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    if (widgetId.current && window.turnstile) {
+      window.turnstile.remove(widgetId.current);
+      widgetId.current = null;
+    }
     // Wenn das Ziel-Element (div) noch nicht im DOM existiert, breche ab
     if (!widgetRef.current) return;
 
@@ -65,7 +83,8 @@ export default function Contact() {
             setError("Security token expired. Please verify again.");
             setTurnstileToken(""); // Token zurücksetzen
           },
-          theme: "light", // Optisches Design des Widgets
+          theme: theme === "dark" ? "dark" : "light", // Optisches Design des Widgets
+          size: turnstileSize,
         });
       }
     };
@@ -99,7 +118,7 @@ export default function Contact() {
         widgetId.current = null;
       }
     };
-  }, []);
+  }, [theme, turnstileSize]);
 
   const onChange =
     (key: keyof ContactForm) =>
@@ -135,14 +154,14 @@ export default function Contact() {
       setSuccess("Thank you! Your message has been sent.");
       setForm(initialForm);
 
-      if (widgetId.current) {
+      if (widgetId.current && window.turnstile) {
         window.turnstile.reset(widgetId.current);
       }
       setTurnstileToken("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to send a message");
 
-      if (widgetId.current) {
+      if (widgetId.current && window.turnstile) {
         window.turnstile.reset(widgetId.current);
         setTurnstileToken("");
       }
@@ -254,7 +273,12 @@ export default function Contact() {
             select <em>“Chef collaboration”</em> and tell us about your cuisine.
           </p>
 
-          <div className="mt-4" ref={widgetRef}></div>
+          <div className="mt-5 flex max-w-full justify-center overflow-hidden px-2">
+            <div
+              className="flex max-w-full justify-center"
+              ref={widgetRef}
+            ></div>
+          </div>
 
           <div className="mt-8 flex justify-center">
             <button

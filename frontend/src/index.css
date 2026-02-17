@@ -46,7 +46,7 @@
 
   /* cards shadows */
   --shadow-card: 0 0 40px rgba(0, 0, 0, 0.14);
-  --shadow-card-hover: 0 0 55px rgba(0, 0, 0, 0.20);
+  --shadow-card-hover: 0 0 55px rgba(0, 0, 0, 0.2);
 }
 
 /* ======================
@@ -89,7 +89,7 @@
 
   /* cards shadows */
   --shadow-card: 0 0 40px rgba(255, 255, 255, 0.06);
-  --shadow-card-hover: 0 0 55px rgba(255, 243, 176, 0.10);
+  --shadow-card-hover: 0 0 55px rgba(255, 243, 176, 0.1);
 }
 
 /* ======================
