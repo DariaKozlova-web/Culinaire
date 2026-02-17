@@ -20,7 +20,7 @@ Each recipe is presented not only as a cooking guide, but as a curated culinary 
 
 ## 🚀 Live Demo
 
-- Frontend: <https://culinaire-1.onrender.com>
+- Frontend: <https://culinaire-app.onrender.com/>
 - Backend API: <https://culinaire-rx10.onrender.com>
 
 ---
