@@ -45,7 +45,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-(--border-soft) bg-(--bg-main)/90 backdrop-blur">
+      <header className="sticky top-0 z-60 border-b border-(--border-soft) bg-(--bg-main)/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
           {/* Logo */}
           <NavLink
