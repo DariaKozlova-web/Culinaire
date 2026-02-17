@@ -67,7 +67,7 @@ const RecipesSection = ({ favoritesOnly }: { favoritesOnly?: boolean }) => {
               <div
                 key={recipe._id}
                 className={
-                  idx === 2
+                  !favoritesOnly && idx === 2
                     ? "sm:col-span-2 sm:flex sm:justify-center lg:col-span-1 lg:block"
                     : ""
                 }
